@@ -26,11 +26,12 @@ class View extends Component<ViewProps, { showDifferentVersion: boolean }> {
   render() {
     const { packageName } = this.props;
     const { showDifferentVersion } = this.state;
+    const decodedPackageName = decodeURIComponent(packageName);
     return (
       <>
         <Link to="/">Dependency Explorer</Link>
         <h1>PACKAGE OVERVIEW</h1>
-        <h2>{packageName}</h2>
+        <h2>{decodedPackageName}</h2>
         <FormGroup>
           <FormControlLabel
             control={
@@ -47,13 +48,13 @@ class View extends Component<ViewProps, { showDifferentVersion: boolean }> {
         <DataLoader
           createPromise={() => {
             return getAllDependencies$(
-              packageName,
+              decodedPackageName,
               showDifferentVersion
             ).toPromise();
           }}
           // generate unique cacheKey so that DataLoader will refresh
           // if packageName or showDifferentVersion change
-          cacheKey={packageName + showDifferentVersion.toString()}
+          cacheKey={decodedPackageName + showDifferentVersion.toString()}
         >
           {({ loading, error, data }) => {
             if (loading) {
@@ -67,7 +68,7 @@ class View extends Component<ViewProps, { showDifferentVersion: boolean }> {
               return (
                 <>
                   <div>
-                    Found {data.length} dependencies for {packageName}
+                    Found {data.length} dependencies for {decodedPackageName}
                   </div>
                   <ul>
                     {data.sort().map(dependency => (

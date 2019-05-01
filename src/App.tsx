@@ -10,7 +10,7 @@ const SearchCompoonent = (props: any) => (
     <Search
       onClickSearch={value => {
         if (value) {
-          props.history.push(`/${value}`);
+          props.history.push(`/${encodeURIComponent(value)}`);
         }
       }}
     />

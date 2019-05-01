@@ -26,7 +26,11 @@ const getDependenciesInSet = (dependencies: { [key: string]: string }) => {
 // Observable to get package data from registry cache or online registry
 const fetchPackage$ = (packageName: string, packageVersion?: string) =>
   // get all versions if packageVersion exists, if not just get latest
-  of(`${packageName}${packageVersion ? `` : "/latest"}`).pipe(
+  of(
+    `${packageName}${
+      packageVersion || packageName.includes("/") ? `` : "/latest"
+    }`
+  ).pipe(
     mergeMap(fetchPackage),
     // retry 2 times if fail
     retry(2)
@@ -40,21 +44,20 @@ const getDependencies$ = (packageName: string, packageVersion?: string) =>
     // else assume that packageVersion is a range and use semver to check
     // and get the max satisfying version
     mergeMap(async data => {
-      if (packageVersion && data.versions) {
-        const versionInDistTags = data["dist-tags"][packageVersion];
+      if (data.versions) {
+        const checkVersion = packageVersion || "latest";
+        const versionInDistTags = data["dist-tags"][checkVersion];
         const foundVersion =
-          data.versions[packageVersion] || data.versions[versionInDistTags];
+          data.versions[checkVersion] || data.versions[versionInDistTags];
         if (foundVersion) {
           return getDependenciesInSet(foundVersion[dependenciesField]);
         } else {
           const nearestVersion = semver.maxSatisfying(
             Object.keys(data.versions),
-            packageVersion
+            checkVersion
           );
           if (!nearestVersion) {
-            console.warn(
-              `no such version ${packageVersion} for ${packageName}`
-            );
+            console.warn(`no such version ${checkVersion} for ${packageName}`);
             return [];
           }
           return getDependenciesInSet(
