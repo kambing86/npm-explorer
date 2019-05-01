@@ -66,7 +66,9 @@ class View extends Component<ViewProps, { showDifferentVersion: boolean }> {
             if (data) {
               return (
                 <>
-                  <div>Total packages: {data.length}</div>
+                  <div>
+                    Found {data.length} dependencies for {packageName}
+                  </div>
                   <ul>
                     {data.sort().map(dependency => (
                       <li key={dependency}>{dependency}</li>
