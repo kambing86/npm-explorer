@@ -1,5 +1,10 @@
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+# NPM EXPLORER
+
+This project uses https://npm-registry-proxy.glitch.me/ API to check dependencies
+run `npm start` or `yarn start` to play
+
 ## Available Scripts
 
 In the project directory, you can run:

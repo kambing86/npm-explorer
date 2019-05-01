@@ -1,26 +1,36 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import "./App.css";
+import Search from "./Search";
+import { BrowserRouter as Router, Route } from "react-router-dom";
+import View from "./View";
+
+const SearchCompoonent = (props: any) => (
+  <>
+    <h1 className="flex-grow-1">Dependency Explorer</h1>
+    <Search
+      onClickSearch={value => {
+        if (value) {
+          props.history.push(`/${value}`);
+        }
+      }}
+    />
+    <div className="flex-grow-1" />
+  </>
+);
+
+const ViewComponent = (props: any) => {
+  return <View packageName={props.match.params.packageName} />;
+};
 
 const App: React.FC = () => {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <Router>
+        <Route exact path="/" component={SearchCompoonent} />
+        <Route exact path="/:packageName" component={ViewComponent} />
+      </Router>
     </div>
   );
-}
+};
 
 export default App;
