@@ -74,7 +74,8 @@ const getDependencies$ = (packageName: string, packageVersion?: string) =>
 // Observable that get all dependencies for the package recursively
 export const getAllDependencies$ = (
   packageString: string,
-  showDifferentVersion: boolean = true
+  showDifferentVersion: boolean = true,
+  concurrency: number = 10
 ) => {
   // use Set to remove circular dependency, one good example is jest
   const checkedSet = new Set<string>();
@@ -88,7 +89,7 @@ export const getAllDependencies$ = (
       checkedSet.add(dependency);
       const { packageName, packageVersion } = getPackageInfo(dependency);
       return getDependencies$(packageName, packageVersion);
-    }, 10),
+    }, concurrency),
     // get the version number based on showDifferentVersion
     mergeMap(async (value: string) => {
       const data = getPackageInfo(value);

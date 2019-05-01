@@ -1,18 +1,23 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
-import { DataLoader } from "./DataLoader";
-import { getAllDependencies$ } from "./Observable/getDependencies";
 import {
   Checkbox,
   FormGroup,
   FormControlLabel,
   CircularProgress
 } from "@material-ui/core";
+import LoaderWithConcurrency from "./LoaderWithConcurrency";
 
-type ViewProps = { packageName: string };
+interface IViewProps {
+  packageName: string;
+}
 
-class View extends Component<ViewProps, { showDifferentVersion: boolean }> {
-  constructor(props: ViewProps) {
+interface IViewState {
+  showDifferentVersion: boolean;
+}
+
+class View extends Component<IViewProps, IViewState> {
+  constructor(props: IViewProps) {
     super(props);
     this.state = {
       showDifferentVersion: true
@@ -36,7 +41,7 @@ class View extends Component<ViewProps, { showDifferentVersion: boolean }> {
           <FormControlLabel
             control={
               <Checkbox
-                checked={this.state.showDifferentVersion}
+                checked={showDifferentVersion}
                 onChange={this.changeDifferentVersion}
                 value="showDifferentVersion"
                 color="primary"
@@ -45,16 +50,9 @@ class View extends Component<ViewProps, { showDifferentVersion: boolean }> {
             label="Show Different Version"
           />
         </FormGroup>
-        <DataLoader
-          createPromise={() => {
-            return getAllDependencies$(
-              decodedPackageName,
-              showDifferentVersion
-            ).toPromise();
-          }}
-          // generate unique cacheKey so that DataLoader will refresh
-          // if packageName or showDifferentVersion change
-          cacheKey={decodedPackageName + showDifferentVersion.toString()}
+        <LoaderWithConcurrency
+          packageName={decodedPackageName}
+          showDifferentVersion={showDifferentVersion}
         >
           {({ loading, error, data }) => {
             if (loading) {
@@ -68,7 +66,7 @@ class View extends Component<ViewProps, { showDifferentVersion: boolean }> {
               return (
                 <>
                   <div>
-                    Found {data.length} dependencies for {decodedPackageName}
+                    Found {data.length} dependencies for {packageName}
                   </div>
                   <ul>
                     {data.sort().map(dependency => (
@@ -79,7 +77,7 @@ class View extends Component<ViewProps, { showDifferentVersion: boolean }> {
               );
             }
           }}
-        </DataLoader>
+        </LoaderWithConcurrency>
       </>
     );
   }

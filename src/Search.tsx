@@ -1,9 +1,11 @@
 import React from "react";
 import AsyncCreatable from "react-select/lib/AsyncCreatable";
-import queryPackage from "./utils/queryPackage";
 import { Button, Icon, Theme, withStyles } from "@material-ui/core";
 import { ValueType } from "react-select/lib/types";
 import { isArray } from "lodash";
+
+import queryPackage from "./utils/queryPackage";
+import ConcurrencyInput from "./ConcurrencyInput";
 
 const styles = (theme: Theme) => ({
   button: {
@@ -20,13 +22,17 @@ const styles = (theme: Theme) => ({
 
 export type OptionType = { label: string; value: string };
 
-type SearchProps = {
+interface ISearchState {
+  value: string | null;
+}
+
+interface ISearchProps {
   classes: any;
   onClickSearch?: (value: string | null) => void;
-};
+}
 
-class Search extends React.Component<SearchProps, { value: string | null }> {
-  constructor(props: SearchProps) {
+class Search extends React.Component<ISearchProps, ISearchState> {
+  constructor(props: ISearchProps) {
     super(props);
     this.state = {
       value: null
@@ -69,6 +75,7 @@ class Search extends React.Component<SearchProps, { value: string | null }> {
           Search
           <Icon className={classes.icon}>search</Icon>
         </Button>
+        <ConcurrencyInput />
       </>
     );
   }
