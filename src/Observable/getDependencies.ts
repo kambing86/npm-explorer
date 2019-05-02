@@ -5,7 +5,8 @@ import {
   distinct,
   expand,
   take,
-  toArray
+  toArray,
+  map
 } from "rxjs/operators";
 import { forIn } from "lodash";
 import semver from "semver";
@@ -91,18 +92,21 @@ export const getAllDependencies$ = (
       return getDependencies$(packageName, packageVersion);
     }, concurrency),
     // get the version number based on showDifferentVersion
-    mergeMap(async (value: string) => {
+    mergeMap((value: string) => {
       const data = getPackageInfo(value);
       if (!showDifferentVersion) {
         return data.packageName;
       }
-      const packageData = await fetchPackage(data.packageName).toPromise();
-      const maxVersion =
-        semver.maxSatisfying(
-          Object.keys(packageData.versions),
-          data.packageVersion
-        ) || data.packageVersion;
-      return `${data.packageName}@${maxVersion}`;
+      return retryFetchPackage$(data.packageName, data.packageVersion).pipe(
+        map(packageData => {
+          const maxVersion =
+            semver.maxSatisfying(
+              Object.keys(packageData.versions),
+              data.packageVersion
+            ) || data.packageVersion;
+          return `${data.packageName}@${maxVersion}`;
+        })
+      );
     }, concurrency),
     // only show distinct value
     distinct(),
