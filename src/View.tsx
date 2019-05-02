@@ -60,7 +60,7 @@ class View extends Component<IViewProps, IViewState> {
             }
             if (error) {
               console.error(error);
-              return <div>Got error</div>;
+              return <div>Error: {error.message}</div>;
             }
             if (data) {
               return (

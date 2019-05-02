@@ -11,7 +11,7 @@ interface IAction {
 }
 
 const initialState: IState = {
-  concurrency: 10
+  concurrency: 2
 };
 
 const ConcurrencyContext = React.createContext<
