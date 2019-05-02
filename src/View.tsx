@@ -66,7 +66,7 @@ class View extends Component<IViewProps, IViewState> {
               return (
                 <>
                   <div>
-                    Found {data.length} dependencies for {packageName}
+                    Found {data.length} dependencies for {decodedPackageName}
                   </div>
                   <ul>
                     {data.sort().map(dependency => (
