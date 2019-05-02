@@ -54,13 +54,13 @@ class View extends Component<IViewProps, IViewState> {
           packageName={decodedPackageName}
           showDifferentVersion={showDifferentVersion}
         >
-          {({ loading, error, data }) => {
-            if (loading) {
-              return <CircularProgress />;
-            }
+          {({ data, error, completed }) => {
             if (error) {
               console.error(error);
               return <div>Error: {error.message}</div>;
+            }
+            if (!completed) {
+              return <CircularProgress />;
             }
             if (data) {
               return (

@@ -1,5 +1,5 @@
-export default async (url: string) => {
-  const response = await fetch(url);
+export default async (url: string, signal?: AbortSignal) => {
+  const response = await fetch(url, { signal });
   if (response.ok) {
     return await response.json();
   }

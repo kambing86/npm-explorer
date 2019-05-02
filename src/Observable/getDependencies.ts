@@ -14,7 +14,7 @@ import { getPackageInfo } from "../utils/getPackageInfo";
 
 const dependenciesField = "dependencies";
 
-// convert dependencies object to set with `package@version` format
+// convert dependencies Object to Set with `package@version` format
 const getDependenciesInSet = (dependencies: { [key: string]: string }) => {
   const results = new Set();
   forIn(dependencies, (value, key) => {
@@ -24,7 +24,7 @@ const getDependenciesInSet = (dependencies: { [key: string]: string }) => {
 };
 
 // Observable to get package data from registry cache or online registry
-const fetchPackage$ = (packageName: string, packageVersion?: string) =>
+const retryFetchPackage$ = (packageName: string, packageVersion?: string) =>
   // get all versions if packageVersion exists, if not just get latest
   of(
     `${packageName}${
@@ -38,7 +38,7 @@ const fetchPackage$ = (packageName: string, packageVersion?: string) =>
 
 // Observable that returns all the dependencies for one package in `package@version` format
 const getDependencies$ = (packageName: string, packageVersion?: string) =>
-  fetchPackage$(packageName, packageVersion).pipe(
+  retryFetchPackage$(packageName, packageVersion).pipe(
     // check if the packageVersion is in dist-tags or version
     // if so get the dependencies from there
     // else assume that packageVersion is a range and use semver to check
@@ -68,7 +68,7 @@ const getDependencies$ = (packageName: string, packageVersion?: string) =>
       return getDependenciesInSet(data[dependenciesField]);
     }),
     // convert from Set to Stream
-    mergeMap(dependenciesInArray => from(dependenciesInArray))
+    mergeMap(dependenciesInSet => from(dependenciesInSet))
   );
 
 // Observable that get all dependencies for the package recursively
@@ -96,14 +96,14 @@ export const getAllDependencies$ = (
       if (!showDifferentVersion) {
         return data.packageName;
       }
-      const packageData = await fetchPackage(data.packageName);
+      const packageData = await fetchPackage(data.packageName).toPromise();
       const maxVersion =
         semver.maxSatisfying(
           Object.keys(packageData.versions),
           data.packageVersion
         ) || data.packageVersion;
       return `${data.packageName}@${maxVersion}`;
-    }),
+    }, concurrency),
     // only show distinct value
     distinct(),
     // get maximum 1000 packages, one good example is bloater
