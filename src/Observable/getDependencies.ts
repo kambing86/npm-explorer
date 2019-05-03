@@ -17,7 +17,7 @@ const dependenciesField = "dependencies";
 
 // convert dependencies Object to Set with `package@version` format
 const getDependenciesInSet = (dependencies: { [key: string]: string }) => {
-  const results = new Set();
+  const results = new Set<string>();
   forIn(dependencies, (value, key) => {
     results.add(`${key}@${value}`);
   });
@@ -59,7 +59,7 @@ const getDependencies$ = (packageName: string, packageVersion?: string) =>
           );
           if (!nearestVersion) {
             console.warn(`no such version ${checkVersion} for ${packageName}`);
-            return [];
+            return new Set<string>();
           }
           return getDependenciesInSet(
             data.versions[nearestVersion][dependenciesField]
@@ -92,7 +92,7 @@ export const getAllDependencies$ = (
       return getDependencies$(packageName, packageVersion);
     }, concurrency),
     // get the version number based on showDifferentVersion
-    mergeMap((value: string) => {
+    mergeMap(value => {
       const data = getPackageInfo(value);
       if (!showDifferentVersion) {
         return data.packageName;
