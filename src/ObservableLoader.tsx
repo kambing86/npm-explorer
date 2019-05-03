@@ -22,7 +22,7 @@ interface IAction {
 
 function getInitialState<IReturnData>(): IState<IReturnData> {
   return {
-    completed: true
+    completed: false
   };
 }
 
@@ -38,7 +38,7 @@ function reducer<IReturnData>(
     case "completed":
       return { ...state, completed: true };
     default:
-      return { ...state, completed: false };
+      return state;
   }
 }
 
