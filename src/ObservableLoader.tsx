@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useReducer, useEffect, Reducer } from "react";
 import { Observable } from "rxjs";
 
 interface IState<IReturnData> {
@@ -15,26 +15,64 @@ export interface IObservableLoaderProps<IReturnData> {
   onCompleted?(): void;
 }
 
+interface IAction {
+  type: "data" | "error" | "completed";
+  payload?: any;
+}
+
+function getInitialState<IReturnData>(): IState<IReturnData> {
+  return {
+    completed: true
+  };
+}
+
+function reducer<IReturnData>(
+  state: IState<IReturnData>,
+  action: IAction
+): IState<IReturnData> {
+  switch (action.type) {
+    case "data":
+      return { ...state, data: action.payload };
+    case "error":
+      return { ...state, error: action.payload };
+    case "completed":
+      return { ...state, completed: true };
+    default:
+      return { ...state, completed: false };
+  }
+}
+
 function ObservableLoader<IReturnData>({
   observable,
-  children
-}: IObservableLoaderProps<IReturnData>): React.ReactElement {
-  const [data, setData] = useState<IState<IReturnData>["data"]>();
-  const [error, setError] = useState<IState<IReturnData>["error"]>();
-  const [completed, setCompleted] = useState<IState<IReturnData>["completed"]>(
-    false
+  children,
+  onData,
+  onError,
+  onCompleted
+}: IObservableLoaderProps<IReturnData>) {
+  const [state, dispatch] = useReducer<Reducer<IState<IReturnData>, IAction>>(
+    reducer,
+    getInitialState()
   );
   useEffect(() => {
     const subscription = observable.subscribe(
-      data => setData(data),
-      error => setError(error),
-      () => setCompleted(true)
+      data => {
+        dispatch({ type: "data", payload: data });
+        onData && onData(data);
+      },
+      error => {
+        dispatch({ type: "error", payload: error });
+        onError && onError(error);
+      },
+      () => {
+        dispatch({ type: "completed" });
+        onCompleted && onCompleted();
+      }
     );
     return () => {
       subscription.unsubscribe();
     };
-  }, [observable]);
-  return <>{children({ data, error, completed })}</>;
+  }, [observable, onData, onError, onCompleted]);
+  return <>{children(state)}</>;
 }
 
 export default ObservableLoader;
