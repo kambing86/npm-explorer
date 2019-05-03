@@ -16,7 +16,7 @@ export interface IObservableLoaderProps<IReturnData> {
 }
 
 interface IAction {
-  type: "data" | "error" | "completed";
+  type: "data" | "error" | "completed" | "reset";
   payload?: any;
 }
 
@@ -37,6 +37,8 @@ function reducer<IReturnData>(
       return { ...state, error: action.payload };
     case "completed":
       return { ...state, completed: true };
+    case "reset":
+      return getInitialState<IReturnData>();
     default:
       return state;
   }
@@ -69,6 +71,7 @@ function ObservableLoader<IReturnData>({
       }
     );
     return () => {
+      dispatch({ type: "reset" });
       subscription.unsubscribe();
     };
   }, [observable, onData, onError, onCompleted]);

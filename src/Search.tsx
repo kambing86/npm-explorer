@@ -27,7 +27,7 @@ interface ISearchState {
 }
 
 interface ISearchProps {
-  classes: any;
+  classes: { [key: string]: string };
   onClickSearch?: (value: string | null) => void;
 }
 

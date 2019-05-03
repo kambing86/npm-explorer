@@ -95,7 +95,7 @@ export const getAllDependencies$ = (
     mergeMap(value => {
       const data = getPackageInfo(value);
       if (!showDifferentVersion) {
-        return data.packageName;
+        return of(data.packageName);
       }
       return retryFetchPackage$(data.packageName, data.packageVersion).pipe(
         map(packageData => {

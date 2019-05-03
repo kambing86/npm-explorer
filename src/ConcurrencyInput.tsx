@@ -1,13 +1,31 @@
 import React from "react";
 import { useConcurrency } from "./UseConcurrency";
-import { FormControl, InputLabel, Input } from "@material-ui/core";
+import { FormControl, InputLabel, Input, withStyles } from "@material-ui/core";
+import { PositionProperty, TextAlignProperty } from "csstype";
 
-export default () => {
+const styles = () => ({
+  inputLabel: {
+    position: "static" as PositionProperty
+  },
+  input: {
+    textAlign: "center" as TextAlignProperty
+  }
+});
+
+interface IConcurrencyInputProps {
+  classes: { [key: string]: string };
+}
+
+const ConcurrencyInput = (props: IConcurrencyInputProps) => {
   const [state, dispatch] = useConcurrency();
+  const { classes } = props;
   return (
     <FormControl>
-      <InputLabel>Concurrency</InputLabel>
+      <InputLabel classes={{ root: classes.inputLabel }}>
+        Concurrency
+      </InputLabel>
       <Input
+        classes={{ input: classes.input }}
         value={state.concurrency}
         onChange={event =>
           dispatch({ type: "set", payload: Number(event.target.value) })
@@ -18,3 +36,5 @@ export default () => {
     </FormControl>
   );
 };
+
+export default withStyles(styles)(ConcurrencyInput);
