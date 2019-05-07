@@ -1,5 +1,13 @@
 import { from, of } from "rxjs";
-import { mergeMap, retry, distinct, take, toArray, map } from "rxjs/operators";
+import {
+  mergeMap,
+  retry,
+  distinct,
+  take,
+  // toArray,
+  map,
+  scan
+} from "rxjs/operators";
 import { forIn } from "lodash";
 import semver from "semver";
 import fetchPackage from "../utils/fetchPackage";
@@ -98,6 +106,6 @@ export const getAllDependencies$ = (
     distinct(),
     // get maximum 1000 packages, one good example is bloater
     take(1000),
-    toArray()
+    scan((acc: string[], value: string) => [...acc, value], [])
   );
 };

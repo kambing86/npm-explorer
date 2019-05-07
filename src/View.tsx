@@ -59,12 +59,10 @@ class View extends Component<IViewProps, IViewState> {
               console.error(error);
               return <div>Error: {error.message}</div>;
             }
-            if (!completed) {
-              return <CircularProgress />;
-            }
             if (data) {
               return (
                 <>
+                  {!completed && <CircularProgress />}
                   <div>
                     Found {data.length} dependencies for {decodedPackageName}
                   </div>
