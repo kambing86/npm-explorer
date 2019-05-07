@@ -1,17 +1,10 @@
-import { from, of, empty } from "rxjs";
-import {
-  mergeMap,
-  retry,
-  distinct,
-  expand,
-  take,
-  toArray,
-  map
-} from "rxjs/operators";
+import { from, of } from "rxjs";
+import { mergeMap, retry, distinct, take, toArray, map } from "rxjs/operators";
 import { forIn } from "lodash";
 import semver from "semver";
 import fetchPackage from "../utils/fetchPackage";
 import { getPackageInfo } from "../utils/getPackageInfo";
+import { distinctExpand } from "./operators";
 
 const dependenciesField = "dependencies";
 
@@ -78,16 +71,9 @@ export const getAllDependencies$ = (
   showDifferentVersion: boolean = true,
   concurrency: number = 10
 ) => {
-  // use Set to remove circular dependency, one good example is jest
-  const checkedSet = new Set<string>();
   return getDependencies$(packageString).pipe(
     // get the dependencies of dependency, with 10 concurrency
-    expand(dependency => {
-      // if checked the same dependency before, return empty
-      if (checkedSet.has(dependency)) {
-        return empty();
-      }
-      checkedSet.add(dependency);
+    distinctExpand(dependency => {
       const { packageName, packageVersion } = getPackageInfo(dependency);
       return getDependencies$(packageName, packageVersion);
     }, concurrency),
