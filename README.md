@@ -12,7 +12,7 @@ tested with
 
 - `react`
 - `bloater` with a lot of dependencies
-- `jest` with circular dependencies (the autocomplete API doesn't show `jest`, so need to scroll to the bottom of the list to select `jest`)
+- `jest` with circular dependencies (the autocomplete API doesn't show `jest`, so need to select `Create "jest"`)
 - `@angular/core` with scope
 
 ## Available Scripts
