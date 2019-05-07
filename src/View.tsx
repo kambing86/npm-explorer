@@ -59,21 +59,24 @@ class View extends Component<IViewProps, IViewState> {
               console.error(error);
               return <div>Error: {error.message}</div>;
             }
-            if (data) {
-              return (
-                <>
-                  {!completed && <CircularProgress />}
-                  <div>
-                    Found {data.length} dependencies for {decodedPackageName}
-                  </div>
-                  <ul>
-                    {data.sort().map(dependency => (
-                      <li key={dependency}>{dependency}</li>
-                    ))}
-                  </ul>
-                </>
-              );
-            }
+            return (
+              <>
+                {!completed && <CircularProgress />}
+                {data && (
+                  <>
+                    <div>
+                      Found {data.length} dependencies for {decodedPackageName}
+                    </div>
+                    <ul>
+                      {data.sort().map(dependency => (
+                        <li key={dependency}>{dependency}</li>
+                      ))}
+                    </ul>
+                  </>
+                )}
+                {completed && !data && <div>No dependencies</div>}
+              </>
+            );
           }}
         </LoaderWithConcurrency>
       </>
