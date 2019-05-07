@@ -1,7 +1,7 @@
 import React from "react";
 import "./App.css";
 import Search from "./Search";
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import { HashRouter as Router, Route, Switch } from "react-router-dom";
 import { RouteChildrenProps } from "react-router";
 import View from "./View";
 import { ConcurrencyProvider } from "./UseConcurrency";
@@ -34,7 +34,7 @@ const App: React.FC = () => {
   return (
     <div className="App">
       <ConcurrencyProvider>
-        <Router>
+        <Router basename={process.env.PUBLIC_URL || ""}>
           <Switch>
             <Route exact path="/" component={SearchCompoonent} />
             <Route exact path="/:packageName" component={ViewComponent} />

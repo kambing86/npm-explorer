@@ -2,11 +2,13 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 # NPM EXPLORER
 
-This project uses https://npm-registry-proxy.glitch.me/ API to check dependencies
+deployed to <https://kambing86.github.io/npm-explorer>
+
+This project uses <https://npm-registry-proxy.glitch.me/> API to check dependencies
 
 run `npm start` or `yarn start` to play
 
-verified the result with https://npm.anvaka.com/#/
+verified the result with <https://npm.anvaka.com/#/>
 
 tested with
 
