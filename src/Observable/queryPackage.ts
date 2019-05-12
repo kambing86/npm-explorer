@@ -1,17 +1,9 @@
-import fetchJson from "./fetchJson";
+import fetchJson from "../utils/fetchJson";
 import { EMPTY, Observable, Subject, of } from "rxjs";
 import { switchMap, delay, flatMap } from "rxjs/operators";
 
 const getQueryUrl = (query: string) =>
   `https://npm-registry-proxy.glitch.me/search/suggestions?q=${query}`;
-
-export default async (query: string) => {
-  if (query === "") {
-    return [];
-  }
-
-  return await fetchJson(getQueryUrl(query));
-};
 
 const getQueryObservable$ = (query: string) => {
   return of(query).pipe(
@@ -19,6 +11,7 @@ const getQueryObservable$ = (query: string) => {
     flatMap(
       query =>
         new Observable<any>(subsriber => {
+          let done = false;
           const abortController = new AbortController();
           (async () => {
             try {
@@ -26,6 +19,7 @@ const getQueryObservable$ = (query: string) => {
                 getQueryUrl(query),
                 abortController.signal
               );
+              done = true;
               subsriber.next(data);
               subsriber.complete();
             } catch (e) {
@@ -33,14 +27,16 @@ const getQueryObservable$ = (query: string) => {
             }
           })();
           return () => {
-            abortController.abort();
+            if (!done) {
+              abortController.abort();
+            }
           };
         })
     )
   );
 };
 
-export const queryPackage$ = (subject: Subject<string>) => {
+export default (subject: Subject<string>) => {
   return subject.pipe(
     switchMap(query => (query === "" ? EMPTY : getQueryObservable$(query)))
   );

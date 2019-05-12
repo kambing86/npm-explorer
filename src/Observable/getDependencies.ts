@@ -10,7 +10,7 @@ import {
 } from "rxjs/operators";
 import { forIn } from "lodash";
 import semver from "semver";
-import fetchPackage from "../utils/fetchPackage";
+import fetchPackage from "./fetchPackage";
 import { getPackageInfo } from "../utils/getPackageInfo";
 import { distinctExpand } from "./operators";
 

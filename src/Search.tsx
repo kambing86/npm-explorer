@@ -5,7 +5,7 @@ import CreatableSelect from "react-select/lib/Creatable";
 import { ValueType, InputActionMeta } from "react-select/lib/types";
 import { StateManager } from "react-select/lib/stateManager";
 import { isArray } from "lodash";
-import { queryPackage$ } from "./utils/queryPackage";
+import queryPackage$ from "./Observable/queryPackage";
 import ConcurrencyInput from "./ConcurrencyInput";
 
 const styles = (theme: Theme) => ({

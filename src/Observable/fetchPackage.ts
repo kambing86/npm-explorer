@@ -1,4 +1,4 @@
-import fetchJson from "./fetchJson";
+import fetchJson from "../utils/fetchJson";
 import { Observable } from "rxjs";
 
 const registryUrl = "https://npm-registry-proxy.glitch.me/";
