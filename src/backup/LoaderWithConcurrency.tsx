@@ -1,7 +1,7 @@
 import React from "react";
 import ObservableLoader, { IObservableLoaderProps } from "./ObservableLoader";
-import { getAllDependencies$ } from "./Observable/getDependencies";
-import { useConcurrency } from "./UseConcurrency";
+import { getAllDependencies$ } from "../observables/getDependencies";
+import { useConcurrency } from "../hooks";
 
 export default ({
   packageName,
@@ -12,13 +12,13 @@ export default ({
   showDifferentVersion: boolean;
   children: IObservableLoaderProps<string[]>["children"];
 }) => {
-  const [state] = useConcurrency();
+  const [concurrency] = useConcurrency();
   return (
     <ObservableLoader
       observable={getAllDependencies$(
         packageName,
         showDifferentVersion,
-        state.concurrency
+        concurrency
       )}
     >
       {children}

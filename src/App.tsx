@@ -1,12 +1,12 @@
 import React from "react";
 import "./App.css";
-import Search from "./Search";
+import Search from "./components/Search";
 import { HashRouter as Router, Route, Switch } from "react-router-dom";
 import { RouteChildrenProps } from "react-router";
-import View from "./View";
-import { ConcurrencyProvider } from "./UseConcurrency";
+import View from "./components/View";
+import { ConcurrencyProvider } from "./hooks";
 
-const SearchCompoonent = (props: RouteChildrenProps) => (
+const SearchCompoonent: React.FC<RouteChildrenProps> = props => (
   <>
     <h1 className="flex-grow-1">Dependency Explorer</h1>
     <Search
@@ -20,13 +20,15 @@ const SearchCompoonent = (props: RouteChildrenProps) => (
   </>
 );
 
-const ViewComponent = (props: RouteChildrenProps<{ packageName: string }>) => {
+const ViewComponent: React.FC<
+  RouteChildrenProps<{ packageName: string }>
+> = props => {
   return (
     <View packageName={(props.match && props.match.params.packageName) || ""} />
   );
 };
 
-const NotFoundComponent = () => {
+const NotFoundComponent: React.FC = () => {
   return <div>Page Not Found</div>;
 };
 

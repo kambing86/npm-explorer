@@ -1,5 +1,5 @@
 import React from "react";
-import { useConcurrency } from "./UseConcurrency";
+import { useConcurrency } from "../hooks";
 import { FormControl, InputLabel, Input, withStyles } from "@material-ui/core";
 import { PositionProperty, TextAlignProperty } from "csstype";
 
@@ -12,13 +12,12 @@ const styles = () => ({
   }
 });
 
-interface IConcurrencyInputProps {
+interface IProps {
   classes: { [key: string]: string };
 }
 
-const ConcurrencyInput = (props: IConcurrencyInputProps) => {
-  const [state, dispatch] = useConcurrency();
-  const { classes } = props;
+const ConcurrencyInput: React.FC<IProps> = ({ classes }) => {
+  const [concurrency, setConcurrency] = useConcurrency();
   return (
     <FormControl>
       <InputLabel classes={{ root: classes.inputLabel }}>
@@ -26,10 +25,8 @@ const ConcurrencyInput = (props: IConcurrencyInputProps) => {
       </InputLabel>
       <Input
         classes={{ input: classes.input }}
-        value={state.concurrency}
-        onChange={event =>
-          dispatch({ type: "set", payload: Number(event.target.value) })
-        }
+        value={concurrency}
+        onChange={event => setConcurrency(Number(event.target.value))}
         type="number"
         inputProps={{ min: 1, max: 10 }}
       />
