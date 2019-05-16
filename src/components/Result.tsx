@@ -10,13 +10,13 @@ interface IProps {
 
 const Result: React.FC<IProps> = ({ packageName, showDifferentVersion }) => {
   const [concurrency] = useConcurrency();
-  const [observableState, setObservable] = useObservable<string[]>();
+  const [observerState, setObservable] = useObservable<string[]>();
   useEffect(() => {
     setObservable(
       getAllDependencies$(packageName, showDifferentVersion, concurrency)
     );
   }, [setObservable, packageName, showDifferentVersion, concurrency]);
-  const { data, error, completed } = observableState;
+  const { data, error, completed } = observerState;
   if (error) {
     console.error(error);
     return <div>Error: {error.message}</div>;

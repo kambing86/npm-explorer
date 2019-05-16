@@ -8,7 +8,7 @@ const ConcurrencyContext = React.createContext<
 >([defaultValue, noop]);
 
 export const ConcurrencyProvider = ({ children }: { children: ReactNode }) => {
-  const contextValue = useState(2);
+  const contextValue = useState(defaultValue);
   return (
     <ConcurrencyContext.Provider value={contextValue}>
       {children}

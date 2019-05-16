@@ -38,44 +38,45 @@ interface ISearchProps {
   onClickSearch?: (value: string | null) => void;
 }
 
-const useQuery = (
-  state: ISearchState,
-  setState: React.Dispatch<React.SetStateAction<ISearchState>>
-) => {
-  const [observerState, setObservable] = useObservable<any>();
-  useEffect(() => {
-    setObservable(getQueryObservable$(state.inputValue));
-  }, [setObservable, state.inputValue]);
-  const { data, error, completed } = observerState;
-  useEffect(() => {
-    if (data && !error && completed) {
-      const allOptions: IOptionType[] = data.map((packageInfo: any) => ({
-        label: packageInfo.name,
-        value: packageInfo.name
-      }));
-      const inputValue = state.inputValue;
-      const sortedOption = [
-        ...allOptions.filter(option => option.value === inputValue),
-        ...allOptions.filter(option => option.value !== inputValue)
-      ];
-      setState(state => ({
-        ...state,
-        isLoading: false,
-        options: sortedOption
-      }));
-    }
-  }, [data, error, completed, state.inputValue, setState]);
-};
-
-const Search: React.FC<ISearchProps> = ({ classes, onClickSearch }) => {
-  const [state, setState] = useState<ISearchState>({
+const useQuery = () => {
+  const searchState = useState<ISearchState>({
     isLoading: false,
     options: [],
     inputValue: "",
     value: null
   });
+  const [state, setState] = searchState;
+  const [observerState, setObservable] = useObservable<any>();
+  useEffect(() => {
+    setObservable(getQueryObservable$(state.inputValue));
+  }, [setObservable, state.inputValue]);
+  useEffect(() => {
+    const { data, error, completed } = observerState;
+    if (data && !error && completed) {
+      setState(state => {
+        const allOptions: IOptionType[] = data.map((packageInfo: any) => ({
+          label: packageInfo.name,
+          value: packageInfo.name
+        }));
+        const { inputValue } = state;
+        const sortedOption = [
+          ...allOptions.filter(option => option.value === inputValue),
+          ...allOptions.filter(option => option.value !== inputValue)
+        ];
+        return {
+          ...state,
+          isLoading: false,
+          options: sortedOption
+        };
+      });
+    }
+  }, [observerState, setState]);
+  return searchState;
+};
+
+const Search: React.FC<ISearchProps> = ({ classes, onClickSearch }) => {
+  const [state, setState] = useQuery();
   const reactSelectRef = useRef<StateManager<IOptionType>>(null);
-  useQuery(state, setState);
 
   const onInputChangeHandler = (value: string, event: InputActionMeta) => {
     if (event.action === "input-change") {
@@ -93,7 +94,7 @@ const Search: React.FC<ISearchProps> = ({ classes, onClickSearch }) => {
       setState({ ...state, value: null });
     }
   };
-  const onSearch = () => {
+  const onSearchHandler = () => {
     if (onClickSearch) {
       onClickSearch(state.value);
     }
@@ -102,7 +103,7 @@ const Search: React.FC<ISearchProps> = ({ classes, onClickSearch }) => {
     if (event.keyCode === 13) {
       const stateManager = reactSelectRef.current;
       if (stateManager && !stateManager.state.menuIsOpen) {
-        onSearch();
+        onSearchHandler();
         event.preventDefault();
       }
     }
@@ -126,7 +127,7 @@ const Search: React.FC<ISearchProps> = ({ classes, onClickSearch }) => {
         variant="contained"
         color="primary"
         className={classes.button}
-        onClick={onSearch}
+        onClick={onSearchHandler}
       >
         Search
         <Icon className={classes.icon}>search</Icon>

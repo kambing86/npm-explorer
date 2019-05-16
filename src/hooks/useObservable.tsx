@@ -1,7 +1,7 @@
 import { useReducer, useEffect, Reducer, useState } from "react";
 import { Observable } from "rxjs";
 
-interface IState<IReturnData> {
+interface IObserverState<IReturnData> {
   readonly data?: IReturnData;
   readonly error?: Error;
   readonly completed: boolean;
@@ -12,16 +12,16 @@ interface IAction {
   payload?: any;
 }
 
-function getInitialState<IReturnData>(): IState<IReturnData> {
+function getInitialState<IReturnData>(): IObserverState<IReturnData> {
   return {
     completed: false
   };
 }
 
 function reducer<IReturnData>(
-  state: IState<IReturnData>,
+  state: IObserverState<IReturnData>,
   action: IAction
-): IState<IReturnData> {
+): IObserverState<IReturnData> {
   switch (action.type) {
     case "data":
       return { ...state, data: action.payload };
@@ -37,14 +37,13 @@ function reducer<IReturnData>(
 }
 
 export function useObservable<IReturnData>(): [
-  IState<IReturnData>,
+  IObserverState<IReturnData>,
   React.Dispatch<React.SetStateAction<Observable<IReturnData> | undefined>>
 ] {
   const [observable, setObservable] = useState<Observable<IReturnData>>();
-  const [state, dispatch] = useReducer<Reducer<IState<IReturnData>, IAction>>(
-    reducer,
-    getInitialState()
-  );
+  const [state, dispatch] = useReducer<
+    Reducer<IObserverState<IReturnData>, IAction>
+  >(reducer, getInitialState());
   useEffect(() => {
     if (!observable) {
       return;
