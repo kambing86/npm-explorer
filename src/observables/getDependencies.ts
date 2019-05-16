@@ -1,13 +1,5 @@
 import { from, of } from "rxjs";
-import {
-  mergeMap,
-  retry,
-  distinct,
-  take,
-  // toArray,
-  map,
-  scan
-} from "rxjs/operators";
+import { mergeMap, retry, distinct, take, map, scan } from "rxjs/operators";
 import { forIn } from "lodash";
 import semver from "semver";
 import fetchPackage from "./fetchPackage";
@@ -15,6 +7,8 @@ import { getPackageInfo } from "../utils/getPackageInfo";
 import { distinctExpand } from "./operators";
 
 const dependenciesField = "dependencies";
+const distributionTags = "dist-tags";
+const latestTag = "latest";
 
 // convert dependencies Object to Set with `package@version` format
 const getDependenciesInSet = (dependencies: { [key: string]: string }) => {
@@ -30,7 +24,7 @@ const retryFetchPackage$ = (packageName: string, packageVersion?: string) =>
   // get all versions if packageVersion exists, if not just get latest
   of(
     `${packageName}${
-      packageVersion || packageName.includes("/") ? `` : "/latest"
+      packageVersion || packageName.includes("/") ? `` : `/${latestTag}`
     }`
   ).pipe(
     mergeMap(fetchPackage),
@@ -47,25 +41,32 @@ const getDependencies$ = (packageName: string, packageVersion?: string) =>
     // and get the max satisfying version
     mergeMap(async data => {
       if (data.versions) {
-        const checkVersion = packageVersion || "latest";
-        const versionInDistTags = data["dist-tags"][checkVersion];
-        const foundVersion =
+        const checkVersion = packageVersion || latestTag;
+        const versionInDistTags = data[distributionTags][checkVersion];
+        const foundVersionMeta =
           data.versions[checkVersion] || data.versions[versionInDistTags];
-        if (foundVersion) {
-          return getDependenciesInSet(foundVersion[dependenciesField]);
-        } else {
-          const nearestVersion = semver.maxSatisfying(
-            Object.keys(data.versions),
-            checkVersion
-          );
-          if (!nearestVersion) {
-            console.warn(`no such version ${checkVersion} for ${packageName}`);
-            return new Set<string>();
-          }
+        if (foundVersionMeta) {
+          return getDependenciesInSet(foundVersionMeta[dependenciesField]);
+        }
+        const nearestVersion = semver.maxSatisfying(
+          Object.keys(data.versions),
+          checkVersion
+        );
+        if (nearestVersion) {
           return getDependenciesInSet(
             data.versions[nearestVersion][dependenciesField]
           );
         }
+        console.warn(
+          `no such version ${checkVersion} for ${packageName}, use latest tag`
+        );
+        const latestVersion = data[distributionTags][latestTag];
+        const latestVersionMeta = data.versions[latestVersion];
+        if (latestVersionMeta) {
+          return getDependenciesInSet(latestVersionMeta[dependenciesField]);
+        }
+        console.warn("no latest version");
+        return new Set<string>();
       }
       return getDependenciesInSet(data[dependenciesField]);
     }),
