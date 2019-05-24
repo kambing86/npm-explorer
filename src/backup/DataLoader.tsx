@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { useEffect, useState } from "react";
 
 interface IDataCache {
   // tslint:disable-next-line no-any
@@ -21,36 +21,64 @@ interface IState<IReturnData> {
   readonly loading: boolean;
 }
 
-export class DataLoader<IReturnData> extends Component<
-  IDataLoaderProps<IReturnData>,
-  IState<IReturnData>
-> {
-  private static readonly initialState = {
-    data: undefined,
-    error: undefined,
+function getInitialState<IReturnData>(): IState<IReturnData> {
+  return {
     loading: true
   };
-  public readonly state: IState<IReturnData> = DataLoader.initialState;
-  private cacheKey?: string;
-  private unmounted = false;
+}
 
-  public render() {
-    return this.props.children(this.state);
-  }
+export function DataLoader<IReturnData>({
+  cacheKey,
+  createPromise,
+  children,
+  onCompleted,
+  onError
+}: IDataLoaderProps<IReturnData>) {
+  const [state, setState] = useState<IState<IReturnData>>(
+    getInitialState<IReturnData>()
+  );
+  const [currentCacheKey, setCurrentCacheKey] = useState<string>();
+  useEffect(() => {
+    if (cacheKey !== currentCacheKey) {
+      setState(getInitialState<IReturnData>());
+      setCurrentCacheKey(cacheKey);
+    } else {
+      let cleanup = false;
+      let foundCache = dataCaches[cacheKey];
 
-  public componentDidMount() {
-    const { cacheKey, createPromise } = this.props;
-    this.loadData(cacheKey, createPromise);
-  }
+      if (!foundCache) {
+        const promise = createPromise()
+          .then(res => {
+            delete dataCaches[cacheKey];
+            return res;
+          })
+          .catch(err => {
+            delete dataCaches[cacheKey];
+            throw err;
+          });
+        dataCaches[cacheKey] = foundCache = promise;
+      }
 
-  public componentDidUpdate(prevProps: IDataLoaderProps<IReturnData>) {
-    const { cacheKey, createPromise, onCompleted, onError } = this.props;
-    if (prevProps.cacheKey !== cacheKey) {
-      this.setState(DataLoader.initialState, () => {
-        this.loadData(cacheKey, createPromise);
-      });
-    } else if (onCompleted || onError) {
-      const { data, error, loading } = this.state;
+      foundCache
+        .then((data: IReturnData) => {
+          if (!cleanup) {
+            setState({ data, loading: false });
+          }
+        })
+        .catch(error => {
+          if (!cleanup) {
+            setState({ error, loading: false });
+          }
+        });
+
+      return () => {
+        cleanup = true;
+      };
+    }
+  }, [cacheKey, currentCacheKey]);
+  useEffect(() => {
+    if (onCompleted || onError) {
+      const { data, error, loading } = state;
       if (!loading) {
         // data can be null
         if (onCompleted && !error && data !== undefined) {
@@ -60,42 +88,6 @@ export class DataLoader<IReturnData> extends Component<
         }
       }
     }
-  }
-
-  public componentWillUnmount() {
-    this.unmounted = true;
-  }
-
-  private loadData(
-    cacheKey: string,
-    createPromise: IDataLoaderProps<IReturnData>["createPromise"]
-  ) {
-    this.cacheKey = cacheKey;
-    let foundCache = dataCaches[cacheKey];
-
-    if (!foundCache) {
-      const promise = createPromise()
-        .then(res => {
-          delete dataCaches[cacheKey];
-          return res;
-        })
-        .catch(err => {
-          delete dataCaches[cacheKey];
-          throw err;
-        });
-      dataCaches[cacheKey] = foundCache = promise;
-    }
-
-    foundCache
-      .then((data: IReturnData) => {
-        if (!this.unmounted && this.cacheKey === cacheKey) {
-          this.setState({ data, loading: false });
-        }
-      })
-      .catch(error => {
-        if (!this.unmounted && this.cacheKey === cacheKey) {
-          this.setState({ error, loading: false });
-        }
-      });
-  }
+  }, [state, onCompleted, onError]);
+  return <>{children(state)}</>;
 }

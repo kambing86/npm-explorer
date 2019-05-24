@@ -3,18 +3,18 @@ import { Button, Icon, Theme, withStyles } from "@material-ui/core";
 import CreatableSelect from "react-select/lib/Creatable";
 import { ValueType, InputActionMeta } from "react-select/lib/types";
 import { StateManager } from "react-select/lib/stateManager";
-import { isArray } from "lodash";
 import { getQueryObservable$ } from "../observables/queryPackage";
 import ConcurrencyInput from "./ConcurrencyInput";
 import { useObservable } from "../hooks";
+import { isArray } from "../utils/typescriptHelpers";
 
 const styles = (theme: Theme) => ({
   button: {
-    padding: theme.spacing.unit,
-    margin: theme.spacing.unit
+    padding: theme.spacing(1),
+    margin: theme.spacing(1)
   },
   icon: {
-    marginLeft: theme.spacing.unit
+    marginLeft: theme.spacing(1)
   },
   reactSelect: {
     width: "100%"
