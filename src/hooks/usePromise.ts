@@ -1,23 +1,29 @@
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 
-interface IState<IReturnData> {
+interface IPromiseState<IReturnData> {
   readonly data?: IReturnData;
   readonly error?: Error;
   readonly loading: boolean;
 }
 
-function getInitialState<IReturnData>(): IState<IReturnData> {
+function getInitialState<IReturnData>(): IPromiseState<IReturnData> {
   return {
     loading: true
   };
 }
 
-export function usePromise<IReturnData>(): [
-  IState<IReturnData>,
+export function usePromise<IReturnData>(
+  initialPromise?: () => Promise<IReturnData>
+): [
+  IPromiseState<IReturnData>,
   Dispatch<SetStateAction<Promise<IReturnData>>>
 ] {
-  const [promise, setPromise] = useState<Promise<IReturnData>>();
-  const [state, setState] = useState<IState<IReturnData>>(getInitialState());
+  const [promise, setPromise] = useState<Promise<IReturnData> | undefined>(
+    initialPromise
+  );
+  const [state, setState] = useState<IPromiseState<IReturnData>>(
+    getInitialState
+  );
   useEffect(() => {
     if (!promise) {
       return;

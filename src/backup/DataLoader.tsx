@@ -34,9 +34,7 @@ export function DataLoader<IReturnData>({
   onCompleted,
   onError
 }: IDataLoaderProps<IReturnData>) {
-  const [state, setState] = useState<IState<IReturnData>>(
-    getInitialState<IReturnData>()
-  );
+  const [state, setState] = useState<IState<IReturnData>>(getInitialState);
   const [currentCacheKey, setCurrentCacheKey] = useState<string>();
   useEffect(() => {
     if (cacheKey !== currentCacheKey) {

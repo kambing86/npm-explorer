@@ -38,13 +38,17 @@ interface ISearchProps {
   onClickSearch?: (value: string | null) => void;
 }
 
-const useQuery = () => {
-  const searchState = useState<ISearchState>({
+function getInitialState(): ISearchState {
+  return {
     isLoading: false,
     options: [],
     inputValue: "",
     value: null
-  });
+  };
+}
+
+const useQuery = () => {
+  const searchState = useState<ISearchState>(getInitialState);
   const [state, setState] = searchState;
   const [observerState, setObservable] = useObservable<any>();
   useEffect(() => {
