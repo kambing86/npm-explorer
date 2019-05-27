@@ -1,4 +1,4 @@
-import React, { useReducer, useEffect, Reducer } from "react";
+import React, { useEffect, useState } from "react";
 import { Observable } from "rxjs";
 
 interface IState<IReturnData> {
@@ -15,33 +15,10 @@ export interface IObservableLoaderProps<IReturnData> {
   onCompleted?(): void;
 }
 
-interface IAction {
-  type: "data" | "error" | "completed" | "reset";
-  payload?: any;
-}
-
 function getInitialState<IReturnData>(): IState<IReturnData> {
   return {
     completed: false
   };
-}
-
-function reducer<IReturnData>(
-  state: IState<IReturnData>,
-  action: IAction
-): IState<IReturnData> {
-  switch (action.type) {
-    case "data":
-      return { ...state, data: action.payload };
-    case "error":
-      return { ...state, error: action.payload };
-    case "completed":
-      return { ...state, completed: true };
-    case "reset":
-      return getInitialState<IReturnData>();
-    default:
-      return state;
-  }
 }
 
 function ObservableLoader<IReturnData>({
@@ -51,27 +28,24 @@ function ObservableLoader<IReturnData>({
   onError,
   onCompleted
 }: IObservableLoaderProps<IReturnData>) {
-  const [state, dispatch] = useReducer<Reducer<IState<IReturnData>, IAction>>(
-    reducer,
-    getInitialState()
-  );
+  const [state, setState] = useState<IState<IReturnData>>(getInitialState);
   useEffect(() => {
     const subscription = observable.subscribe(
       data => {
-        dispatch({ type: "data", payload: data });
+        setState(prevState => ({ ...prevState, data }));
         onData && onData(data);
       },
       error => {
-        dispatch({ type: "error", payload: error });
+        setState(prevState => ({ ...prevState, error }));
         onError && onError(error);
       },
       () => {
-        dispatch({ type: "completed" });
+        setState(prevState => ({ ...prevState, completed: true }));
         onCompleted && onCompleted();
       }
     );
     return () => {
-      dispatch({ type: "reset" });
+      setState(getInitialState);
       subscription.unsubscribe();
     };
   }, [observable, onData, onError, onCompleted]);

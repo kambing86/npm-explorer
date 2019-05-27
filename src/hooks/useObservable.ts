@@ -41,7 +41,7 @@ export function useObservable<IReturnData>(
       }
     );
     return () => {
-      setState(getInitialState());
+      setState(getInitialState);
       subscription.unsubscribe();
     };
   }, [observable]);

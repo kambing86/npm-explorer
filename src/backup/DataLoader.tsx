@@ -38,7 +38,7 @@ export function DataLoader<IReturnData>({
   const [currentCacheKey, setCurrentCacheKey] = useState<string>();
   useEffect(() => {
     if (cacheKey !== currentCacheKey) {
-      setState(getInitialState<IReturnData>());
+      setState(getInitialState);
       setCurrentCacheKey(cacheKey);
     } else {
       let cleanup = false;

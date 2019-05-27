@@ -43,7 +43,7 @@ export function usePromise<IReturnData>(
     );
     return () => {
       cleanup = true;
-      setState(getInitialState());
+      setState(getInitialState);
     };
   }, [promise]);
 
