@@ -8,31 +8,32 @@ const registryCache: { [key: string]: Promise<any> } = {};
 
 export default (packageQuery: string) =>
   new Observable<any>(subsriber => {
-    let done = false;
-    const abortController = new AbortController();
+    let abortController: AbortController | null = null;
+    function cleanup() {
+      abortController = null;
+      delete registryCache[packageQuery];
+    }
     (async () => {
       try {
-        const cache = registryCache[packageQuery];
-        if (cache) {
-          subsriber.next(await cache);
-          subsriber.complete();
-          return;
+        let cache = registryCache[packageQuery];
+        if (!cache) {
+          abortController = new AbortController();
+          cache = registryCache[packageQuery] = fetchJson(
+            `${registryUrl}${packageQuery}`,
+            abortController.signal
+          );
         }
-        const response = await (registryCache[packageQuery] = fetchJson(
-          `${registryUrl}${packageQuery}`,
-          abortController.signal
-        ));
-        done = true;
-        delete registryCache[packageQuery];
+        const response = await cache;
+        cleanup();
         subsriber.next(response);
         subsriber.complete();
       } catch (e) {
-        delete registryCache[packageQuery];
+        cleanup();
         subsriber.error(e);
       }
     })();
     return () => {
-      if (!done) {
+      if (abortController) {
         abortController.abort();
       }
     };
