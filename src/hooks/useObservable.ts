@@ -1,5 +1,6 @@
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { Observable } from "rxjs";
+import { useStateSimple } from "./useStateSimple";
 
 interface IObserverState<IReturnData> {
   readonly data?: IReturnData;
@@ -22,7 +23,7 @@ export function useObservable<IReturnData>(
   const [observable, setObservable] = useState<
     Observable<IReturnData> | undefined
   >(initialObservable);
-  const [state, setState] = useState<IObserverState<IReturnData>>(
+  const [state, setState] = useStateSimple<IObserverState<IReturnData>>(
     getInitialState
   );
   useEffect(() => {
@@ -31,20 +32,20 @@ export function useObservable<IReturnData>(
     }
     const subscription = observable.subscribe(
       data => {
-        setState(prevState => ({ ...prevState, data }));
+        setState({ data });
       },
       error => {
-        setState(prevState => ({ ...prevState, error }));
+        setState({ error });
       },
       () => {
-        setState(prevState => ({ ...prevState, completed: true }));
+        setState({ completed: true });
       }
     );
     return () => {
-      setState(getInitialState);
+      setState(getInitialState());
       subscription.unsubscribe();
     };
-  }, [observable]);
+  }, [observable, setState]);
 
   return [
     state,
