@@ -10,6 +10,8 @@ interface IObserverState<IReturnData> {
 
 function getInitialState<IReturnData>(): IObserverState<IReturnData> {
   return {
+    data: undefined,
+    error: undefined,
     completed: false
   };
 }

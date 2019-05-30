@@ -9,6 +9,7 @@ const registryCache: { [key: string]: Promise<any> } = {};
 export default (packageQuery: string) =>
   new Observable<any>(subsriber => {
     let abortController: AbortController | null = null;
+    let aborted = false;
     function cleanup() {
       abortController = null;
       delete registryCache[packageQuery];
@@ -29,11 +30,14 @@ export default (packageQuery: string) =>
         subsriber.complete();
       } catch (e) {
         cleanup();
-        subsriber.error(e);
+        if (!aborted) {
+          subsriber.error(e);
+        }
       }
     })();
     return () => {
       if (abortController) {
+        aborted = true;
         abortController.abort();
       }
     };
