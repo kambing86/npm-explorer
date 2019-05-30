@@ -39,7 +39,7 @@ const getDependencies$ = (packageName: string, packageVersion?: string) =>
     // if so get the dependencies from there
     // else assume that packageVersion is a range and use semver to check
     // and get the max satisfying version
-    mergeMap(async data => {
+    map(data => {
       if (data.versions) {
         const checkVersion = packageVersion || latestTag;
         const versionInDistTags = data[distributionTags][checkVersion];
