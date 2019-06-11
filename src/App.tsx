@@ -4,7 +4,7 @@ import Search from "./components/Search";
 import { HashRouter as Router, Route, Switch } from "react-router-dom";
 import { RouteChildrenProps } from "react-router";
 import View from "./components/View";
-import { ConcurrencyProvider } from "./hooks";
+import { GlobalStateProvider } from "./hooks/useGlobalState";
 
 const SearchCompoonent: React.FC<RouteChildrenProps> = props => (
   <>
@@ -35,7 +35,7 @@ const NotFoundComponent: React.FC = () => {
 const App: React.FC = () => {
   return (
     <div className="App">
-      <ConcurrencyProvider>
+      <GlobalStateProvider>
         <Router basename={process.env.PUBLIC_URL || ""}>
           <Switch>
             <Route exact path="/" component={SearchCompoonent} />
@@ -43,7 +43,7 @@ const App: React.FC = () => {
             <Route component={NotFoundComponent} />
           </Switch>
         </Router>
-      </ConcurrencyProvider>
+      </GlobalStateProvider>
     </div>
   );
 };
