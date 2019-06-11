@@ -1,9 +1,9 @@
 import React, { ReactNode, Reducer, useContext, useReducer } from "react";
 import { noop } from "lodash";
 import { combineReducers } from "redux";
-import { ActionType } from "typesafe-actions";
 import { concurrency } from "../state/reducers";
-import * as actions from "../state/actions";
+import { INIT } from "../state/actions";
+import { Action } from "../state/types";
 
 function getReducersMap() {
   return {
@@ -12,11 +12,10 @@ function getReducersMap() {
 }
 
 function getInitialState() {
-  return combineReducers(getReducersMap())(undefined, actions.INIT());
+  return combineReducers(getReducersMap())(undefined, INIT());
 }
 
 export type GlobalState = ReturnType<typeof getInitialState>;
-type Action = ActionType<typeof actions>;
 
 function reducer(state: GlobalState, action: Action) {
   return combineReducers(getReducersMap())(state, action);
