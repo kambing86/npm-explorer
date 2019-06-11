@@ -19,8 +19,8 @@ interface IProps {
 }
 
 const ConcurrencyInput: React.FC<IProps> = ({ classes }) => {
-  const [state, dispatch] = useGlobalState();
-  const concurrency = getConcurrencyCount(state);
+  const [globalState, dispatch] = useGlobalState();
+  const concurrency = getConcurrencyCount(globalState);
   const onChangeHandler = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
       dispatch(SET_CONCURRENCY(Number(event.target.value)));

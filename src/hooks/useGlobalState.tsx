@@ -1,24 +1,10 @@
 import React, { ReactNode, Reducer, useContext, useReducer } from "react";
 import { noop } from "lodash";
-import { combineReducers } from "redux";
-import { concurrency } from "../state/reducers";
-import { INIT } from "../state/actions";
-import { Action } from "../state/types";
-
-function getReducersMap() {
-  return {
-    concurrency
-  };
-}
-
-function getInitialState() {
-  return combineReducers(getReducersMap())(undefined, INIT());
-}
-
-export type GlobalState = ReturnType<typeof getInitialState>;
+import { Action, GlobalState } from "../state/types";
+import { getInitialState, getReducers } from "../state";
 
 function reducer(state: GlobalState, action: Action) {
-  return combineReducers(getReducersMap())(state, action);
+  return getReducers()(state, action);
 }
 
 const GlobalStateContext = React.createContext<

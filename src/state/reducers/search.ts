@@ -1,24 +1,21 @@
 import { getType } from "typesafe-actions";
 import { Action } from "../types";
-import { SET_CONCURRENCY } from "../actions";
+import { SET_SEARCH_HISTORY } from "../actions";
 
 type State = Readonly<{
-  count: number;
+  history: string;
 }>;
 
 const initialState: State = {
-  count: 2
+  history: ""
 };
 
-export function concurrency(
-  state: State = initialState,
-  action: Action
-): State {
+export function search(state: State = initialState, action: Action): State {
   switch (action.type) {
-    case getType(SET_CONCURRENCY):
+    case getType(SET_SEARCH_HISTORY):
       return {
         ...state,
-        count: action.payload
+        history: action.payload
       };
     default:
       return state;

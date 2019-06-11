@@ -10,10 +10,10 @@ interface IProps {
 }
 
 const Result: React.FC<IProps> = ({ packageName, showDifferentVersion }) => {
-  const [state] = useGlobalState();
+  const [globalState] = useGlobalState();
   const [observerState, setObservable] = useObservable<string[]>();
 
-  const concurrency = getConcurrencyCount(state);
+  const concurrency = getConcurrencyCount(globalState);
 
   useEffect(() => {
     setObservable(

@@ -5,8 +5,10 @@ import CreatableSelect from "react-select/creatable";
 import { ValueType, InputActionMeta } from "react-select/lib/types";
 import { getQueryObservable$ } from "../observables/queryPackage";
 import ConcurrencyInput from "./ConcurrencyInput";
-import { useObservable } from "../hooks";
+import { useObservable, useGlobalState } from "../hooks";
 import { isArray } from "../utils/typescriptHelpers";
+import { getSearchHistory } from "../state/selectors/search";
+import { SET_SEARCH_HISTORY } from "../state/actions";
 
 const styles = (theme: Theme) => ({
   button: {
@@ -31,12 +33,12 @@ interface ISearchState {
   isMenuOpen: boolean;
   options: IOptionType[];
   inputValue: string;
-  value: string | null;
+  value: string;
 }
 
 interface ISearchProps {
   classes: { [key: string]: string };
-  onClickSearch?: (value: string | null) => void;
+  onClickSearch?: (value: string) => void;
 }
 
 function getInitialState(): ISearchState {
@@ -45,7 +47,7 @@ function getInitialState(): ISearchState {
     isMenuOpen: false,
     options: [],
     inputValue: "",
-    value: null
+    value: ""
   };
 }
 
@@ -82,7 +84,21 @@ const useQuery = () => {
 
 const Search: React.FC<ISearchProps> = ({ classes, onClickSearch }) => {
   const [state, setState] = useQuery();
+  const [globalState, dispatch] = useGlobalState();
 
+  const searchValue = getSearchHistory(globalState);
+
+  useEffect(() => {
+    if (searchValue !== "") {
+      setState(prevState => ({
+        ...prevState,
+        isLoading: true,
+        isMenuOpen: true,
+        options: [],
+        inputValue: searchValue
+      }));
+    }
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
   const onInputChangeHandler = useCallback(
     (value: string, event: InputActionMeta) => {
       if (event.action === "input-change") {
@@ -105,16 +121,17 @@ const Search: React.FC<ISearchProps> = ({ classes, onClickSearch }) => {
           setState(prevState => ({ ...prevState, value: input.value }));
         }
       } else {
-        setState(prevState => ({ ...prevState, value: null }));
+        setState(prevState => ({ ...prevState, value: "" }));
       }
     },
     [setState]
   );
   const onSearchHandler = useCallback(() => {
+    dispatch(SET_SEARCH_HISTORY(state.value));
     if (onClickSearch) {
       onClickSearch(state.value);
     }
-  }, [onClickSearch, state.value]);
+  }, [dispatch, onClickSearch, state.value]);
   const onKeyDownHandler = useCallback(
     (event: React.KeyboardEvent<HTMLElement>) => {
       if (event.keyCode === 13) {
@@ -146,6 +163,9 @@ const Search: React.FC<ISearchProps> = ({ classes, onClickSearch }) => {
         onKeyDown={onKeyDownHandler}
         onMenuOpen={onMenuOpenHandler}
         onMenuClose={onMenuCloseHandler}
+        defaultInputValue={searchValue}
+        defaultMenuIsOpen={searchValue !== ""}
+        autoFocus={searchValue !== ""}
       />
       <Button
         variant="contained"

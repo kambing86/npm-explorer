@@ -1,1 +1,2 @@
-export { default as concurrency } from "./concurrency";
+export { concurrency } from "./concurrency";
+export { search } from "./search";
