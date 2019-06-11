@@ -15,7 +15,7 @@ export default function(state: State = initialState, action: Action): State {
     case getType(SET_CONCURRENCY):
       return {
         ...state,
-        count: Number(action.payload)
+        count: action.payload
       };
     default:
       return state;

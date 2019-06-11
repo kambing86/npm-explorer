@@ -1,8 +1,8 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { Button, Icon, Theme, withStyles } from "@material-ui/core";
-import CreatableSelect from "react-select/lib/Creatable";
+// @ts-ignore pending update from @types/react-select
+import CreatableSelect from "react-select/creatable";
 import { ValueType, InputActionMeta } from "react-select/lib/types";
-import { StateManager } from "react-select/lib/stateManager";
 import { getQueryObservable$ } from "../observables/queryPackage";
 import ConcurrencyInput from "./ConcurrencyInput";
 import { useObservable } from "../hooks";
@@ -28,6 +28,7 @@ export interface IOptionType {
 
 interface ISearchState {
   isLoading: boolean;
+  isMenuOpen: boolean;
   options: IOptionType[];
   inputValue: string;
   value: string | null;
@@ -41,6 +42,7 @@ interface ISearchProps {
 function getInitialState(): ISearchState {
   return {
     isLoading: false,
+    isMenuOpen: false,
     options: [],
     inputValue: "",
     value: null
@@ -80,38 +82,56 @@ const useQuery = () => {
 
 const Search: React.FC<ISearchProps> = ({ classes, onClickSearch }) => {
   const [state, setState] = useQuery();
-  const reactSelectRef = useRef<StateManager<IOptionType>>(null);
 
-  const onInputChangeHandler = (value: string, event: InputActionMeta) => {
-    if (event.action === "input-change") {
-      setState({ ...state, isLoading: true, options: [], inputValue: value });
-    }
-  };
-  const onChangeHandler = (input: ValueType<IOptionType>) => {
-    if (input) {
-      if (isArray(input)) {
-        setState({ ...state, value: input[0].value });
-      } else {
-        setState({ ...state, value: input.value });
+  const onInputChangeHandler = useCallback(
+    (value: string, event: InputActionMeta) => {
+      if (event.action === "input-change") {
+        setState(prevState => ({
+          ...prevState,
+          isLoading: true,
+          options: [],
+          inputValue: value
+        }));
       }
-    } else {
-      setState({ ...state, value: null });
-    }
-  };
-  const onSearchHandler = () => {
+    },
+    [setState]
+  );
+  const onChangeHandler = useCallback(
+    (input: ValueType<IOptionType>) => {
+      if (input) {
+        if (isArray(input)) {
+          setState(prevState => ({ ...prevState, value: input[0].value }));
+        } else {
+          setState(prevState => ({ ...prevState, value: input.value }));
+        }
+      } else {
+        setState(prevState => ({ ...prevState, value: null }));
+      }
+    },
+    [setState]
+  );
+  const onSearchHandler = useCallback(() => {
     if (onClickSearch) {
       onClickSearch(state.value);
     }
-  };
-  const onKeyDownHandler = (event: React.KeyboardEvent<HTMLElement>) => {
-    if (event.keyCode === 13) {
-      const stateManager = reactSelectRef.current;
-      if (stateManager && !stateManager.state.menuIsOpen) {
-        onSearchHandler();
-        event.preventDefault();
+  }, [onClickSearch, state.value]);
+  const onKeyDownHandler = useCallback(
+    (event: React.KeyboardEvent<HTMLElement>) => {
+      if (event.keyCode === 13) {
+        if (!state.isMenuOpen) {
+          onSearchHandler();
+          event.preventDefault();
+        }
       }
-    }
-  };
+    },
+    [state.isMenuOpen, onSearchHandler]
+  );
+  const onMenuOpenHandler = useCallback(() => {
+    setState(prevState => ({ ...prevState, isMenuOpen: true }));
+  }, [setState]);
+  const onMenuCloseHandler = useCallback(() => {
+    setState(prevState => ({ ...prevState, isMenuOpen: false }));
+  }, [setState]);
   return (
     <>
       <CreatableSelect
@@ -124,8 +144,8 @@ const Search: React.FC<ISearchProps> = ({ classes, onClickSearch }) => {
         filterOption={null}
         createOptionPosition="first"
         onKeyDown={onKeyDownHandler}
-        // @ts-ignore
-        ref={reactSelectRef}
+        onMenuOpen={onMenuOpenHandler}
+        onMenuClose={onMenuCloseHandler}
       />
       <Button
         variant="contained"
