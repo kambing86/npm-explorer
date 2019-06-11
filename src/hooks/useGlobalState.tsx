@@ -1,4 +1,4 @@
-import React, { ReactNode, useContext, useReducer } from "react";
+import React, { ReactNode, Reducer, useContext, useReducer } from "react";
 import { noop } from "lodash";
 import { combineReducers } from "redux";
 import { ActionType } from "typesafe-actions";
@@ -27,7 +27,11 @@ const GlobalStateContext = React.createContext<
 >([getInitialState(), noop]);
 
 export function GlobalStateProvider({ children }: { children: ReactNode }) {
-  const contextValue = useReducer(reducer, null, getInitialState);
+  const contextValue = useReducer<Reducer<GlobalState, Action>, null>(
+    reducer,
+    null,
+    getInitialState
+  );
   return (
     <GlobalStateContext.Provider value={contextValue}>
       {children}
