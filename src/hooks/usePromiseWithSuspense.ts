@@ -22,41 +22,45 @@ export function usePromiseWithSuspense<IReturnData>(
     getInitialState
   );
   const loading = useRef(false);
-  const suspensePromise = useRef<Promise<undefined> | null>(null);
+  const [suspensePromise, setSuspensePromise] = useState<Promise<
+    undefined
+  > | null>(null);
   useEffect(() => {
     if (!promise) {
       return;
     }
     let cleanup = false;
     loading.current = true;
-    suspensePromise.current = new Promise(resolve => {
-      promise.then(
-        (data: IReturnData) => {
-          if (!cleanup) {
-            loading.current = false;
-            setState({ data });
+    setSuspensePromise(
+      new Promise(resolve => {
+        promise.then(
+          (data: IReturnData) => {
+            if (!cleanup) {
+              loading.current = false;
+              setState({ data });
+            }
+            resolve();
+          },
+          (error: Error) => {
+            if (!cleanup) {
+              loading.current = false;
+              setState({ error });
+            }
+            resolve();
           }
-          resolve();
-        },
-        (error: Error) => {
-          if (!cleanup) {
-            loading.current = false;
-            setState({ error });
-          }
-          resolve();
-        }
-      );
-    });
+        );
+      })
+    );
     return () => {
       cleanup = true;
       loading.current = false;
-      suspensePromise.current = null;
+      setSuspensePromise(null);
       setState(getInitialState);
     };
   }, [promise]);
 
-  if (loading.current && suspensePromise.current) {
-    throw suspensePromise.current;
+  if (loading.current && suspensePromise) {
+    throw suspensePromise;
   }
 
   return [state, setPromise as Dispatch<SetStateAction<Promise<IReturnData>>>];
