@@ -1,8 +1,7 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { Button, Icon, Theme, withStyles } from "@material-ui/core";
-// @ts-ignore pending update from @types/react-select
 import CreatableSelect from "react-select/creatable";
-import { ValueType, InputActionMeta } from "react-select/lib/types";
+import { ValueType, InputActionMeta } from "react-select/src/types";
 import { getQueryObservable$ } from "../observables/queryPackage";
 import ConcurrencyInput from "./ConcurrencyInput";
 import { useObservable, useGlobalState } from "../hooks";
