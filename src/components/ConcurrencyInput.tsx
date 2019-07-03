@@ -1,7 +1,7 @@
 import React, { useCallback } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { FormControl, InputLabel, Input, withStyles } from "@material-ui/core";
 import { PositionProperty, TextAlignProperty } from "csstype";
-import { useDispatch, useSelector } from "../hooks";
 import { SET_CONCURRENCY } from "../state/actions";
 import { getConcurrencyCount } from "../state/selectors/concurrency";
 

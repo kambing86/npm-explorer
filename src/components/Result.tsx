@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
-import { useSelector, useObservable } from "../hooks";
+import { useSelector } from "react-redux";
+import { useObservable } from "../hooks";
 import { getAllDependencies$ } from "../observables/getDependencies";
 import { CircularProgress } from "@material-ui/core";
 import { getConcurrencyCount } from "../state/selectors/concurrency";

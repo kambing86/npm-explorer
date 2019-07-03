@@ -1,10 +1,11 @@
 import React from "react";
+import { Provider } from "react-redux";
 import { RouteChildrenProps } from "react-router";
 import { HashRouter as Router, Route, Switch } from "react-router-dom";
 import "./App.css";
 import Search from "./components/Search";
 import View from "./components/View";
-import { GlobalStateProvider } from "./hooks/useGlobalState";
+import store from "./state";
 
 const SearchCompoonent: React.FC<RouteChildrenProps> = props => (
   <>
@@ -35,7 +36,7 @@ const NotFoundComponent: React.FC = () => {
 const App: React.FC = () => {
   return (
     <div className="App">
-      <GlobalStateProvider>
+      <Provider store={store}>
         <Router basename={process.env.PUBLIC_URL || ""}>
           <Switch>
             <Route exact path="/" component={SearchCompoonent} />
@@ -43,7 +44,7 @@ const App: React.FC = () => {
             <Route component={NotFoundComponent} />
           </Switch>
         </Router>
-      </GlobalStateProvider>
+      </Provider>
     </div>
   );
 };

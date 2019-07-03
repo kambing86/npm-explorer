@@ -1,10 +1,11 @@
 import React, { useState, useEffect, useCallback } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Button, Icon, Theme, withStyles } from "@material-ui/core";
 import CreatableSelect from "react-select/creatable";
 import { ValueType, InputActionMeta } from "react-select/src/types";
 import { getQueryObservable$ } from "../observables/queryPackage";
 import ConcurrencyInput from "./ConcurrencyInput";
-import { useDispatch, useSelector, useObservable } from "../hooks";
+import { useObservable } from "../hooks";
 import { isArray } from "../utils/typescriptHelpers";
 import { getSearchHistory } from "../state/selectors/search";
 import { SET_SEARCH_HISTORY } from "../state/actions";

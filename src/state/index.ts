@@ -1,4 +1,4 @@
-import { combineReducers } from "redux";
+import { createStore, combineReducers } from "redux";
 import { concurrency, search } from "./reducers";
 import { INIT } from "./actions";
 
@@ -16,3 +16,5 @@ export function getReducers() {
 export function getInitialState() {
   return getReducers()(undefined, INIT());
 }
+
+export default createStore(combineReducers(getReducersMap()));
