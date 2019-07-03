@@ -27,3 +27,13 @@ export function GlobalStateProvider({ children }: { children: ReactNode }) {
 export const useGlobalState = () => {
   return useContext(GlobalStateContext);
 };
+
+export function useSelector<T>(selector: (state: GlobalState) => T) {
+  const [state] = useGlobalState();
+  return selector(state);
+}
+
+export function useDispatch() {
+  const globalState = useGlobalState();
+  return globalState[1];
+}

@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { useGlobalState, useObservable } from "../hooks";
+import { useSelector, useObservable } from "../hooks";
 import { getAllDependencies$ } from "../observables/getDependencies";
 import { CircularProgress } from "@material-ui/core";
 import { getConcurrencyCount } from "../state/selectors/concurrency";
@@ -10,10 +10,8 @@ interface IProps {
 }
 
 const Result: React.FC<IProps> = ({ packageName, showDifferentVersion }) => {
-  const [globalState] = useGlobalState();
   const [observerState, setObservable] = useObservable<string[]>();
-
-  const concurrency = getConcurrencyCount(globalState);
+  const concurrency = useSelector(getConcurrencyCount);
 
   useEffect(() => {
     setObservable(

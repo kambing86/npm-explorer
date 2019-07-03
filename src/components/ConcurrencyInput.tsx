@@ -1,7 +1,7 @@
 import React, { useCallback } from "react";
 import { FormControl, InputLabel, Input, withStyles } from "@material-ui/core";
 import { PositionProperty, TextAlignProperty } from "csstype";
-import { useGlobalState } from "../hooks";
+import { useDispatch, useSelector } from "../hooks";
 import { SET_CONCURRENCY } from "../state/actions";
 import { getConcurrencyCount } from "../state/selectors/concurrency";
 
@@ -19,8 +19,8 @@ interface IProps {
 }
 
 const ConcurrencyInput: React.FC<IProps> = ({ classes }) => {
-  const [globalState, dispatch] = useGlobalState();
-  const concurrency = getConcurrencyCount(globalState);
+  const dispatch = useDispatch();
+  const concurrency = useSelector(getConcurrencyCount);
   const onChangeHandler = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
       dispatch(SET_CONCURRENCY(Number(event.target.value)));

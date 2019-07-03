@@ -4,7 +4,7 @@ import CreatableSelect from "react-select/creatable";
 import { ValueType, InputActionMeta } from "react-select/src/types";
 import { getQueryObservable$ } from "../observables/queryPackage";
 import ConcurrencyInput from "./ConcurrencyInput";
-import { useObservable, useGlobalState } from "../hooks";
+import { useDispatch, useSelector, useObservable } from "../hooks";
 import { isArray } from "../utils/typescriptHelpers";
 import { getSearchHistory } from "../state/selectors/search";
 import { SET_SEARCH_HISTORY } from "../state/actions";
@@ -83,9 +83,8 @@ const useQuery = () => {
 
 const Search: React.FC<ISearchProps> = ({ classes, onClickSearch }) => {
   const [state, setState] = useQuery();
-  const [globalState, dispatch] = useGlobalState();
-
-  const searchValue = getSearchHistory(globalState);
+  const dispatch = useDispatch();
+  const searchValue = useSelector(getSearchHistory);
 
   useEffect(() => {
     if (searchValue !== "") {
