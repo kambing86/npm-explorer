@@ -1,4 +1,5 @@
 import { createStore, combineReducers } from "redux";
+import { composeWithDevTools } from "redux-devtools-extension";
 import { concurrency, search } from "./reducers";
 import { INIT } from "./actions";
 
@@ -17,4 +18,7 @@ export function getInitialState() {
   return getReducers()(undefined, INIT());
 }
 
-export default createStore(combineReducers(getReducersMap()));
+export default createStore(
+  combineReducers(getReducersMap()),
+  composeWithDevTools()
+);
