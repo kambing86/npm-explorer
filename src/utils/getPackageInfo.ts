@@ -7,6 +7,6 @@ export const getPackageInfo = (packageString: string) => {
     .replace(/,/g, "");
   return {
     packageName,
-    packageVersion
+    packageVersion,
   };
 };

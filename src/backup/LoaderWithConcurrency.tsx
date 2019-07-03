@@ -6,7 +6,7 @@ import { useConcurrency } from "./useConcurrency";
 export default ({
   packageName,
   showDifferentVersion,
-  children
+  children,
 }: {
   packageName: string;
   showDifferentVersion: boolean;

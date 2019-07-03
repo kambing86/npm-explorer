@@ -5,7 +5,7 @@ import { INIT } from "./actions";
 function getReducersMap() {
   return {
     concurrency,
-    search
+    search,
   };
 }
 

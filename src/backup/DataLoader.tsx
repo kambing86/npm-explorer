@@ -23,7 +23,7 @@ interface IState<IReturnData> {
 
 function getInitialState<IReturnData>(): IState<IReturnData> {
   return {
-    loading: true
+    loading: true,
   };
 }
 
@@ -32,7 +32,7 @@ export function DataLoader<IReturnData>({
   createPromise,
   children,
   onCompleted,
-  onError
+  onError,
 }: IDataLoaderProps<IReturnData>) {
   const [state, setState] = useState<IState<IReturnData>>(getInitialState);
   const [currentCacheKey, setCurrentCacheKey] = useState<string>();

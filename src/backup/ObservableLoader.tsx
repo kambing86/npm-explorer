@@ -17,7 +17,7 @@ export interface IObservableLoaderProps<IReturnData> {
 
 function getInitialState<IReturnData>(): IState<IReturnData> {
   return {
-    completed: false
+    completed: false,
   };
 }
 
@@ -26,7 +26,7 @@ function ObservableLoader<IReturnData>({
   children,
   onData,
   onError,
-  onCompleted
+  onCompleted,
 }: IObservableLoaderProps<IReturnData>) {
   const [state, setState] = useState<IState<IReturnData>>(getInitialState);
   useEffect(() => {

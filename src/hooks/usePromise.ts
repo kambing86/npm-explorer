@@ -8,7 +8,7 @@ interface IPromiseState<IReturnData> {
 
 function getInitialState<IReturnData>(): IPromiseState<IReturnData> {
   return {
-    loading: true
+    loading: true,
   };
 }
 

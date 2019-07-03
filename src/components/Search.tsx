@@ -12,14 +12,14 @@ import { SET_SEARCH_HISTORY } from "../state/actions";
 const styles = (theme: Theme) => ({
   button: {
     padding: theme.spacing(1),
-    margin: theme.spacing(1)
+    margin: theme.spacing(1),
   },
   icon: {
-    marginLeft: theme.spacing(1)
+    marginLeft: theme.spacing(1),
   },
   reactSelect: {
-    width: "100%"
-  }
+    width: "100%",
+  },
 });
 
 export interface IOptionType {
@@ -46,7 +46,7 @@ function getInitialState(): ISearchState {
     isMenuOpen: false,
     options: [],
     inputValue: "",
-    value: ""
+    value: "",
   };
 }
 
@@ -63,17 +63,17 @@ const useQuery = () => {
       setState(state => {
         const allOptions: IOptionType[] = data.map((packageInfo: any) => ({
           label: packageInfo.name,
-          value: packageInfo.name
+          value: packageInfo.name,
         }));
         const { inputValue } = state;
         const sortedOption = [
           ...allOptions.filter(option => option.value === inputValue),
-          ...allOptions.filter(option => option.value !== inputValue)
+          ...allOptions.filter(option => option.value !== inputValue),
         ];
         return {
           ...state,
           isLoading: false,
-          options: sortedOption
+          options: sortedOption,
         };
       });
     }
@@ -84,16 +84,16 @@ const useQuery = () => {
 const Search: React.FC<ISearchProps> = ({ classes, onClickSearch }) => {
   const [state, setState] = useQuery();
   const dispatch = useDispatch();
-  const searchValue = useSelector(getSearchHistory);
+  const searchHistory = useSelector(getSearchHistory);
 
   useEffect(() => {
-    if (searchValue !== "") {
+    if (searchHistory !== "") {
       setState(prevState => ({
         ...prevState,
         isLoading: true,
         isMenuOpen: true,
         options: [],
-        inputValue: searchValue
+        inputValue: searchHistory,
       }));
     }
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
@@ -104,7 +104,7 @@ const Search: React.FC<ISearchProps> = ({ classes, onClickSearch }) => {
           ...prevState,
           isLoading: true,
           options: [],
-          inputValue: value
+          inputValue: value,
         }));
       }
     },
@@ -161,9 +161,9 @@ const Search: React.FC<ISearchProps> = ({ classes, onClickSearch }) => {
         onKeyDown={onKeyDownHandler}
         onMenuOpen={onMenuOpenHandler}
         onMenuClose={onMenuCloseHandler}
-        defaultInputValue={searchValue}
-        defaultMenuIsOpen={searchValue !== ""}
-        autoFocus={searchValue !== ""}
+        defaultInputValue={searchHistory}
+        defaultMenuIsOpen={searchHistory !== ""}
+        autoFocus={searchHistory !== ""}
       />
       <Button
         variant="contained"

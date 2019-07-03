@@ -7,11 +7,11 @@ import { getConcurrencyCount } from "../state/selectors/concurrency";
 
 const styles = () => ({
   inputLabel: {
-    position: "static" as PositionProperty
+    position: "static" as PositionProperty,
   },
   input: {
-    textAlign: "center" as TextAlignProperty
-  }
+    textAlign: "center" as TextAlignProperty,
+  },
 });
 
 interface IProps {

@@ -12,7 +12,7 @@ function getInitialState<IReturnData>(): IObserverState<IReturnData> {
   return {
     data: undefined,
     error: undefined,
-    completed: false
+    completed: false,
   };
 }
 
@@ -51,6 +51,6 @@ export function useObservable<IReturnData>(
 
   return [
     state,
-    setObservable as Dispatch<SetStateAction<Observable<IReturnData>>>
+    setObservable as Dispatch<SetStateAction<Observable<IReturnData>>>,
   ];
 }

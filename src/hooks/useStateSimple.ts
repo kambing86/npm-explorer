@@ -3,7 +3,7 @@ import { useReducer, Reducer } from "react";
 function reducer<T>(currentState: T, newState: Partial<T>) {
   return {
     ...currentState,
-    ...newState
+    ...newState,
   };
 }
 
