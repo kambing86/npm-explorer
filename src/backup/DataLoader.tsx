@@ -73,7 +73,7 @@ export function DataLoader<IReturnData>({
         cleanup = true;
       };
     }
-  }, [cacheKey, currentCacheKey]);
+  }, [cacheKey, currentCacheKey]); // eslint-disable-line react-hooks/exhaustive-deps
   useEffect(() => {
     if (onCompleted || onError) {
       const { data, error, loading } = state;
