@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Button, Icon, Theme, withStyles } from "@material-ui/core";
+import { Button, Icon, Theme } from "@material-ui/core";
+import { makeStyles } from "@material-ui/styles";
 import CreatableSelect from "react-select/creatable";
 import { ValueType, InputActionMeta } from "react-select/src/types";
 import { getQueryObservable$ } from "../observables/queryPackage";
@@ -10,7 +11,7 @@ import { isArray } from "../utils/typescriptHelpers";
 import { getSearchHistory } from "../state/selectors/search";
 import { SET_SEARCH_HISTORY } from "../state/actions";
 
-const styles = (theme: Theme) => ({
+const useStyles = makeStyles((theme: Theme) => ({
   button: {
     padding: theme.spacing(1),
     margin: theme.spacing(1),
@@ -21,7 +22,7 @@ const styles = (theme: Theme) => ({
   reactSelect: {
     width: "100%",
   },
-});
+}));
 
 export interface IOptionType {
   label: string;
@@ -37,7 +38,6 @@ interface ISearchState {
 }
 
 interface ISearchProps {
-  classes: { [key: string]: string };
   onClickSearch?: (value: string) => void;
 }
 
@@ -82,7 +82,8 @@ const useQuery = () => {
   return searchState;
 };
 
-const Search: React.FC<ISearchProps> = ({ classes, onClickSearch }) => {
+const Search: React.FC<ISearchProps> = ({ onClickSearch }) => {
+  const classes = useStyles();
   const [state, setState] = useQuery();
   const dispatch = useDispatch();
   const searchHistory = useSelector(getSearchHistory);
@@ -180,4 +181,4 @@ const Search: React.FC<ISearchProps> = ({ classes, onClickSearch }) => {
   );
 };
 
-export default withStyles(styles)(Search);
+export default Search;

@@ -1,11 +1,12 @@
 import React, { useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { FormControl, InputLabel, Input, withStyles } from "@material-ui/core";
+import { FormControl, InputLabel, Input } from "@material-ui/core";
+import { makeStyles } from "@material-ui/styles";
 import { PositionProperty, TextAlignProperty } from "csstype";
 import { SET_CONCURRENCY } from "../state/actions";
 import { getConcurrencyCount } from "../state/selectors/concurrency";
 
-const styles = () => ({
+const useStyles = makeStyles({
   inputLabel: {
     position: "static" as PositionProperty,
   },
@@ -14,11 +15,8 @@ const styles = () => ({
   },
 });
 
-interface IProps {
-  classes: { [key: string]: string };
-}
-
-const ConcurrencyInput: React.FC<IProps> = ({ classes }) => {
+const ConcurrencyInput: React.FC = () => {
+  const classes = useStyles();
   const dispatch = useDispatch();
   const concurrency = useSelector(getConcurrencyCount);
   const onChangeHandler = useCallback(
@@ -43,4 +41,4 @@ const ConcurrencyInput: React.FC<IProps> = ({ classes }) => {
   );
 };
 
-export default withStyles(styles)(ConcurrencyInput);
+export default ConcurrencyInput;
