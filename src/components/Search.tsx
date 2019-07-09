@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Button, Icon, Theme } from "@material-ui/core";
-import { makeStyles } from "@material-ui/styles";
+import { Button, Icon, Theme, makeStyles } from "@material-ui/core";
 import CreatableSelect from "react-select/creatable";
 import { ValueType, InputActionMeta } from "react-select/src/types";
 import { getQueryObservable$ } from "../observables/queryPackage";

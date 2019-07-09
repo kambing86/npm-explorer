@@ -2,6 +2,7 @@ import React from "react";
 import { Provider } from "react-redux";
 import { RouteChildrenProps } from "react-router";
 import { HashRouter as Router, Route, Switch } from "react-router-dom";
+import { makeStyles } from "@material-ui/core";
 import { ThemeProvider } from "@material-ui/styles";
 import "./App.css";
 import Search from "./components/Search";
@@ -35,9 +36,19 @@ const NotFoundComponent: React.FC = () => {
   return <div>Page Not Found</div>;
 };
 
+const useStyles = makeStyles({
+  app: {
+    maxWidth: "800px",
+    margin: "0 auto",
+    flex: "1 0 auto",
+    padding: "1rem",
+  },
+});
+
 const App: React.FC = () => {
+  const classes = useStyles();
   return (
-    <div className="App">
+    <div className={`App d-flex flex-column align-items-center ${classes.app}`}>
       <ThemeProvider theme={theme}>
         <Provider store={store}>
           <Router basename={process.env.PUBLIC_URL || ""}>
