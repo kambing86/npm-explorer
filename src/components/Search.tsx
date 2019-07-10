@@ -33,7 +33,6 @@ interface ISearchState {
   isMenuOpen: boolean;
   options: IOptionType[];
   inputValue: string;
-  value: string;
 }
 
 interface ISearchProps {
@@ -46,14 +45,28 @@ function getInitialState(): ISearchState {
     isMenuOpen: false,
     options: [],
     inputValue: "",
-    value: "",
   };
 }
 
 const useQuery = () => {
-  const searchState = useState<ISearchState>(getInitialState);
-  const [state, setState] = searchState;
+  const [state, setState] = useState<ISearchState>(getInitialState);
+  const searchHistory = useSelector(getSearchHistory);
   const [observerState, setObservable] = useObservable<any>();
+
+  // componentDidMount effect
+  useEffect(() => {
+    if (searchHistory !== "") {
+      setState(prevState => ({
+        ...prevState,
+        isLoading: true,
+        isMenuOpen: true,
+        options: [],
+        inputValue: searchHistory,
+      }));
+    }
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // check for input value and do query
   useEffect(() => {
     setObservable(getQueryObservable$(state.inputValue));
   }, [setObservable, state.inputValue]);
@@ -78,59 +91,57 @@ const useQuery = () => {
       });
     }
   }, [observerState, setState]);
-  return searchState;
+
+  // callbacks for Search component
+  const setQuery = useCallback((value: string) => {
+    setState(prevState => ({
+      ...prevState,
+      isLoading: true,
+      options: [],
+      inputValue: value,
+    }));
+  }, []);
+  const setMenuOpen = useCallback((value: boolean) => {
+    setState(prevState => ({
+      ...prevState,
+      isMenuOpen: value,
+    }));
+  }, []);
+
+  return { state, setQuery, setMenuOpen, searchHistory };
 };
 
 const Search: React.FC<ISearchProps> = ({ onClickSearch }) => {
   const classes = useStyles();
-  const [state, setState] = useQuery();
+  const { state, setQuery, setMenuOpen, searchHistory } = useQuery();
+  const [value, setValue] = useState("");
   const dispatch = useDispatch();
-  const searchHistory = useSelector(getSearchHistory);
 
-  useEffect(() => {
-    if (searchHistory !== "") {
-      setState(prevState => ({
-        ...prevState,
-        isLoading: true,
-        isMenuOpen: true,
-        options: [],
-        inputValue: searchHistory,
-      }));
-    }
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
   const onInputChangeHandler = useCallback(
     (value: string, event: InputActionMeta) => {
       if (event.action === "input-change") {
-        setState(prevState => ({
-          ...prevState,
-          isLoading: true,
-          options: [],
-          inputValue: value,
-        }));
+        setQuery(value);
       }
     },
-    [setState]
+    [setQuery]
   );
-  const onChangeHandler = useCallback(
-    (input: ValueType<IOptionType>) => {
-      if (input) {
-        if (isArray(input)) {
-          setState(prevState => ({ ...prevState, value: input[0].value }));
-        } else {
-          setState(prevState => ({ ...prevState, value: input.value }));
-        }
+  const onChangeHandler = useCallback((input: ValueType<IOptionType>) => {
+    if (input) {
+      if (isArray(input)) {
+        setValue(input[0].value);
       } else {
-        setState(prevState => ({ ...prevState, value: "" }));
+        setValue(input.value);
       }
-    },
-    [setState]
-  );
-  const onSearchHandler = useCallback(() => {
-    dispatch(SET_SEARCH_HISTORY(state.value));
-    if (onClickSearch) {
-      onClickSearch(state.value);
+    } else {
+      setValue("");
     }
-  }, [dispatch, onClickSearch, state.value]);
+  }, []);
+  const onSearchHandler = useCallback(() => {
+    dispatch(SET_SEARCH_HISTORY(value));
+    if (onClickSearch) {
+      onClickSearch(value);
+    }
+  }, [dispatch, onClickSearch, value]);
   const onKeyDownHandler = useCallback(
     (event: React.KeyboardEvent<HTMLElement>) => {
       if (event.keyCode === 13) {
@@ -143,11 +154,11 @@ const Search: React.FC<ISearchProps> = ({ onClickSearch }) => {
     [state.isMenuOpen, onSearchHandler]
   );
   const onMenuOpenHandler = useCallback(() => {
-    setState(prevState => ({ ...prevState, isMenuOpen: true }));
-  }, [setState]);
+    setMenuOpen(true);
+  }, [setMenuOpen]);
   const onMenuCloseHandler = useCallback(() => {
-    setState(prevState => ({ ...prevState, isMenuOpen: false }));
-  }, [setState]);
+    setMenuOpen(false);
+  }, [setMenuOpen]);
   return (
     <>
       <CreatableSelect
