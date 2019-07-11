@@ -29,10 +29,10 @@ export interface IOptionType {
 }
 
 interface ISearchState {
-  isLoading: boolean;
-  isMenuOpen: boolean;
-  options: IOptionType[];
-  searchString: string;
+  readonly isLoading: boolean;
+  readonly isMenuOpen: boolean;
+  readonly options: IOptionType[];
+  readonly searchString: string;
 }
 
 interface ISearchProps {

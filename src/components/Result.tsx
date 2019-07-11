@@ -21,7 +21,7 @@ const Result: React.FC<IProps> = ({ packageName, showDifferentVersion }) => {
   }, [setObservable, packageName, showDifferentVersion, concurrency]);
   const { data, error, completed } = observerState;
   if (error) {
-    console.error(error);
+    console.error(error); // eslint-disable-line no-console
     return <div>Error: {error.message}</div>;
   }
   const decodedPackageName = decodeURIComponent(packageName);

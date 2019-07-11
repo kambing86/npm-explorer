@@ -57,6 +57,7 @@ const getDependencies$ = (packageName: string, packageVersion?: string) =>
             data.versions[nearestVersion][dependenciesField]
           );
         }
+        // eslint-disable-next-line no-console
         console.warn(
           `no such version ${checkVersion} for ${packageName}, use latest tag`
         );
@@ -65,7 +66,7 @@ const getDependencies$ = (packageName: string, packageVersion?: string) =>
         if (latestVersionMeta) {
           return getDependenciesInSet(latestVersionMeta[dependenciesField]);
         }
-        console.warn("no latest version");
+        console.warn("no latest version"); // eslint-disable-line no-console
         return new Set<string>();
       }
       return getDependenciesInSet(data[dependenciesField]);
