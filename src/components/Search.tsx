@@ -32,7 +32,7 @@ interface ISearchState {
   isLoading: boolean;
   isMenuOpen: boolean;
   options: IOptionType[];
-  inputValue: string;
+  searchString: string;
 }
 
 interface ISearchProps {
@@ -44,11 +44,11 @@ function getInitialState(): ISearchState {
     isLoading: false,
     isMenuOpen: false,
     options: [],
-    inputValue: "",
+    searchString: "",
   };
 }
 
-const useQuery = () => {
+const useSearch = () => {
   const [state, setState] = useState<ISearchState>(getInitialState);
   const searchHistory = useSelector(getSearchHistory);
   const [observerState, setObservable] = useObservable<any>();
@@ -61,15 +61,15 @@ const useQuery = () => {
         isLoading: true,
         isMenuOpen: true,
         options: [],
-        inputValue: searchHistory,
+        searchString: searchHistory,
       }));
     }
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
-  // check for input value and do query
+  // check for searchString and do query
   useEffect(() => {
-    setObservable(getQueryObservable$(state.inputValue));
-  }, [setObservable, state.inputValue]);
+    setObservable(getQueryObservable$(state.searchString));
+  }, [setObservable, state.searchString]);
   useEffect(() => {
     const { data, error, completed } = observerState;
     if (data && !error && completed) {
@@ -78,10 +78,10 @@ const useQuery = () => {
           label: packageInfo.name,
           value: packageInfo.name,
         }));
-        const { inputValue } = state;
+        const { searchString } = state;
         const sortedOption = [
-          ...allOptions.filter(option => option.value === inputValue),
-          ...allOptions.filter(option => option.value !== inputValue),
+          ...allOptions.filter(option => option.value === searchString),
+          ...allOptions.filter(option => option.value !== searchString),
         ];
         return {
           ...state,
@@ -90,15 +90,15 @@ const useQuery = () => {
         };
       });
     }
-  }, [observerState, setState]);
+  }, [observerState]);
 
   // callbacks for Search component
-  const setQuery = useCallback((value: string) => {
+  const setSearchString = useCallback((value: string) => {
     setState(prevState => ({
       ...prevState,
       isLoading: true,
       options: [],
-      inputValue: value,
+      searchString: value,
     }));
   }, []);
   const setMenuOpen = useCallback((value: boolean) => {
@@ -108,22 +108,22 @@ const useQuery = () => {
     }));
   }, []);
 
-  return { state, setQuery, setMenuOpen, searchHistory };
+  return { state, setSearchString, setMenuOpen, searchHistory };
 };
 
 const Search: React.FC<ISearchProps> = ({ onClickSearch }) => {
   const classes = useStyles();
-  const { state, setQuery, setMenuOpen, searchHistory } = useQuery();
+  const { state, setSearchString, setMenuOpen, searchHistory } = useSearch();
   const [value, setValue] = useState("");
   const dispatch = useDispatch();
 
   const onInputChangeHandler = useCallback(
     (value: string, event: InputActionMeta) => {
       if (event.action === "input-change") {
-        setQuery(value);
+        setSearchString(value);
       }
     },
-    [setQuery]
+    [setSearchString]
   );
   const onChangeHandler = useCallback((input: ValueType<IOptionType>) => {
     if (input) {
