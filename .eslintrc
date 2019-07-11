@@ -7,11 +7,21 @@
     "prettier",
     "prettier/@typescript-eslint"
   ],
+  "plugins": ["@typescript-eslint/tslint"],
+  "parserOptions": {
+    "project": "tsconfig.json"
+  },
   "rules": {
     "@typescript-eslint/explicit-function-return-type": ["off"],
     "@typescript-eslint/interface-name-prefix": ["off"],
     "@typescript-eslint/no-explicit-any": ["off"], // can be changed to warn
+    "@typescript-eslint/tslint/config": [
+      "warn",
+      {
+        "lintFile": "./tslint.json" // path to tslint.json of your project
+      }
+    ],
     "no-console": ["warn"],
-    "spaced-comment": ["error"]
+    "spaced-comment": ["error", "always", { "markers": ["/"] }]
   }
 }

@@ -1,7 +1,7 @@
-import React, { ReactNode, Reducer, useContext, useReducer } from "react";
 import { noop } from "lodash";
-import { Action, GlobalState } from "../state/types";
+import React, { useContext, useReducer, ReactNode, Reducer } from "react";
 import { getInitialState, getReducers } from "../state";
+import { Action, GlobalState } from "../state/types";
 
 function reducer(state: GlobalState, action: Action) {
   return getReducers()(state, action);

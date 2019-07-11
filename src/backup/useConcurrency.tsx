@@ -1,5 +1,5 @@
-import React, { ReactNode, useContext, useState } from "react";
 import { noop } from "lodash";
+import React, { useContext, useState, ReactNode } from "react";
 
 const defaultValue = 2;
 

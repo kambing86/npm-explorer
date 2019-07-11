@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction, useEffect, useState, useRef } from "react";
+import { useEffect, useRef, useState, Dispatch, SetStateAction } from "react";
 
 interface IPromiseState<IReturnData> {
   readonly data?: IReturnData;

@@ -1,7 +1,7 @@
 import React from "react";
-import ObservableLoader, { IObservableLoaderProps } from "./ObservableLoader";
 import { getAllDependencies$ } from "../observables/getDependencies";
 import { useConcurrency } from "./useConcurrency";
+import ObservableLoader, { IObservableLoaderProps } from "./ObservableLoader";
 
 export default ({
   packageName,

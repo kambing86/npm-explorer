@@ -35,8 +35,9 @@
     "eject": "react-scripts eject",
     "predeploy": "yarn build",
     "deploy": "gh-pages -d build",
-    "prettier": "prettier --write src/**/*.*",
-    "lint": "eslint src/**/*.*"
+    "prettier": "prettier --write 'src/**/*.*'",
+    "lint": "tslint 'src/**/*.{j,t}s{,x}' && eslint 'src/**/*.{j,t}s{,x}'",
+    "lint-fix": "tslint --fix 'src/**/*.{j,t}s{,x}' && eslint --fix 'src/**/*.{j,t}s{,x}'"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -55,13 +56,16 @@
   },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^1.11.0",
+    "@typescript-eslint/eslint-plugin-tslint": "^1.11.0",
     "eslint": "^5.16.0",
     "eslint-config-prettier": "^6.0.0",
     "eslint-config-react-app": "^4.0.1",
     "gh-pages": "^2.0.1",
     "husky": "^3.0.0",
     "lint-staged": "^9.2.0",
-    "prettier": "^1.18.2"
+    "prettier": "^1.18.2",
+    "tslint": "^5.18.0",
+    "tslint-microsoft-contrib": "^6.2.0"
   },
   "husky": {
     "hooks": {
@@ -71,6 +75,7 @@
   "lint-staged": {
     "src/**/*.{js,jsx,ts,tsx,json,css,scss,md}": [
       "prettier --write",
+      "yarn lint",
       "git add"
     ]
   }

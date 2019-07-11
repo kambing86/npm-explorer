@@ -1,6 +1,6 @@
+import { of, EMPTY, Observable, Subject } from "rxjs";
+import { delay, flatMap, switchMap } from "rxjs/operators";
 import fetchJson from "../utils/fetchJson";
-import { EMPTY, Observable, Subject, of } from "rxjs";
-import { switchMap, delay, flatMap } from "rxjs/operators";
 
 const getQueryUrl = (query: string) =>
   `https://npm-registry-proxy.glitch.me/search/suggestions?q=${query}`;

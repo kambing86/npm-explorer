@@ -1,6 +1,6 @@
-import React, { useState, useCallback } from "react";
+import { Checkbox, FormControlLabel, FormGroup } from "@material-ui/core";
+import React, { useCallback, useState } from "react";
 import { Link } from "react-router-dom";
-import { Checkbox, FormGroup, FormControlLabel } from "@material-ui/core";
 import Result from "./Result";
 
 interface IProps {

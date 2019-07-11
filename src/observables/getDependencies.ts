@@ -1,9 +1,9 @@
-import { from, of } from "rxjs";
-import { mergeMap, retry, distinct, take, map, scan } from "rxjs/operators";
 import { forIn } from "lodash";
+import { from, of } from "rxjs";
+import { distinct, map, mergeMap, retry, scan, take } from "rxjs/operators";
 import semver from "semver";
-import fetchPackage from "./fetchPackage";
 import { getPackageInfo } from "../utils/getPackageInfo";
+import fetchPackage from "./fetchPackage";
 import { distinctExpand } from "./operators";
 
 const dependenciesField = "dependencies";

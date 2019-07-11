@@ -1,14 +1,14 @@
-import React, { useState, useEffect, useCallback } from "react";
+import { makeStyles, Button, Icon, Theme } from "@material-ui/core";
+import React, { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Button, Icon, Theme, makeStyles } from "@material-ui/core";
 import CreatableSelect from "react-select/creatable";
-import { ValueType, InputActionMeta } from "react-select/src/types";
-import { getQueryObservable$ } from "../observables/queryPackage";
-import ConcurrencyInput from "./ConcurrencyInput";
+import { InputActionMeta, ValueType } from "react-select/src/types";
 import { useObservable } from "../hooks";
-import { isArray } from "../utils/typescriptHelpers";
-import { getSearchHistory } from "../state/selectors/search";
+import { getQueryObservable$ } from "../observables/queryPackage";
 import { SET_SEARCH_HISTORY } from "../state/actions";
+import { getSearchHistory } from "../state/selectors/search";
+import { isArray } from "../utils/typescriptHelpers";
+import ConcurrencyInput from "./ConcurrencyInput";
 
 const useStyles = makeStyles((theme: Theme) => ({
   button: {

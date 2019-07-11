@@ -1,0 +1,20 @@
+{
+  "extends": ["tslint-microsoft-contrib/recommended"],
+  "rules": {
+    "export-name": ["off"],
+    "function-name": ["off"],
+    "import-name": ["off"],
+    "no-backbone-get-set-outside-model": ["off"],
+    "no-relative-imports": ["off"],
+    "no-useless-files": ["off"],
+    "ordered-imports": [
+      true,
+      {
+        "import-sources-order": "lowercase-first",
+        "named-imports-order": "lowercase-first"
+      }
+    ],
+    "prefer-type-cast": ["off"],
+    "use-simple-attributes": ["off"]
+  }
+}

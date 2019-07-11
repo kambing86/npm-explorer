@@ -1,5 +1,5 @@
+import { EMPTY, ObservableInput, SchedulerLike } from "rxjs";
 import { expand } from "rxjs/operators";
-import { ObservableInput, EMPTY, SchedulerLike } from "rxjs";
 
 // custom operator that only expand if the value is distinct from previous values
 export const distinctExpand = <T>(
@@ -11,7 +11,7 @@ export const distinctExpand = <T>(
   return expand(
     (value: T) => {
       if (set.has(value)) {
-        console.debug("duplicate", value);
+        console.debug("duplicate", value); // eslint-disable-line no-console
         return EMPTY;
       }
       set.add(value);
