@@ -1,0 +1,12 @@
+language: node_js
+node_js: node
+jobs:
+  include:
+    - stage: format
+      name: lint
+      script: yarn lint
+    - name: prettier
+      script: yarn prettier
+    - stage: test
+      name: jest
+      script: yarn test
