@@ -1,8 +1,12 @@
 language: node_js
 node_js: node
+stages:
+  - quality
+  - test
+  - build
 jobs:
   include:
-    - stage: format
+    - stage: quality
       name: lint
       script: yarn lint
     - name: prettier
@@ -10,6 +14,12 @@ jobs:
     - stage: test
       name: jest
       script: yarn test
-    - stage: deploy
-      name: gh-pages
-      script: yarn deploy
+    - stage: build
+      script: yarn build
+deploy:
+  provider: pages
+  skip_cleanup: true
+  github_token: $GITHUB_TOKEN
+  local_dir: ./build
+  on:
+    branch: master
