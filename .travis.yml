@@ -4,6 +4,11 @@ stages:
   - quality
   - test
   - build
+  - deploy
+cache:
+  - yarn
+  - directories:
+    - ./build
 jobs:
   include:
     - stage: quality
@@ -16,10 +21,11 @@ jobs:
       script: yarn test
     - stage: build
       script: yarn build
-deploy:
-  provider: pages
-  skip_cleanup: true
-  github_token: $GITHUB_TOKEN
-  local_dir: ./build
-  on:
-    branch: master
+    - stage: deploy  
+      deploy:
+        provider: pages
+        skip_cleanup: true
+        github_token: $GITHUB_TOKEN
+        local_dir: ./build
+        on:
+          branch: master
