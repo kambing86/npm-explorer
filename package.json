@@ -35,7 +35,8 @@
     "eject": "react-scripts eject",
     "predeploy": "yarn build",
     "deploy": "gh-pages -d build",
-    "prettier": "prettier --write 'src/**/*.*'",
+    "prettier": "prettier --check 'src/**/*.*'",
+    "prettier-write": "prettier --write 'src/**/*.*'",
     "lint": "tslint 'src/**/*.{j,t}s{,x}' && eslint 'src/**/*.{j,t}s{,x}'",
     "lint-fix": "tslint --fix 'src/**/*.{j,t}s{,x}' && eslint --fix 'src/**/*.{j,t}s{,x}'"
   },
