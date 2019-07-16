@@ -10,3 +10,6 @@ jobs:
     - stage: test
       name: jest
       script: yarn test
+    - stage: deploy
+      name: gh-pages
+      script: yarn deploy
