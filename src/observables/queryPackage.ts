@@ -13,6 +13,7 @@ export const getQueryObservable$ = (query: string) => {
         ? EMPTY
         : new Observable<any>(subsriber => {
             let done = false;
+            let aborted = false;
             const abortController = new AbortController();
             (async () => {
               try {
@@ -24,11 +25,14 @@ export const getQueryObservable$ = (query: string) => {
                 subsriber.next(data);
                 subsriber.complete();
               } catch (e) {
-                subsriber.error(e);
+                if (!aborted) {
+                  subsriber.error(e);
+                }
               }
             })();
             return () => {
               if (!done) {
+                aborted = true;
                 abortController.abort();
               }
             };
