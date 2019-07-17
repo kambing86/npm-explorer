@@ -10,28 +10,28 @@ const dependenciesField = "dependencies";
 const distributionTags = "dist-tags";
 const latestTag = "latest";
 
-export interface IPackageMetaData {
+export interface PackageMetaData {
   name: string;
   dependencies: {
     [key: string]: string;
   };
 }
 
-export interface IAllVersionsPackageMetaData {
+export interface AllVersionsPackageMetaData {
   "dist-tags": {
     [key: string]: string;
   };
   versions: {
-    [key: string]: IPackageMetaData;
+    [key: string]: PackageMetaData;
   };
 }
 
-type FetchResult = IPackageMetaData | IAllVersionsPackageMetaData;
+type FetchResult = PackageMetaData | AllVersionsPackageMetaData;
 
 function isAllVersionPackageMetaData(
   result: FetchResult
-): result is IAllVersionsPackageMetaData {
-  return Boolean((result as IAllVersionsPackageMetaData).versions);
+): result is AllVersionsPackageMetaData {
+  return Boolean((result as AllVersionsPackageMetaData).versions);
 }
 
 // convert dependencies Object to Set with `package@version` format
@@ -120,7 +120,7 @@ export const getAllDependencies$ = (
       }
       return retryFetchPackage$(packageName, packageVersion).pipe(
         map(unknownData => {
-          const packageData = unknownData as IAllVersionsPackageMetaData;
+          const packageData = unknownData as AllVersionsPackageMetaData;
           const maxVersion =
             semver.maxSatisfying(
               Object.keys(packageData.versions),

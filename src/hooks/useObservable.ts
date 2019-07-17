@@ -2,13 +2,13 @@ import { useEffect, useState, Dispatch, SetStateAction } from "react";
 import { Observable } from "rxjs";
 import { useStateSimple } from "./useStateSimple";
 
-interface IObserverState<IReturnData> {
-  readonly data?: IReturnData;
+interface ObserverState<ReturnData> {
+  readonly data?: ReturnData;
   readonly error?: Error;
   readonly completed: boolean;
 }
 
-function getInitialState<IReturnData>(): IObserverState<IReturnData> {
+function getInitialState<ReturnData>(): ObserverState<ReturnData> {
   return {
     data: undefined,
     error: undefined,
@@ -16,16 +16,16 @@ function getInitialState<IReturnData>(): IObserverState<IReturnData> {
   };
 }
 
-export function useObservable<IReturnData>(
-  initialObservable?: Observable<IReturnData> | (() => Observable<IReturnData>)
+export function useObservable<ReturnData>(
+  initialObservable?: Observable<ReturnData> | (() => Observable<ReturnData>)
 ): [
-  IObserverState<IReturnData>,
-  Dispatch<SetStateAction<Observable<IReturnData>>>
+  ObserverState<ReturnData>,
+  Dispatch<SetStateAction<Observable<ReturnData>>>
 ] {
   const [observable, setObservable] = useState<
-    Observable<IReturnData> | undefined
+    Observable<ReturnData> | undefined
   >(initialObservable);
-  const [state, setState] = useStateSimple<IObserverState<IReturnData>>(
+  const [state, setState] = useStateSimple<ObserverState<ReturnData>>(
     getInitialState
   );
   useEffect(() => {
@@ -51,6 +51,6 @@ export function useObservable<IReturnData>(
 
   return [
     state,
-    setObservable as Dispatch<SetStateAction<Observable<IReturnData>>>,
+    setObservable as Dispatch<SetStateAction<Observable<ReturnData>>>,
   ];
 }

@@ -1,36 +1,31 @@
 import { useEffect, useState, Dispatch, SetStateAction } from "react";
 
-interface IPromiseState<IReturnData> {
-  readonly data?: IReturnData;
+interface PromiseState<ReturnData> {
+  readonly data?: ReturnData;
   readonly error?: Error;
   readonly loading: boolean;
 }
 
-function getInitialState<IReturnData>(): IPromiseState<IReturnData> {
+function getInitialState<ReturnData>(): PromiseState<ReturnData> {
   return {
     loading: true,
   };
 }
 
-export function usePromise<IReturnData>(
-  initialPromise?: () => Promise<IReturnData>
-): [
-  IPromiseState<IReturnData>,
-  Dispatch<SetStateAction<Promise<IReturnData>>>
-] {
-  const [promise, setPromise] = useState<Promise<IReturnData> | undefined>(
+export function usePromise<ReturnData>(
+  initialPromise?: () => Promise<ReturnData>
+): [PromiseState<ReturnData>, Dispatch<SetStateAction<Promise<ReturnData>>>] {
+  const [promise, setPromise] = useState<Promise<ReturnData> | undefined>(
     initialPromise
   );
-  const [state, setState] = useState<IPromiseState<IReturnData>>(
-    getInitialState
-  );
+  const [state, setState] = useState<PromiseState<ReturnData>>(getInitialState);
   useEffect(() => {
     if (!promise) {
       return;
     }
     let cleanup = false;
     promise.then(
-      (data: IReturnData) => {
+      (data: ReturnData) => {
         if (!cleanup) {
           setState({ data, loading: false });
         }
@@ -47,5 +42,5 @@ export function usePromise<IReturnData>(
     };
   }, [promise]);
 
-  return [state, setPromise as Dispatch<SetStateAction<Promise<IReturnData>>>];
+  return [state, setPromise as Dispatch<SetStateAction<Promise<ReturnData>>>];
 }

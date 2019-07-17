@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import CreatableSelect from "react-select/creatable";
 import { InputActionMeta, ValueType } from "react-select/src/types";
 import { useObservable } from "../hooks";
-import { IPackageMetaData } from "../observables/getDependencies";
+import { PackageMetaData } from "../observables/getDependencies";
 import { getQueryObservable$ } from "../observables/queryPackage";
 import { SET_SEARCH_HISTORY } from "../state/actions";
 import { getSearchHistory } from "../state/selectors/search";
@@ -24,23 +24,23 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
 }));
 
-export interface IOptionType {
+interface OptionType {
   label: string;
   value: string;
 }
 
-interface ISearchState {
+interface SearchState {
   readonly isLoading: boolean;
   readonly isMenuOpen: boolean;
-  readonly options: IOptionType[];
+  readonly options: OptionType[];
   readonly searchString: string;
 }
 
-interface ISearchProps {
+interface SearchProps {
   onClickSearch?: (value: string) => void;
 }
 
-function getInitialState(): ISearchState {
+function getInitialState(): SearchState {
   return {
     isLoading: false,
     isMenuOpen: false,
@@ -50,7 +50,7 @@ function getInitialState(): ISearchState {
 }
 
 const useSearch = () => {
-  const [state, setState] = useState<ISearchState>(getInitialState);
+  const [state, setState] = useState<SearchState>(getInitialState);
   const searchHistory = useSelector(getSearchHistory);
   const [observerState, setObservable] = useObservable();
 
@@ -75,7 +75,7 @@ const useSearch = () => {
     const { data, error, completed } = observerState;
     if (data && !error && completed) {
       setState(state => {
-        const allOptions: IOptionType[] = (data as IPackageMetaData[]).map(
+        const allOptions: OptionType[] = (data as PackageMetaData[]).map(
           packageInfo => ({
             label: packageInfo.name,
             value: packageInfo.name,
@@ -114,7 +114,7 @@ const useSearch = () => {
   return { state, setSearchString, setMenuOpen, searchHistory };
 };
 
-const Search: React.FC<ISearchProps> = ({ onClickSearch }) => {
+const Search: React.FC<SearchProps> = ({ onClickSearch }) => {
   const classes = useStyles();
   const { state, setSearchString, setMenuOpen, searchHistory } = useSearch();
   const [value, setValue] = useState("");
@@ -128,7 +128,7 @@ const Search: React.FC<ISearchProps> = ({ onClickSearch }) => {
     },
     [setSearchString]
   );
-  const onChangeHandler = useCallback((input: ValueType<IOptionType>) => {
+  const onChangeHandler = useCallback((input: ValueType<OptionType>) => {
     if (input) {
       if (isArray(input)) {
         setValue(input[0].value);

@@ -1,39 +1,41 @@
 import React, { useEffect, useState } from "react";
 
-interface IDataCache {
+interface DataCache {
   [cacheKey: string]: Promise<unknown> | undefined;
 }
 
-const dataCaches: IDataCache = {};
+const dataCaches: DataCache = {};
 
-export interface IDataLoaderProps<IReturnData> {
+export interface DataLoaderProps<ReturnData> {
   cacheKey: string;
-  createPromise(): Promise<IReturnData>;
-  children(data: IState<IReturnData>): React.ReactNode;
-  onCompleted?(data: IReturnData): void;
+  createPromise(): Promise<ReturnData>;
+  children(data: DataLoaderState<ReturnData>): React.ReactNode;
+  onCompleted?(data: ReturnData): void;
   onError?(err: Error): void;
 }
 
-interface IState<IReturnData> {
-  readonly data?: IReturnData;
+interface DataLoaderState<ReturnData> {
+  readonly data?: ReturnData;
   readonly error?: Error;
   readonly loading: boolean;
 }
 
-function getInitialState<IReturnData>(): IState<IReturnData> {
+function getInitialState<ReturnData>(): DataLoaderState<ReturnData> {
   return {
     loading: true,
   };
 }
 
-export function DataLoader<IReturnData>({
+export function DataLoader<ReturnData>({
   cacheKey,
   createPromise,
   children,
   onCompleted,
   onError,
-}: IDataLoaderProps<IReturnData>) {
-  const [state, setState] = useState<IState<IReturnData>>(getInitialState);
+}: DataLoaderProps<ReturnData>) {
+  const [state, setState] = useState<DataLoaderState<ReturnData>>(
+    getInitialState
+  );
   const [currentCacheKey, setCurrentCacheKey] = useState<string>();
   useEffect(() => {
     if (cacheKey !== currentCacheKey) {
@@ -59,7 +61,7 @@ export function DataLoader<IReturnData>({
       foundCache
         .then(unknownData => {
           if (!cleanup) {
-            setState({ data: unknownData as IReturnData, loading: false });
+            setState({ data: unknownData as ReturnData, loading: false });
           }
         })
         .catch(error => {

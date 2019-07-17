@@ -1,34 +1,36 @@
 import React, { useEffect, useState } from "react";
 import { Observable } from "rxjs";
 
-interface IState<IReturnData> {
-  readonly data?: IReturnData;
+interface ObservableLoaderState<ReturnData> {
+  readonly data?: ReturnData;
   readonly error?: Error;
   readonly completed: boolean;
 }
 
-export interface IObservableLoaderProps<IReturnData> {
-  observable: Observable<IReturnData>;
-  children(data: IState<IReturnData>): React.ReactNode;
-  onData?(data: IReturnData): void;
+export interface ObservableLoaderProps<ReturnData> {
+  observable: Observable<ReturnData>;
+  children(data: ObservableLoaderState<ReturnData>): React.ReactNode;
+  onData?(data: ReturnData): void;
   onError?(err: Error): void;
   onCompleted?(): void;
 }
 
-function getInitialState<IReturnData>(): IState<IReturnData> {
+function getInitialState<ReturnData>(): ObservableLoaderState<ReturnData> {
   return {
     completed: false,
   };
 }
 
-function ObservableLoader<IReturnData>({
+function ObservableLoader<ReturnData>({
   observable,
   children,
   onData,
   onError,
   onCompleted,
-}: IObservableLoaderProps<IReturnData>) {
-  const [state, setState] = useState<IState<IReturnData>>(getInitialState);
+}: ObservableLoaderProps<ReturnData>) {
+  const [state, setState] = useState<ObservableLoaderState<ReturnData>>(
+    getInitialState
+  );
   useEffect(() => {
     const subscription = observable.subscribe(
       data => {

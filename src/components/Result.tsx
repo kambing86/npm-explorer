@@ -5,12 +5,12 @@ import { useObservable } from "../hooks";
 import { getAllDependencies$ } from "../observables/getDependencies";
 import { getConcurrencyCount } from "../state/selectors/concurrency";
 
-interface IProps {
+interface Props {
   packageName: string;
   showDifferentVersion: boolean;
 }
 
-const Result: React.FC<IProps> = ({ packageName, showDifferentVersion }) => {
+const Result: React.FC<Props> = ({ packageName, showDifferentVersion }) => {
   const [observerState, setObservable] = useObservable<string[]>();
   const concurrency = useSelector(getConcurrencyCount);
 

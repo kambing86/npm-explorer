@@ -3,11 +3,11 @@ import React, { useCallback, useState } from "react";
 import { Link } from "react-router-dom";
 import Result from "./Result";
 
-interface IProps {
+interface Props {
   packageName: string;
 }
 
-const View: React.FC<IProps> = ({ packageName }) => {
+const View: React.FC<Props> = ({ packageName }) => {
   const [diffVersion, setDiffVersion] = useState(true);
   const decodedPackageName = decodeURIComponent(packageName);
   const onChangeHandler = useCallback(() => {
