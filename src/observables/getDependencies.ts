@@ -10,6 +10,30 @@ const dependenciesField = "dependencies";
 const distributionTags = "dist-tags";
 const latestTag = "latest";
 
+export interface IPackageMetaData {
+  name: string;
+  dependencies: {
+    [key: string]: string;
+  };
+}
+
+export interface IAllVersionsPackageMetaData {
+  "dist-tags": {
+    [key: string]: string;
+  };
+  versions: {
+    [key: string]: IPackageMetaData;
+  };
+}
+
+type FetchResult = IPackageMetaData | IAllVersionsPackageMetaData;
+
+function isAllVersionPackageMetaData(
+  result: FetchResult
+): result is IAllVersionsPackageMetaData {
+  return Boolean((result as IAllVersionsPackageMetaData).versions);
+}
+
 // convert dependencies Object to Set with `package@version` format
 const getDependenciesInSet = (dependencies: { [key: string]: string }) => {
   const results = new Set<string>();
@@ -39,8 +63,9 @@ const getDependencies$ = (packageName: string, packageVersion?: string) =>
     // if so get the dependencies from there
     // else assume that packageVersion is a range and use semver to check
     // and get the max satisfying version
-    map(data => {
-      if (data.versions) {
+    map(unknownData => {
+      const data = unknownData as FetchResult;
+      if (isAllVersionPackageMetaData(data)) {
         const checkVersion = packageVersion || latestTag;
         const versionInDistTags = data[distributionTags][checkVersion];
         const foundVersionMeta =
@@ -89,18 +114,19 @@ export const getAllDependencies$ = (
     }, concurrency),
     // get the version number based on showDifferentVersion
     mergeMap(value => {
-      const data = getPackageInfo(value);
+      const { packageName, packageVersion } = getPackageInfo(value);
       if (!showDifferentVersion) {
-        return of(data.packageName);
+        return of(packageName);
       }
-      return retryFetchPackage$(data.packageName, data.packageVersion).pipe(
-        map(packageData => {
+      return retryFetchPackage$(packageName, packageVersion).pipe(
+        map(unknownData => {
+          const packageData = unknownData as IAllVersionsPackageMetaData;
           const maxVersion =
             semver.maxSatisfying(
               Object.keys(packageData.versions),
-              data.packageVersion
-            ) || data.packageVersion;
-          return `${data.packageName}@${maxVersion}`;
+              packageVersion
+            ) || packageVersion;
+          return `${packageName}@${maxVersion}`;
         })
       );
     }, concurrency),

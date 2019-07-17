@@ -4,10 +4,10 @@ import fetchJson from "../utils/fetchJson";
 const registryUrl = "https://npm-registry-proxy.glitch.me/";
 // backup url
 // const registryUrl = "https://registry.npmjs.cf/";
-const registryCache: { [key: string]: Promise<any> } = {};
+const registryCache: { [key: string]: Promise<unknown> } = {};
 
 export default (packageQuery: string) =>
-  new Observable<any>(subsriber => {
+  new Observable(subsriber => {
     let abortController: AbortController | null = null;
     let aborted = false;
     function cleanup() {

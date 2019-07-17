@@ -11,7 +11,7 @@ export const getQueryObservable$ = (query: string) => {
     flatMap(query =>
       query === ""
         ? EMPTY
-        : new Observable<any>(subsriber => {
+        : new Observable(subsriber => {
             let done = false;
             let aborted = false;
             const abortController = new AbortController();

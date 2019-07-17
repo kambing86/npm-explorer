@@ -14,7 +14,6 @@
   "rules": {
     "@typescript-eslint/explicit-function-return-type": ["off"],
     "@typescript-eslint/interface-name-prefix": ["off"],
-    "@typescript-eslint/no-explicit-any": ["off"], // can be changed to warn
     "@typescript-eslint/tslint/config": [
       "warn",
       {

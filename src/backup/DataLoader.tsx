@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from "react";
 
 interface IDataCache {
-  // tslint:disable-next-line no-any
-  [cacheKey: string]: Promise<any> | undefined;
+  [cacheKey: string]: Promise<unknown> | undefined;
 }
 
 const dataCaches: IDataCache = {};
@@ -58,9 +57,9 @@ export function DataLoader<IReturnData>({
       }
 
       foundCache
-        .then((data: IReturnData) => {
+        .then(unknownData => {
           if (!cleanup) {
-            setState({ data, loading: false });
+            setState({ data: unknownData as IReturnData, loading: false });
           }
         })
         .catch(error => {
