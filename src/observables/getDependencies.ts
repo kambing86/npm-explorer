@@ -32,6 +32,7 @@ const retryFetchPackage$ = (packageName: string, packageVersion?: string) =>
   // get all versions if packageVersion exists, if not just get latest
   of(
     `${packageName}${
+      // check if packageName has "/" eg. @angular/core
       packageVersion || packageName.includes("/") ? `` : `/${latestTag}`
     }`
   ).pipe(
