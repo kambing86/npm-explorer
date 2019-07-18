@@ -5,13 +5,19 @@ import fetchJson from "../utils/fetchJson";
 const getQueryUrl = (query: string) =>
   `https://npm-registry-proxy.glitch.me/search/suggestions?q=${query}`;
 
+interface PackageQuery {
+  name: string;
+}
+
+export type QueryResult = PackageQuery[];
+
 export const getQueryObservable$ = (query: string) => {
   return of(query).pipe(
     delay(400),
     flatMap(query =>
       query === ""
         ? EMPTY
-        : new Observable(subsriber => {
+        : new Observable<QueryResult>(subsriber => {
             let done = false;
             let aborted = false;
             const abortController = new AbortController();

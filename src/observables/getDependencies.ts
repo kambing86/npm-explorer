@@ -1,38 +1,22 @@
-import { forIn } from "lodash";
+import { forIn, isEmpty } from "lodash";
 import { from, of } from "rxjs";
-import { distinct, map, mergeMap, retry, scan, take } from "rxjs/operators";
+import {
+  distinct,
+  filter,
+  map,
+  mergeMap,
+  retry,
+  scan,
+  take,
+} from "rxjs/operators";
 import semver from "semver";
 import { getPackageInfo } from "../utils/getPackageInfo";
-import fetchPackage from "./fetchPackage";
+import fetchPackage, { isAllVersionPackageMetaData } from "./fetchPackage";
 import { distinctExpand } from "./operators";
 
 const dependenciesField = "dependencies";
 const distributionTags = "dist-tags";
 const latestTag = "latest";
-
-export interface PackageMetaData {
-  name: string;
-  dependencies: {
-    [key: string]: string;
-  };
-}
-
-export interface AllVersionsPackageMetaData {
-  "dist-tags": {
-    [key: string]: string;
-  };
-  versions: {
-    [key: string]: PackageMetaData;
-  };
-}
-
-type FetchResult = PackageMetaData | AllVersionsPackageMetaData;
-
-function isAllVersionPackageMetaData(
-  result: FetchResult
-): result is AllVersionsPackageMetaData {
-  return Boolean((result as AllVersionsPackageMetaData).versions);
-}
 
 // convert dependencies Object to Set with `package@version` format
 const getDependenciesInSet = (dependencies: { [key: string]: string }) => {
@@ -63,8 +47,7 @@ const getDependencies$ = (packageName: string, packageVersion?: string) =>
     // if so get the dependencies from there
     // else assume that packageVersion is a range and use semver to check
     // and get the max satisfying version
-    map(unknownData => {
-      const data = unknownData as FetchResult;
+    map(data => {
       if (isAllVersionPackageMetaData(data)) {
         const checkVersion = packageVersion || latestTag;
         const versionInDistTags = data[distributionTags][checkVersion];
@@ -119,15 +102,18 @@ export const getAllDependencies$ = (
         return of(packageName);
       }
       return retryFetchPackage$(packageName, packageVersion).pipe(
-        map(unknownData => {
-          const packageData = unknownData as AllVersionsPackageMetaData;
-          const maxVersion =
-            semver.maxSatisfying(
-              Object.keys(packageData.versions),
-              packageVersion
-            ) || packageVersion;
-          return `${packageName}@${maxVersion}`;
-        })
+        map(packageData => {
+          if (isAllVersionPackageMetaData(packageData)) {
+            const maxVersion =
+              semver.maxSatisfying(
+                Object.keys(packageData.versions),
+                packageVersion
+              ) || packageVersion;
+            return `${packageName}@${maxVersion}`;
+          }
+          return "";
+        }),
+        filter(value => !isEmpty(value))
       );
     }, concurrency),
     // only show distinct value

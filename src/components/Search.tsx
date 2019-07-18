@@ -4,8 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import CreatableSelect from "react-select/creatable";
 import { InputActionMeta, ValueType } from "react-select/src/types";
 import { useObservable } from "../hooks";
-import { PackageMetaData } from "../observables/getDependencies";
-import { getQueryObservable$ } from "../observables/queryPackage";
+import { getQueryObservable$, QueryResult } from "../observables/queryPackage";
 import { SET_SEARCH_HISTORY } from "../state/actions";
 import { getSearchHistory } from "../state/selectors/search";
 import { isArray } from "../utils/typescriptHelpers";
@@ -52,7 +51,7 @@ function getInitialState(): SearchState {
 const useSearch = () => {
   const [state, setState] = useState<SearchState>(getInitialState);
   const searchHistory = useSelector(getSearchHistory);
-  const [observerState, setObservable] = useObservable();
+  const [observerState, setObservable] = useObservable<QueryResult>();
 
   // componentDidMount effect
   useEffect(() => {
@@ -75,12 +74,10 @@ const useSearch = () => {
     const { data, error, completed } = observerState;
     if (data && !error && completed) {
       setState(state => {
-        const allOptions: OptionType[] = (data as PackageMetaData[]).map(
-          packageInfo => ({
-            label: packageInfo.name,
-            value: packageInfo.name,
-          })
-        );
+        const allOptions: OptionType[] = data.map(packageInfo => ({
+          label: packageInfo.name,
+          value: packageInfo.name,
+        }));
         const { searchString } = state;
         const sortedOption = [
           ...allOptions.filter(option => option.value === searchString),
