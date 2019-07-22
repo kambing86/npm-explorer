@@ -6,7 +6,7 @@ import { RouteChildrenProps } from "react-router";
 import { HashRouter as Router, Route, Switch } from "react-router-dom";
 import Search from "./components/Search";
 import View from "./components/View";
-import store from "./state";
+import store from "./store";
 import theme from "./theme";
 import "./App.css";
 

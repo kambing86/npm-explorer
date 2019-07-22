@@ -5,8 +5,8 @@ import CreatableSelect from "react-select/creatable";
 import { InputActionMeta, ValueType } from "react-select/src/types";
 import { useObservable } from "../hooks";
 import { getQueryObservable$, QueryResult } from "../observables/queryPackage";
-import { SET_SEARCH_HISTORY } from "../state/actions";
-import { getSearchHistory } from "../state/selectors/search";
+import { SET_SEARCH_HISTORY } from "../store/actions";
+import { getSearchHistory } from "../store/selectors/search";
 import { isArray } from "../utils/typescriptHelpers";
 import ConcurrencyInput from "./ConcurrencyInput";
 

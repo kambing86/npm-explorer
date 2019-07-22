@@ -2,8 +2,8 @@ import { makeStyles, FormControl, Input, InputLabel } from "@material-ui/core";
 import { PositionProperty, TextAlignProperty } from "csstype";
 import React, { useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { SET_CONCURRENCY } from "../state/actions";
-import { getConcurrencyCount } from "../state/selectors/concurrency";
+import { SET_CONCURRENCY } from "../store/actions";
+import { getConcurrencyCount } from "../store/selectors/concurrency";
 
 const useStyles = makeStyles({
   inputLabel: {

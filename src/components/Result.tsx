@@ -3,7 +3,7 @@ import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { useObservable } from "../hooks";
 import { getAllDependencies$ } from "../observables/getDependencies";
-import { getConcurrencyCount } from "../state/selectors/concurrency";
+import { getConcurrencyCount } from "../store/selectors/concurrency";
 
 interface Props {
   packageName: string;
