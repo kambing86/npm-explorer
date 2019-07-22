@@ -1,2 +1,9 @@
-export { concurrency } from "./concurrency";
-export { search } from "./search";
+import { concurrency } from "./concurrency";
+import { search } from "./search";
+
+export function getReducersMap() {
+  return {
+    concurrency,
+    search,
+  };
+}
