@@ -87,8 +87,8 @@ const getDependencies$ = (packageName: string, packageVersion?: string) =>
 // Observable that get all dependencies for the package recursively
 export const getAllDependencies$ = (
   packageString: string,
-  showDifferentVersion: boolean = true,
-  concurrency: number = 10
+  showDifferentVersion = true,
+  concurrency = 10
 ) => {
   return getDependencies$(packageString).pipe(
     // get the dependencies of dependency, with 10 concurrency
