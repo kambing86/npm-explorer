@@ -1,7 +1,7 @@
 import { CircularProgress } from "@material-ui/core";
 import React, { useCallback, useEffect } from "react";
 import { useSelector } from "react-redux";
-import { AutoSizer, List } from "react-virtualized";
+import { AutoSizer, List, ListRowProps } from "react-virtualized";
 import { useObservable } from "../hooks";
 import { getAllDependencies$ } from "../observables/getDependencies";
 import { getConcurrencyCount } from "../store/selectors/concurrency";
@@ -22,7 +22,7 @@ const Result: React.FC<Props> = ({ packageName, showDifferentVersion }) => {
   }, [setObservable, packageName, showDifferentVersion, concurrency]);
   const { data, error, completed } = observerState;
   const rowRenderer = useCallback(
-    ({ index, key, style }: any) => {
+    ({ index, key, style }: ListRowProps) => {
       if (data === undefined) {
         return null;
       }
