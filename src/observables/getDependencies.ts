@@ -121,6 +121,7 @@ export const getAllDependencies$ = (
     distinct(),
     // get maximum 1000 packages, one good example is bloater
     take(1000),
-    scan((acc: string[], value: string) => [...acc, value], [])
+    scan((acc: string[], value: string) => [...acc, value], []),
+    map(value => value.sort())
   );
 };

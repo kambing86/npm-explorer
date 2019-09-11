@@ -1,6 +1,7 @@
 import { CircularProgress } from "@material-ui/core";
-import React, { useEffect } from "react";
+import React, { useCallback, useEffect } from "react";
 import { useSelector } from "react-redux";
+import { AutoSizer, List } from "react-virtualized";
 import { useObservable } from "../hooks";
 import { getAllDependencies$ } from "../observables/getDependencies";
 import { getConcurrencyCount } from "../store/selectors/concurrency";
@@ -20,6 +21,20 @@ const Result: React.FC<Props> = ({ packageName, showDifferentVersion }) => {
     );
   }, [setObservable, packageName, showDifferentVersion, concurrency]);
   const { data, error, completed } = observerState;
+  const rowRenderer = useCallback(
+    ({ index, key, style }: any) => {
+      if (data === undefined) {
+        return null;
+      }
+      const dependency = data[index];
+      return (
+        <div className="text-center" key={key} style={style}>
+          {dependency}
+        </div>
+      );
+    },
+    [data]
+  );
   if (error) {
     console.error(error); // eslint-disable-line no-console
     return <div>Error: {error.message}</div>;
@@ -33,11 +48,22 @@ const Result: React.FC<Props> = ({ packageName, showDifferentVersion }) => {
           <div>
             Found {data.length} dependencies for {decodedPackageName}
           </div>
-          <ul>
-            {data.sort().map(dependency => (
-              <li key={dependency}>{dependency}</li>
-            ))}
-          </ul>
+          <div
+            className="flex-grow-1 flex-shrink-1"
+            style={{ alignSelf: "normal" }}
+          >
+            <AutoSizer>
+              {({ height, width }) => (
+                <List
+                  width={width}
+                  height={height}
+                  rowCount={data.length}
+                  rowHeight={30}
+                  rowRenderer={rowRenderer}
+                />
+              )}
+            </AutoSizer>
+          </div>
         </>
       )}
       {completed && !data && <div>No dependencies</div>}
