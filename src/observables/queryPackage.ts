@@ -1,7 +1,6 @@
 import { of, EMPTY, Observable } from "rxjs";
 import { delay, flatMap } from "rxjs/operators";
-// @ts-ignore
-import { fromFetch } from "rxjs/_esm5/fetch";
+import { fromFetch } from "./fetch";
 
 const getQueryUrl = (query: string) =>
   `https://npm-registry-proxy.glitch.me/search/suggestions?q=${query}`;

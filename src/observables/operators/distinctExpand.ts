@@ -11,7 +11,6 @@ export const distinctExpand = <T>(
   return expand(
     (value: T) => {
       if (set.has(value)) {
-        console.debug("duplicate", value); // eslint-disable-line no-console
         return EMPTY;
       }
       set.add(value);

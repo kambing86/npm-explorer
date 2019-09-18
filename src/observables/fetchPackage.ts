@@ -1,7 +1,6 @@
 import { Observable } from "rxjs";
 import { finalize, flatMap, share } from "rxjs/operators";
-// @ts-ignore
-import { fromFetch } from "rxjs/_esm5/fetch";
+import { fromFetch } from "./fetch";
 
 const registryUrl = "https://npm-registry-proxy.glitch.me/";
 // backup url
@@ -9,7 +8,7 @@ const registryUrl = "https://npm-registry-proxy.glitch.me/";
 
 interface PackageMetaData {
   name: string;
-  dependencies: {
+  dependencies?: {
     [key: string]: string;
   };
 }
@@ -33,7 +32,7 @@ export function isAllVersionPackageMetaData(
   return Boolean((result as AllVersionsPackageMetaData).versions);
 }
 
-export default (packageQuery: string) => {
+export default (packageQuery: string): Observable<FetchResult> => {
   let cache = registryCache[packageQuery];
   if (!cache) {
     cache = registryCache[packageQuery] = fromFetch(
