@@ -1,5 +1,7 @@
 import { Observable } from "rxjs";
-import fetchJson from "../utils/fetchJson";
+import { finalize, flatMap, share } from "rxjs/operators";
+// @ts-ignore
+import { fromFetch } from "rxjs/_esm5/fetch";
 
 const registryUrl = "https://npm-registry-proxy.glitch.me/";
 // backup url
@@ -23,7 +25,7 @@ interface AllVersionsPackageMetaData {
 
 type FetchResult = PackageMetaData | AllVersionsPackageMetaData;
 
-const registryCache: { [key: string]: Promise<FetchResult> } = {};
+const registryCache: { [key: string]: Observable<FetchResult> } = {};
 
 export function isAllVersionPackageMetaData(
   result: FetchResult
@@ -31,39 +33,18 @@ export function isAllVersionPackageMetaData(
   return Boolean((result as AllVersionsPackageMetaData).versions);
 }
 
-export default (packageQuery: string): Observable<FetchResult> =>
-  new Observable(subsriber => {
-    let abortController: AbortController | null = null;
-    let aborted = false;
-    function cleanup() {
-      abortController = null;
-      delete registryCache[packageQuery];
-    }
-    (async () => {
-      try {
-        let cache = registryCache[packageQuery];
-        if (!cache) {
-          abortController = new AbortController();
-          cache = registryCache[packageQuery] = fetchJson(
-            `${registryUrl}${packageQuery}`,
-            abortController.signal
-          );
-        }
-        const response = await cache;
-        cleanup();
-        subsriber.next(response);
-        subsriber.complete();
-      } catch (e) {
-        cleanup();
-        if (!aborted) {
-          subsriber.error(e);
-        }
-      }
-    })();
-    return () => {
-      if (abortController) {
-        aborted = true;
-        abortController.abort();
-      }
-    };
-  });
+export default (packageQuery: string) => {
+  let cache = registryCache[packageQuery];
+  if (!cache) {
+    cache = registryCache[packageQuery] = fromFetch(
+      `${registryUrl}${packageQuery}`
+    ).pipe(
+      flatMap((res: Response) => res.json()),
+      finalize(() => {
+        delete registryCache[packageQuery];
+      }),
+      share()
+    );
+  }
+  return cache;
+};
