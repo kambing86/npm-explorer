@@ -48,10 +48,7 @@ const Result: React.FC<Props> = ({ packageName, showDifferentVersion }) => {
           <div>
             Found {data.length} dependencies for {decodedPackageName}
           </div>
-          <div
-            className="flex-grow-1 flex-shrink-1"
-            style={{ alignSelf: "normal" }}
-          >
+          <div className="flex-grow-1 flex-shrink-1 align-self-stretch">
             <AutoSizer>
               {({ height, width }) => (
                 <List
