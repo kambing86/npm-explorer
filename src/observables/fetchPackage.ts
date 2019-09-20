@@ -22,7 +22,7 @@ interface AllVersionsPackageMetaData {
   };
 }
 
-type FetchResult = PackageMetaData | AllVersionsPackageMetaData;
+export type FetchResult = PackageMetaData | AllVersionsPackageMetaData;
 
 const registryCache: { [key: string]: Observable<FetchResult> } = {};
 

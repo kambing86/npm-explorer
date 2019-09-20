@@ -2,7 +2,10 @@ import { from, of } from "rxjs";
 import { distinct, map, mergeMap, retry, scan, take } from "rxjs/operators";
 import semver from "semver";
 import { getPackageInfo } from "../utils/getPackageInfo";
-import fetchPackage, { isAllVersionPackageMetaData } from "./fetchPackage";
+import fetchPackage, {
+  isAllVersionPackageMetaData,
+  FetchResult,
+} from "./fetchPackage";
 import { distinctExpand } from "./operators";
 
 const dependenciesField = "dependencies";
@@ -38,41 +41,62 @@ const retryFetchPackage$ = (
     retry(2)
   );
 
+// use semver with packageVersionRange to get the max satisfying version
+// if there is no such version, use latest tag version
+// then use that version to get the correct dependencies
+const getDependenciesFromFetchResult = (
+  packageName: string,
+  packageVersionRange?: string
+) => (packageData: FetchResult) => {
+  if (isAllVersionPackageMetaData(packageData)) {
+    if (packageVersionRange) {
+      const maxVersion = semver.maxSatisfying(
+        Object.keys(packageData.versions),
+        packageVersionRange
+      );
+      if (maxVersion) {
+        return getDependenciesInSet(
+          packageData.versions[maxVersion][dependenciesField]
+        );
+      }
+      // eslint-disable-next-line no-console
+      console.warn(
+        `no such version ${packageVersionRange} for ${packageName}, use latest tag`
+      );
+    }
+    const latestVersion = packageData[distributionTags][latestTag];
+    const latestVersionMeta = packageData.versions[latestVersion];
+    if (latestVersionMeta) {
+      return getDependenciesInSet(latestVersionMeta[dependenciesField]);
+    }
+    console.warn(`no latest version for ${packageName}`); // eslint-disable-line no-console
+    return new Set<string>();
+  }
+  return getDependenciesInSet(packageData[dependenciesField]);
+};
+
 // Observable that returns all the dependencies for one package in `package@version` format
 const getDependencies$ = (packageName: string, packageVersionRange?: string) =>
   retryFetchPackage$(packageName, packageVersionRange).pipe(
-    // use semver with packageVersionRange to get the max satisfying version
-    // if there is no such version, use latest tag version
-    map(data => {
-      if (isAllVersionPackageMetaData(data)) {
-        if (packageVersionRange) {
-          const maxVersion = semver.maxSatisfying(
-            Object.keys(data.versions),
-            packageVersionRange
-          );
-          if (maxVersion) {
-            return getDependenciesInSet(
-              data.versions[maxVersion][dependenciesField]
-            );
-          }
-          // eslint-disable-next-line no-console
-          console.warn(
-            `no such version ${packageVersionRange} for ${packageName}, use latest tag`
-          );
-        }
-        const latestVersion = data[distributionTags][latestTag];
-        const latestVersionMeta = data.versions[latestVersion];
-        if (latestVersionMeta) {
-          return getDependenciesInSet(latestVersionMeta[dependenciesField]);
-        }
-        console.warn(`no latest version for ${packageName}`); // eslint-disable-line no-console
-        return new Set<string>();
-      }
-      return getDependenciesInSet(data[dependenciesField]);
-    }),
+    map(getDependenciesFromFetchResult(packageName, packageVersionRange)),
     // convert from Set to Stream
     mergeMap(dependenciesInSet => from(dependenciesInSet))
   );
+
+const getMaxVersionFromFetchResult = (
+  packageName: string,
+  packageVersionRange: string
+) => (packageData: FetchResult) => {
+  if (isAllVersionPackageMetaData(packageData)) {
+    const maxVersion =
+      semver.maxSatisfying(
+        Object.keys(packageData.versions),
+        packageVersionRange
+      ) || packageVersionRange;
+    return `${packageName}@${maxVersion}`;
+  }
+  return `${packageName}@${packageVersionRange}`;
+};
 
 // Observable that get all dependencies for the package recursively
 export const getAllDependencies$ = (
@@ -93,17 +117,7 @@ export const getAllDependencies$ = (
         return of(packageName);
       }
       return retryFetchPackage$(packageName, packageVersionRange).pipe(
-        map(packageData => {
-          if (isAllVersionPackageMetaData(packageData)) {
-            const maxVersion =
-              semver.maxSatisfying(
-                Object.keys(packageData.versions),
-                packageVersionRange
-              ) || packageVersionRange;
-            return `${packageName}@${maxVersion}`;
-          }
-          return `${packageName}@${packageVersionRange}`;
-        })
+        map(getMaxVersionFromFetchResult(packageName, packageVersionRange))
       );
     }, concurrency),
     // only show distinct value
