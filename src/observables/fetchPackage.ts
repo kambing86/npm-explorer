@@ -1,6 +1,6 @@
 import { Observable } from "rxjs";
+import { fromFetch } from "rxjs/fetch";
 import { finalize, flatMap, share } from "rxjs/operators";
-import { fromFetch } from "./fetch";
 
 const registryUrl = "https://npm-registry-proxy.glitch.me/";
 // backup url
