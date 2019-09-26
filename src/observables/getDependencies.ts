@@ -144,7 +144,7 @@ export const getAllVersions$ = (packageString: string) => {
           latest: packageData[distributionTags][latestTag],
         } as PackageVersionInfo;
       }
-      return undefined;
+      throw new Error("couldn't find all versions package.json");
     })
   );
 };

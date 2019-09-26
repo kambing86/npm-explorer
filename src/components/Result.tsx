@@ -1,10 +1,8 @@
 import CircularProgress from "@material-ui/core/CircularProgress";
 import MenuItem from "@material-ui/core/MenuItem";
 import Select from "@material-ui/core/Select";
-import React, { useCallback, useEffect, useState, PureComponent } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import AutoSizer from "react-virtualized-auto-sizer";
-import { FixedSizeList as List, ListChildComponentProps } from "react-window";
 import { useObservable } from "../hooks";
 import {
   getAllDependencies$,
@@ -12,6 +10,7 @@ import {
   PackageVersionInfo,
 } from "../observables/getDependencies";
 import { getConcurrencyCount } from "../store/selectors/concurrency";
+import DependenciesList from "./DependenciesList";
 
 interface Props {
   packageName: string;
@@ -24,9 +23,7 @@ const useResult = (
   concurrency: number
 ) => {
   const [selectedVersion, setSelectedVersion] = useState<string>("");
-  const [versions, setVersions] = useObservable<
-    PackageVersionInfo | undefined
-  >();
+  const [versions, setVersions] = useObservable<PackageVersionInfo>();
   const [dependencies, setDependencies] = useObservable<string[]>();
   useEffect(() => {
     setVersions(getAllVersions$(packageName));
@@ -57,22 +54,6 @@ const useResult = (
   return { versions, dependencies, selectedVersion, setSelectedVersion };
 };
 
-class RowRenderer extends PureComponent<ListChildComponentProps> {
-  render() {
-    const { data, index, style } = this.props;
-    const dependency = (data as string[])[index];
-    return (
-      <div className="text-center" style={style}>
-        {dependency}
-      </div>
-    );
-  }
-}
-
-function itemKey(index: number, data: string[]) {
-  return data[index];
-}
-
 const Result: React.FC<Props> = ({ packageName, showDifferentVersion }) => {
   const concurrency = useSelector(getConcurrencyCount);
   const {
@@ -81,6 +62,12 @@ const Result: React.FC<Props> = ({ packageName, showDifferentVersion }) => {
     selectedVersion,
     setSelectedVersion,
   } = useResult(packageName, showDifferentVersion, concurrency);
+  const selectOnChangedHandler = useCallback(
+    (event: React.ChangeEvent<{ name?: string; value: unknown }>) => {
+      setSelectedVersion(event.target.value as string);
+    },
+    [setSelectedVersion]
+  );
 
   const {
     data: versionsData,
@@ -92,12 +79,6 @@ const Result: React.FC<Props> = ({ packageName, showDifferentVersion }) => {
     error: dependenciesError,
     completed: dependenciesCompleted,
   } = dependencies;
-  const selectOnChangedHandler = useCallback(
-    (event: React.ChangeEvent<{ name?: string; value: unknown }>) => {
-      setSelectedVersion(event.target.value as string);
-    },
-    [setSelectedVersion]
-  );
   if (versionsError) {
     console.error(versionsError); // eslint-disable-line no-console
     return <div>Error: {versionsError.message}</div>;
@@ -126,22 +107,7 @@ const Result: React.FC<Props> = ({ packageName, showDifferentVersion }) => {
             Found {dependenciesData.length} dependencies for{" "}
             {decodedPackageName}
           </div>
-          <div className="flex-grow-1 flex-shrink-1 align-self-stretch">
-            <AutoSizer>
-              {({ height, width }) => (
-                <List
-                  width={width}
-                  height={height}
-                  itemCount={dependenciesData.length}
-                  itemSize={30}
-                  itemData={dependenciesData}
-                  itemKey={itemKey}
-                >
-                  {RowRenderer}
-                </List>
-              )}
-            </AutoSizer>
-          </div>
+          <DependenciesList data={dependenciesData} />
         </>
       )}
       {dependenciesCompleted && !dependenciesData && <div>No dependencies</div>}
