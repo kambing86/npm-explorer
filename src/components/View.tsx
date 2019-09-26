@@ -1,4 +1,6 @@
-import { Checkbox, FormControlLabel, FormGroup } from "@material-ui/core";
+import Checkbox from "@material-ui/core/Checkbox";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
+import FormGroup from "@material-ui/core/FormGroup";
 import React, { useCallback, useState } from "react";
 import { Link } from "react-router-dom";
 import Result from "./Result";

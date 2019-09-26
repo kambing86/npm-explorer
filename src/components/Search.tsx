@@ -1,4 +1,6 @@
-import { makeStyles, Button, Icon, Theme } from "@material-ui/core";
+import { makeStyles, Theme } from "@material-ui/core/styles";
+import Button from "@material-ui/core/Button";
+import Icon from "@material-ui/core/Icon";
 import React, { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import CreatableSelect from "react-select/creatable";

@@ -1,9 +1,10 @@
-import { CircularProgress } from "@material-ui/core";
+import CircularProgress from "@material-ui/core/CircularProgress";
 import MenuItem from "@material-ui/core/MenuItem";
 import Select from "@material-ui/core/Select";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState, PureComponent } from "react";
 import { useSelector } from "react-redux";
-import { AutoSizer, List, ListRowProps } from "react-virtualized";
+import AutoSizer from "react-virtualized-auto-sizer";
+import { FixedSizeList as List, ListChildComponentProps } from "react-window";
 import { useObservable } from "../hooks";
 import {
   getAllDependencies$,
@@ -56,6 +57,22 @@ const useResult = (
   return { versions, dependencies, selectedVersion, setSelectedVersion };
 };
 
+class RowRenderer extends PureComponent<ListChildComponentProps> {
+  render() {
+    const { data, index, style } = this.props;
+    const dependency = (data as string[])[index];
+    return (
+      <div className="text-center" style={style}>
+        {dependency}
+      </div>
+    );
+  }
+}
+
+function itemKey(index: number, data: string[]) {
+  return data[index];
+}
+
 const Result: React.FC<Props> = ({ packageName, showDifferentVersion }) => {
   const concurrency = useSelector(getConcurrencyCount);
   const {
@@ -75,20 +92,6 @@ const Result: React.FC<Props> = ({ packageName, showDifferentVersion }) => {
     error: dependenciesError,
     completed: dependenciesCompleted,
   } = dependencies;
-  const rowRenderer = useCallback(
-    ({ index, key, style }: ListRowProps) => {
-      if (dependenciesData === undefined) {
-        return null;
-      }
-      const dependency = dependenciesData[index];
-      return (
-        <div className="text-center" key={key} style={style}>
-          {dependency}
-        </div>
-      );
-    },
-    [dependenciesData]
-  );
   const selectOnChangedHandler = useCallback(
     (event: React.ChangeEvent<{ name?: string; value: unknown }>) => {
       setSelectedVersion(event.target.value as string);
@@ -107,6 +110,7 @@ const Result: React.FC<Props> = ({ packageName, showDifferentVersion }) => {
   return (
     <>
       {versionsCompleted && versionsData && (
+        // TODO: use virtualized select
         <Select value={selectedVersion} onChange={selectOnChangedHandler}>
           {versionsData.versions.sort().map(version => (
             <MenuItem key={version} value={version}>
@@ -128,10 +132,13 @@ const Result: React.FC<Props> = ({ packageName, showDifferentVersion }) => {
                 <List
                   width={width}
                   height={height}
-                  rowCount={dependenciesData.length}
-                  rowHeight={30}
-                  rowRenderer={rowRenderer}
-                />
+                  itemCount={dependenciesData.length}
+                  itemSize={30}
+                  itemData={dependenciesData}
+                  itemKey={itemKey}
+                >
+                  {RowRenderer}
+                </List>
               )}
             </AutoSizer>
           </div>
