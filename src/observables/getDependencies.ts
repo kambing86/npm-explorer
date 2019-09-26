@@ -101,10 +101,11 @@ const getMaxVersionFromFetchResult = (
 // Observable that get all dependencies for the package recursively
 export const getAllDependencies$ = (
   packageString: string,
-  showDifferentVersion = true,
-  concurrency = 10
+  showDifferentVersion: boolean,
+  concurrency: number,
+  packageVersion?: string
 ) => {
-  return getDependencies$(packageString).pipe(
+  return getDependencies$(packageString, packageVersion).pipe(
     // get the dependencies of dependency, with 10 concurrency
     distinctExpand(dependency => {
       const { packageName, packageVersionRange } = getPackageInfo(dependency);
@@ -126,5 +127,24 @@ export const getAllDependencies$ = (
     take(1000),
     scan((acc: string[], value: string) => [...acc, value], []),
     map(value => value.sort())
+  );
+};
+
+export interface PackageVersionInfo {
+  versions: string[];
+  latest: string;
+}
+
+export const getAllVersions$ = (packageString: string) => {
+  return retryFetchPackage$(packageString, "all").pipe(
+    map(packageData => {
+      if (isAllVersionPackageMetaData(packageData)) {
+        return {
+          versions: Object.keys(packageData.versions),
+          latest: packageData[distributionTags][latestTag],
+        } as PackageVersionInfo;
+      }
+      return undefined;
+    })
   );
 };
