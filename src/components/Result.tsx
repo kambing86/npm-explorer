@@ -36,7 +36,7 @@ const useResult = (
     }
   }, [versions]);
   useEffect(() => {
-    if (selectedVersion === undefined) return;
+    if (selectedVersion === "") return;
     setDependencies(
       getAllDependencies$(
         packageName,
