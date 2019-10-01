@@ -25,11 +25,6 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
 }));
 
-interface OptionType {
-  label: string;
-  value: string;
-}
-
 interface SearchState {
   readonly isLoading: boolean;
   readonly isMenuOpen: boolean;

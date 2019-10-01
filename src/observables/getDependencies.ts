@@ -2,6 +2,7 @@ import { from, of } from "rxjs";
 import { distinct, map, mergeMap, retry, scan, take } from "rxjs/operators";
 import semver from "semver";
 import { getPackageInfo } from "../utils/getPackageInfo";
+import { semverCompare } from "../utils/semverCompare";
 import fetchPackage, {
   isAllVersionPackageMetaData,
   FetchResult,
@@ -140,7 +141,7 @@ export const getAllVersions$ = (packageString: string) => {
     map(packageData => {
       if (isAllVersionPackageMetaData(packageData)) {
         return {
-          versions: Object.keys(packageData.versions),
+          versions: Object.keys(packageData.versions).sort(semverCompare),
           latest: packageData[distributionTags][latestTag],
         } as PackageVersionInfo;
       }

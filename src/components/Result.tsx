@@ -1,8 +1,8 @@
+import { makeStyles } from "@material-ui/core/styles";
 import CircularProgress from "@material-ui/core/CircularProgress";
-import MenuItem from "@material-ui/core/MenuItem";
-import Select from "@material-ui/core/Select";
 import React, { useCallback, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
+import { ValueType } from "react-select/src/types";
 import { useObservable } from "../hooks";
 import {
   getAllDependencies$,
@@ -10,19 +10,27 @@ import {
   PackageVersionInfo,
 } from "../observables/getDependencies";
 import { getConcurrencyCount } from "../store/selectors/concurrency";
+import { isArray } from "../utils/typescriptHelpers";
 import DependenciesList from "./DependenciesList";
+import Select from "./ReactWindowSelect";
 
 interface Props {
   packageName: string;
   showDifferentVersion: boolean;
 }
 
+const useStyles = makeStyles(() => ({
+  reactSelect: {
+    width: "100%",
+  },
+}));
+
 const useResult = (
   packageName: string,
   showDifferentVersion: boolean,
   concurrency: number
 ) => {
-  const [selectedVersion, setSelectedVersion] = useState<string>("");
+  const [selectedVersion, setSelectedVersion] = useState<OptionType>();
   const [versions, setVersions] = useObservable<PackageVersionInfo>();
   const [dependencies, setDependencies] = useObservable<string[]>();
   useEffect(() => {
@@ -30,17 +38,18 @@ const useResult = (
   }, [packageName, setVersions]);
   useEffect(() => {
     if (versions.completed && versions.data) {
-      setSelectedVersion(versions.data.latest);
+      const latestVersion = versions.data.latest;
+      setSelectedVersion({ label: latestVersion, value: latestVersion });
     }
   }, [versions]);
   useEffect(() => {
-    if (selectedVersion === "") return;
+    if (selectedVersion === undefined) return;
     setDependencies(
       getAllDependencies$(
         packageName,
         showDifferentVersion,
         concurrency,
-        selectedVersion
+        selectedVersion.value
       )
     );
   }, [
@@ -55,6 +64,7 @@ const useResult = (
 };
 
 const Result: React.FC<Props> = ({ packageName, showDifferentVersion }) => {
+  const classes = useStyles();
   const concurrency = useSelector(getConcurrencyCount);
   const {
     versions,
@@ -63,8 +73,16 @@ const Result: React.FC<Props> = ({ packageName, showDifferentVersion }) => {
     setSelectedVersion,
   } = useResult(packageName, showDifferentVersion, concurrency);
   const selectOnChangedHandler = useCallback(
-    (event: React.ChangeEvent<{ name?: string; value: unknown }>) => {
-      setSelectedVersion(event.target.value as string);
+    (input: ValueType<OptionType>) => {
+      if (input) {
+        if (isArray(input)) {
+          setSelectedVersion(input[0]);
+        } else {
+          setSelectedVersion(input);
+        }
+      } else {
+        setSelectedVersion(undefined);
+      }
     },
     [setSelectedVersion]
   );
@@ -91,14 +109,15 @@ const Result: React.FC<Props> = ({ packageName, showDifferentVersion }) => {
   return (
     <>
       {versionsCompleted && versionsData && (
-        // TODO: use virtualized select
-        <Select value={selectedVersion} onChange={selectOnChangedHandler}>
-          {versionsData.versions.sort().map(version => (
-            <MenuItem key={version} value={version}>
-              {version}
-            </MenuItem>
-          ))}
-        </Select>
+        <Select
+          className={classes.reactSelect}
+          options={versionsData.versions.map(version => ({
+            value: version,
+            label: version,
+          }))}
+          value={selectedVersion}
+          onChange={selectOnChangedHandler}
+        />
       )}
       {!dependenciesCompleted && <CircularProgress className="my-2" />}
       {dependenciesData && (
