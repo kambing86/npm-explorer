@@ -1,8 +1,6 @@
-import { isArray as lodashIsArray } from "lodash";
-
 // solving issue https://github.com/Microsoft/TypeScript/issues/17002
 export function isArray(
-  value?: unknown
+  value: unknown
 ): value is unknown[] | readonly unknown[] {
-  return lodashIsArray(value);
+  return Array.isArray(value);
 }

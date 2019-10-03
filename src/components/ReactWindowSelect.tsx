@@ -1,11 +1,18 @@
-import React, { Component } from "react";
+import React, { Component, PureComponent } from "react";
 import Select from "react-select";
 import { MenuListComponentProps } from "react-select/src/components/Menu";
 import { Props } from "react-select/src/Select";
-import { FixedSizeList as List } from "react-window";
+import { FixedSizeList as List, ListChildComponentProps } from "react-window";
 import { isArray } from "../utils/typescriptHelpers";
 
 const height = 35;
+
+class ItemRenderer extends PureComponent<ListChildComponentProps> {
+  render() {
+    const item = this.props.data[this.props.index];
+    return <div style={this.props.style}>{item}</div>;
+  }
+}
 
 class MenuList extends Component<MenuListComponentProps<OptionType>> {
   render() {
@@ -16,17 +23,18 @@ class MenuList extends Component<MenuListComponentProps<OptionType>> {
         ? options.findIndex(option => option.value === value[0].value) * height
         : 0;
 
-    return children && Array.isArray(children) ? (
+    return (
       <List
         width="100%"
         height={maxHeight}
-        itemCount={children.length}
+        itemCount={options.length}
         itemSize={height}
+        itemData={children}
         initialScrollOffset={initialOffset}
       >
-        {({ index, style }) => <div style={style}>{children[index]}</div>}
+        {ItemRenderer}
       </List>
-    ) : null;
+    );
   }
 }
 

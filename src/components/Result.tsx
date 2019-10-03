@@ -3,6 +3,7 @@ import CircularProgress from "@material-ui/core/CircularProgress";
 import React, { useCallback, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { ValueType } from "react-select/src/types";
+import { map } from "rxjs/operators";
 import { useObservable } from "../hooks";
 import {
   getAllDependencies$,
@@ -25,16 +26,33 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
+interface VersionInfoWithOptions {
+  options: OptionType[];
+  latest: string;
+}
+
+function convertData(data: PackageVersionInfo): VersionInfoWithOptions {
+  return {
+    latest: data.latest,
+    options: data.versions.map(value => ({
+      label: value,
+      value,
+    })),
+  };
+}
+
 const useResult = (
   packageName: string,
   showDifferentVersion: boolean,
   concurrency: number
 ) => {
   const [selectedVersion, setSelectedVersion] = useState<OptionType>();
-  const [versions, setVersions] = useObservable<PackageVersionInfo>();
+  const [versions, setVersions] = useObservable<VersionInfoWithOptions>();
   const [dependencies, setDependencies] = useObservable<string[]>();
   useEffect(() => {
-    setVersions(getAllVersions$(packageName));
+    setVersions(
+      getAllVersions$(packageName).pipe(map(data => convertData(data)))
+    );
   }, [packageName, setVersions]);
   useEffect(() => {
     if (versions.completed && versions.data) {
@@ -111,10 +129,7 @@ const Result: React.FC<Props> = ({ packageName, showDifferentVersion }) => {
       {versionsCompleted && versionsData && (
         <Select
           className={classes.reactSelect}
-          options={versionsData.versions.map(version => ({
-            value: version,
-            label: version,
-          }))}
+          options={versionsData.options}
           value={selectedVersion}
           onChange={selectOnChangedHandler}
         />
