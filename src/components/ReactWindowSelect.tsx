@@ -19,7 +19,7 @@ class MenuList extends Component<MenuListComponentProps<OptionType>> {
     const { options, children, maxHeight, getValue } = this.props;
     const value = getValue();
     const initialOffset =
-      value != null && isArray(value)
+      value != null && isArray(value) && value.length > 0
         ? options.findIndex(option => option.value === value[0].value) * height
         : 0;
 
