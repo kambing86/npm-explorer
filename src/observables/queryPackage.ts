@@ -1,6 +1,7 @@
-import { of, EMPTY, Observable } from "rxjs";
-import { fromFetch } from "rxjs/fetch";
+import { from, of, EMPTY, Observable } from "rxjs";
+// import { fromFetch } from "rxjs/fetch";
 import { delay, flatMap } from "rxjs/operators";
+import { recordedFetch } from "../utils/recordedFetch";
 
 const getQueryUrl = (query: string) =>
   `https://npm-registry-proxy.glitch.me/search/suggestions?q=${query}`;
@@ -17,7 +18,7 @@ export const getQueryObservable$ = (query: string) => {
     flatMap(query =>
       query === ""
         ? EMPTY
-        : (fromFetch(getQueryUrl(query)).pipe(
+        : (from(recordedFetch(getQueryUrl(query))).pipe(
             flatMap((res: Response) => res.json())
           ) as Observable<PackageQuery[]>)
     )

@@ -5,6 +5,10 @@
   "homepage": "https://kambing86.github.io/npm-explorer/",
   "dependencies": {
     "@material-ui/core": "^4.5.0",
+    "@pollyjs/adapter-fetch": "^2.6.3",
+    "@pollyjs/adapter-xhr": "^2.6.3",
+    "@pollyjs/core": "^2.6.3",
+    "@pollyjs/persister-rest": "^2.6.3",
     "@types/jest": "24.0.18",
     "@types/lodash": "^4.14.142",
     "@types/node": "12.7.12",
@@ -60,6 +64,10 @@
     ]
   },
   "devDependencies": {
+    "@types/pollyjs__adapter-fetch": "^2.0.0",
+    "@types/pollyjs__adapter-xhr": "^2.6.0",
+    "@types/pollyjs__core": "^2.6.1",
+    "@types/pollyjs__persister": "^2.0.1",
     "@typescript-eslint/eslint-plugin": "^2.3.3",
     "@typescript-eslint/eslint-plugin-tslint": "^2.3.3",
     "@typescript-eslint/parser": "^2.3.3",
