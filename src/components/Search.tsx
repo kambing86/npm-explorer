@@ -68,24 +68,28 @@ const useSearch = () => {
     setObservable(getQueryObservable$(state.searchString));
   }, [setObservable, state.searchString]);
   useEffect(() => {
-    const { data, error, completed } = observerState;
-    if (data && !error && completed) {
-      setState(state => {
-        const allOptions: OptionType[] = data.map(packageInfo => ({
-          label: packageInfo.name,
-          value: packageInfo.name,
-        }));
-        const { searchString } = state;
-        const sortedOption = [
-          ...allOptions.filter(option => option.value === searchString),
-          ...allOptions.filter(option => option.value !== searchString),
-        ];
-        return {
-          ...state,
-          isLoading: false,
-          options: sortedOption,
-        };
-      });
+    const { data, completed } = observerState;
+    if (completed) {
+      if (data) {
+        setState(state => {
+          const allOptions: OptionType[] = data.map(packageInfo => ({
+            label: packageInfo.name,
+            value: packageInfo.name,
+          }));
+          const { searchString } = state;
+          const sortedOption = [
+            ...allOptions.filter(option => option.value === searchString),
+            ...allOptions.filter(option => option.value !== searchString),
+          ];
+          return {
+            ...state,
+            isLoading: false,
+            options: sortedOption,
+          };
+        });
+      } else {
+        setState(state => ({ ...state, isLoading: false, options: [] }));
+      }
     }
   }, [observerState]);
 
@@ -179,6 +183,7 @@ const Search: React.FC<SearchProps> = ({ onClickSearch }) => {
         color="primary"
         className={classes.button}
         onClick={onSearchHandler}
+        disabled={value === ""}
       >
         Search
         <Icon className={classes.icon}>search</Icon>

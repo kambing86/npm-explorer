@@ -11,15 +11,16 @@ interface PackageQuery {
 
 export type QueryResult = PackageQuery[];
 
-export const getQueryObservable$ = (query: string) => {
+export const getQueryObservable$ = (
+  query: string
+): Observable<PackageQuery[]> => {
+  if (query === "") {
+    return EMPTY;
+  }
   return of(query).pipe(
     delay(400),
     flatMap(query =>
-      query === ""
-        ? EMPTY
-        : (fromFetch(getQueryUrl(query)).pipe(
-            flatMap((res: Response) => res.json())
-          ) as Observable<PackageQuery[]>)
+      fromFetch(getQueryUrl(query)).pipe(flatMap((res: Response) => res.json()))
     )
   );
 };
