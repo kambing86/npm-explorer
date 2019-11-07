@@ -5,7 +5,7 @@ import { expand } from "rxjs/operators";
 export const distinctExpand = <T>(
   fn: (value: T) => ObservableInput<T>,
   concurrent?: number,
-  scheduler?: SchedulerLike
+  scheduler?: SchedulerLike,
 ) => {
   const set = new Set<T>();
   return expand(
@@ -17,6 +17,6 @@ export const distinctExpand = <T>(
       return fn(value);
     },
     concurrent,
-    scheduler
+    scheduler,
   );
 };

@@ -1,5 +1,5 @@
-import { createStandardAction } from "typesafe-actions";
+import { createAction } from "typesafe-actions";
 
-export const INIT = createStandardAction("INIT")();
+export const INIT = createAction("INIT")();
 export * from "./concurrency";
 export * from "./search";

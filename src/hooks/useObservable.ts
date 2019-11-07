@@ -17,16 +17,16 @@ function getInitialState<ReturnData>(): ObserverState<ReturnData> {
 }
 
 export function useObservable<ReturnData>(
-  initialObservable?: Observable<ReturnData> | (() => Observable<ReturnData>)
+  initialObservable?: Observable<ReturnData> | (() => Observable<ReturnData>),
 ): [
   ObserverState<ReturnData>,
-  Dispatch<SetStateAction<Observable<ReturnData>>>
+  Dispatch<SetStateAction<Observable<ReturnData>>>,
 ] {
   const [observable, setObservable] = useState<
     Observable<ReturnData> | undefined
   >(initialObservable);
   const [state, setState] = useStateSimple<ObserverState<ReturnData>>(
-    getInitialState
+    getInitialState,
   );
   useEffect(() => {
     if (!observable) {
@@ -41,7 +41,7 @@ export function useObservable<ReturnData>(
       },
       () => {
         setState({ completed: true });
-      }
+      },
     );
     return () => {
       setState(getInitialState());

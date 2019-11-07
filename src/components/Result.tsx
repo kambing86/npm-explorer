@@ -44,14 +44,14 @@ function convertData(data: PackageVersionInfo): VersionInfoWithOptions {
 const useResult = (
   packageName: string,
   showDifferentVersion: boolean,
-  concurrency: number
+  concurrency: number,
 ) => {
   const [selectedVersion, setSelectedVersion] = useState<OptionType>();
   const [versions, setVersions] = useObservable<VersionInfoWithOptions>();
   const [dependencies, setDependencies] = useObservable<string[]>();
   useEffect(() => {
     setVersions(
-      getAllVersions$(packageName).pipe(map(data => convertData(data)))
+      getAllVersions$(packageName).pipe(map(data => convertData(data))),
     );
   }, [packageName, setVersions]);
   useEffect(() => {
@@ -67,8 +67,8 @@ const useResult = (
         packageName,
         showDifferentVersion,
         concurrency,
-        selectedVersion.value
-      )
+        selectedVersion.value,
+      ),
     );
   }, [
     selectedVersion,
@@ -102,7 +102,7 @@ const Result: React.FC<Props> = ({ packageName, showDifferentVersion }) => {
         setSelectedVersion(undefined);
       }
     },
-    [setSelectedVersion]
+    [setSelectedVersion],
   );
 
   const {

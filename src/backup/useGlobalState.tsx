@@ -15,7 +15,7 @@ export function GlobalStateProvider({ children }: { children: ReactNode }) {
   const contextValue = useReducer<Reducer<GlobalState, Action>, null>(
     reducer,
     null,
-    getInitialState
+    getInitialState,
   );
   return (
     <GlobalStateContext.Provider value={contextValue}>

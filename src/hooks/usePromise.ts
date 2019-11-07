@@ -13,10 +13,10 @@ function getInitialState<ReturnData>(): PromiseState<ReturnData> {
 }
 
 export function usePromise<ReturnData>(
-  initialPromise?: () => Promise<ReturnData>
+  initialPromise?: () => Promise<ReturnData>,
 ): [PromiseState<ReturnData>, Dispatch<SetStateAction<Promise<ReturnData>>>] {
   const [promise, setPromise] = useState<Promise<ReturnData> | undefined>(
-    initialPromise
+    initialPromise,
   );
   const [state, setState] = useState<PromiseState<ReturnData>>(getInitialState);
   useEffect(() => {
@@ -34,7 +34,7 @@ export function usePromise<ReturnData>(
         if (!cleanup) {
           setState({ error, loading: false });
         }
-      }
+      },
     );
     return () => {
       cleanup = true;

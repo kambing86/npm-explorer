@@ -1,5 +1,3 @@
-import { createStandardAction } from "typesafe-actions";
+import { createAction } from "typesafe-actions";
 
-export const SET_CONCURRENCY = createStandardAction("SET_CONCURRENCY")<
-  number
->();
+export const SET_CONCURRENCY = createAction("SET_CONCURRENCY")<number>();

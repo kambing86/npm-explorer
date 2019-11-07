@@ -34,7 +34,7 @@ export function DataLoader<ReturnData>({
   onError,
 }: DataLoaderProps<ReturnData>) {
   const [state, setState] = useState<DataLoaderState<ReturnData>>(
-    getInitialState
+    getInitialState,
   );
   const [currentCacheKey, setCurrentCacheKey] = useState<string>();
   useEffect(() => {

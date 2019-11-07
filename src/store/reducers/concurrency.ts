@@ -12,7 +12,7 @@ const initialState: State = {
 
 export function concurrency(
   state: State = initialState,
-  action: Action
+  action: Action,
 ): State {
   switch (action.type) {
     case getType(SET_CONCURRENCY):

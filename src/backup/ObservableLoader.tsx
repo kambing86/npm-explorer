@@ -29,7 +29,7 @@ function ObservableLoader<ReturnData>({
   onCompleted,
 }: ObservableLoaderProps<ReturnData>) {
   const [state, setState] = useState<ObservableLoaderState<ReturnData>>(
-    getInitialState
+    getInitialState,
   );
   useEffect(() => {
     const subscription = observable.subscribe(
@@ -44,7 +44,7 @@ function ObservableLoader<ReturnData>({
       () => {
         setState(prevState => ({ ...prevState, completed: true }));
         onCompleted && onCompleted();
-      }
+      },
     );
     return () => {
       setState(getInitialState);

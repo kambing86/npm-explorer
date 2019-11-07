@@ -10,10 +10,10 @@ function getInitialState<ReturnData>(): PromiseState<ReturnData> {
 }
 
 export function usePromiseWithSuspense<ReturnData>(
-  initialPromise?: () => Promise<ReturnData>
+  initialPromise?: () => Promise<ReturnData>,
 ): [PromiseState<ReturnData>, Dispatch<SetStateAction<Promise<ReturnData>>>] {
   const [promise, setPromise] = useState<Promise<ReturnData> | undefined>(
-    initialPromise
+    initialPromise,
   );
   const [state, setState] = useState<PromiseState<ReturnData>>(getInitialState);
   const loading = useRef(false);
@@ -42,9 +42,9 @@ export function usePromiseWithSuspense<ReturnData>(
               setState({ error });
             }
             resolve();
-          }
+          },
         );
-      })
+      }),
     );
     return () => {
       cleanup = true;

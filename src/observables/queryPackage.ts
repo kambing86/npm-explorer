@@ -12,7 +12,7 @@ interface PackageQuery {
 export type QueryResult = PackageQuery[];
 
 export const getQueryObservable$ = (
-  query: string
+  query: string,
 ): Observable<PackageQuery[]> => {
   if (query === "") {
     return EMPTY;
@@ -20,7 +20,9 @@ export const getQueryObservable$ = (
   return of(query).pipe(
     delay(400),
     flatMap(query =>
-      fromFetch(getQueryUrl(query)).pipe(flatMap((res: Response) => res.json()))
-    )
+      fromFetch(getQueryUrl(query)).pipe(
+        flatMap((res: Response) => res.json()),
+      ),
+    ),
   );
 };

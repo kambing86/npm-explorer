@@ -17,7 +17,7 @@ const SearchCompoonent: React.FC<RouteChildrenProps> = props => {
         props.history.push(`/${encodeURIComponent(value)}`);
       }
     },
-    [props.history]
+    [props.history],
   );
   return (
     <>

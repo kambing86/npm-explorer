@@ -28,18 +28,18 @@ const getDependenciesInSet = (dependencies?: { [key: string]: string }) => {
 // Observable to get package data from registry cache or online registry
 const retryFetchPackage$ = (
   packageName: string,
-  packageVersionRange?: string
+  packageVersionRange?: string,
 ) =>
   // get all versions if packageVersion exists, if not just get latest
   of(
     `${packageName}${
       // check if packageName has "/" eg. @angular/core
       packageVersionRange || packageName.includes("/") ? `` : `/${latestTag}`
-    }`
+    }`,
   ).pipe(
     mergeMap(fetchPackage),
     // retry 2 times if fail
-    retry(2)
+    retry(2),
   );
 
 // use semver with packageVersionRange to get the max satisfying version
@@ -47,22 +47,22 @@ const retryFetchPackage$ = (
 // then use that version to get the correct dependencies
 const getDependenciesFromFetchResult = (
   packageName: string,
-  packageVersionRange?: string
+  packageVersionRange?: string,
 ) => (packageData: FetchResult) => {
   if (isAllVersionPackageMetaData(packageData)) {
     if (packageVersionRange) {
       const maxVersion = semver.maxSatisfying(
         Object.keys(packageData.versions),
-        packageVersionRange
+        packageVersionRange,
       );
       if (maxVersion) {
         return getDependenciesInSet(
-          packageData.versions[maxVersion][dependenciesField]
+          packageData.versions[maxVersion][dependenciesField],
         );
       }
       // eslint-disable-next-line no-console
       console.warn(
-        `no such version ${packageVersionRange} for ${packageName}, use latest tag`
+        `no such version ${packageVersionRange} for ${packageName}, use latest tag`,
       );
     }
     const latestVersion = packageData[distributionTags][latestTag];
@@ -81,18 +81,18 @@ const getDependencies$ = (packageName: string, packageVersionRange?: string) =>
   retryFetchPackage$(packageName, packageVersionRange).pipe(
     map(getDependenciesFromFetchResult(packageName, packageVersionRange)),
     // convert from Set to Stream
-    mergeMap(dependenciesInSet => from(dependenciesInSet))
+    mergeMap(dependenciesInSet => from(dependenciesInSet)),
   );
 
 const getMaxVersionFromFetchResult = (
   packageName: string,
-  packageVersionRange: string
+  packageVersionRange: string,
 ) => (packageData: FetchResult) => {
   if (isAllVersionPackageMetaData(packageData)) {
     const maxVersion =
       semver.maxSatisfying(
         Object.keys(packageData.versions),
-        packageVersionRange
+        packageVersionRange,
       ) || packageVersionRange;
     return `${packageName}@${maxVersion}`;
   }
@@ -104,7 +104,7 @@ export const getAllDependencies$ = (
   packageString: string,
   showDifferentVersion: boolean,
   concurrency: number,
-  packageVersion?: string
+  packageVersion?: string,
 ) => {
   return getDependencies$(packageString, packageVersion).pipe(
     // get the dependencies of dependency, with 10 concurrency
@@ -119,7 +119,7 @@ export const getAllDependencies$ = (
         return of(packageName);
       }
       return retryFetchPackage$(packageName, packageVersionRange).pipe(
-        map(getMaxVersionFromFetchResult(packageName, packageVersionRange))
+        map(getMaxVersionFromFetchResult(packageName, packageVersionRange)),
       );
     }, concurrency),
     // only show distinct value
@@ -127,7 +127,7 @@ export const getAllDependencies$ = (
     // get maximum 1000 packages, one good example is bloater
     take(1000),
     scan((acc: string[], value: string) => [...acc, value], []),
-    map(value => value.sort())
+    map(value => value.sort()),
   );
 };
 
@@ -146,6 +146,6 @@ export const getAllVersions$ = (packageString: string) => {
         } as PackageVersionInfo;
       }
       throw new Error("couldn't find all versions package.json");
-    })
+    }),
   );
 };

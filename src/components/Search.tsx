@@ -124,7 +124,7 @@ const Search: React.FC<SearchProps> = ({ onClickSearch }) => {
         setSearchString(value);
       }
     },
-    [setSearchString]
+    [setSearchString],
   );
   const onChangeHandler = useCallback((input: ValueType<OptionType>) => {
     if (input) {
@@ -152,7 +152,7 @@ const Search: React.FC<SearchProps> = ({ onClickSearch }) => {
         }
       }
     },
-    [state.isMenuOpen, onSearchHandler]
+    [state.isMenuOpen, onSearchHandler],
   );
   const onMenuOpenHandler = useCallback(() => {
     setMenuOpen(true);

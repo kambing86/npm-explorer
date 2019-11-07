@@ -25,7 +25,7 @@ const ConcurrencyInput: React.FC = () => {
     (event: React.ChangeEvent<HTMLInputElement>) => {
       dispatch(SET_CONCURRENCY(Number(event.target.value)));
     },
-    [dispatch]
+    [dispatch],
   );
   return (
     <FormControl>

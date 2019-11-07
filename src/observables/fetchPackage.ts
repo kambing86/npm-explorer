@@ -27,7 +27,7 @@ export type FetchResult = PackageMetaData | AllVersionsPackageMetaData;
 const registryCache: { [key: string]: Observable<FetchResult> } = {};
 
 export function isAllVersionPackageMetaData(
-  result: FetchResult
+  result: FetchResult,
 ): result is AllVersionsPackageMetaData {
   return Boolean((result as AllVersionsPackageMetaData).versions);
 }
@@ -36,13 +36,13 @@ export default (packageQuery: string): Observable<FetchResult> => {
   let cache = registryCache[packageQuery];
   if (!cache) {
     cache = registryCache[packageQuery] = fromFetch(
-      `${registryUrl}${packageQuery}`
+      `${registryUrl}${packageQuery}`,
     ).pipe(
       flatMap((res: Response) => res.json()),
       finalize(() => {
         delete registryCache[packageQuery];
       }),
-      share()
+      share(),
     );
   }
   return cache;

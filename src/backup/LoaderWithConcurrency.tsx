@@ -18,7 +18,7 @@ export default ({
       observable={getAllDependencies$(
         packageName,
         showDifferentVersion,
-        concurrency
+        concurrency,
       )}
     >
       {children}
