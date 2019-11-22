@@ -1,5 +1,5 @@
+import { getAllDependencies$ } from "observables/getDependencies";
 import React from "react";
-import { getAllDependencies$ } from "../observables/getDependencies";
 import { useConcurrency } from "./useConcurrency";
 import ObservableLoader, { ObservableLoaderProps } from "./ObservableLoader";
 

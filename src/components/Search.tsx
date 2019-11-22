@@ -1,15 +1,15 @@
 import { makeStyles, Theme } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
 import Icon from "@material-ui/core/Icon";
+import { useObservable } from "hooks";
+import { getQueryObservable$, QueryResult } from "observables/queryPackage";
 import React, { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import CreatableSelect from "react-select/creatable";
 import { InputActionMeta, ValueType } from "react-select/src/types";
-import { useObservable } from "../hooks";
-import { getQueryObservable$, QueryResult } from "../observables/queryPackage";
-import { SET_SEARCH_HISTORY } from "../store/actions";
-import { getSearchHistory } from "../store/selectors/search";
-import { isArray } from "../utils/typescriptHelpers";
+import { SET_SEARCH_HISTORY } from "store/actions";
+import { getSearchHistory } from "store/selectors/search";
+import { isArray } from "utils/typescriptHelpers";
 import ConcurrencyInput from "./ConcurrencyInput";
 
 const useStyles = makeStyles((theme: Theme) => ({

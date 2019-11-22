@@ -1,8 +1,8 @@
 import { from, of } from "rxjs";
 import { distinct, map, mergeMap, retry, scan, take } from "rxjs/operators";
 import semver from "semver";
-import { getPackageInfo } from "../utils/getPackageInfo";
-import { semverCompare } from "../utils/semverCompare";
+import { getPackageInfo } from "utils/getPackageInfo";
+import { semverCompare } from "utils/semverCompare";
 import fetchPackage, {
   isAllVersionPackageMetaData,
   FetchResult,

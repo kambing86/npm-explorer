@@ -3,7 +3,7 @@ import Select from "react-select";
 import { MenuListComponentProps } from "react-select/src/components/Menu";
 import { Props } from "react-select/src/Select";
 import { FixedSizeList as List, ListChildComponentProps } from "react-window";
-import { isArray } from "../utils/typescriptHelpers";
+import { isArray } from "utils/typescriptHelpers";
 
 const height = 35;
 

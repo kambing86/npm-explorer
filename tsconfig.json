@@ -15,7 +15,8 @@
     "noEmit": true,
     "jsx": "preserve",
     "typeRoots": ["node_modules/@types", "src/types"],
-    "strictNullChecks": true
+    "strictNullChecks": true,
+    "baseUrl": "./src"
   },
   "include": ["src"]
 }

@@ -5,8 +5,8 @@ import InputLabel from "@material-ui/core/InputLabel";
 import { PositionProperty, TextAlignProperty } from "csstype";
 import React, { useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { SET_CONCURRENCY } from "../store/actions";
-import { getConcurrencyCount } from "../store/selectors/concurrency";
+import { SET_CONCURRENCY } from "store/actions";
+import { getConcurrencyCount } from "store/selectors/concurrency";
 
 const useStyles = makeStyles({
   inputLabel: {

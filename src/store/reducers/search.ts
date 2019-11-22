@@ -1,6 +1,6 @@
+import { SET_SEARCH_HISTORY } from "store/actions";
+import { Action } from "store/types";
 import { getType } from "typesafe-actions";
-import { SET_SEARCH_HISTORY } from "../actions";
-import { Action } from "../types";
 
 type State = Readonly<{
   history: string;
