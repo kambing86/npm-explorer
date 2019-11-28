@@ -1,13 +1,17 @@
-import React, { Component, PureComponent } from "react";
-import Select from "react-select";
-import { MenuListComponentProps } from "react-select/src/components/Menu";
-import { Props } from "react-select/src/Select";
-import { FixedSizeList as List, ListChildComponentProps } from "react-window";
+import React, { Component } from "react";
+import Select, { MenuListComponentProps, Props } from "react-select";
+import {
+  shouldComponentUpdate,
+  FixedSizeList as List,
+  ListChildComponentProps,
+} from "react-window";
 import { isArray } from "utils/typescriptHelpers";
 
 const height = 35;
 
-class ItemRenderer extends PureComponent<ListChildComponentProps> {
+class ItemRenderer extends Component<ListChildComponentProps> {
+  shouldComponentUpdate = shouldComponentUpdate.bind(this);
+
   render() {
     const item = this.props.data[this.props.index];
     return <div style={this.props.style}>{item}</div>;

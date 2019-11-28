@@ -14,7 +14,7 @@ const View: React.FC<Props> = ({ packageName }) => {
   const decodedPackageName = decodeURIComponent(packageName);
   const onChangeHandler = useCallback(() => {
     setDiffVersion(prevState => !prevState);
-  }, [setDiffVersion]);
+  }, []);
   return (
     <>
       <Link to="/">Dependency Explorer</Link>

@@ -11,13 +11,14 @@ import theme from "./theme";
 import "./App.css";
 
 const SearchCompoonent: React.FC<RouteChildrenProps> = props => {
+  const { history } = props;
   const clickSearchHandler = useCallback(
     value => {
       if (value) {
-        props.history.push(`/${encodeURIComponent(value)}`);
+        history.push(`/${encodeURIComponent(value)}`);
       }
     },
-    [props.history],
+    [history],
   );
   return (
     <>
@@ -28,9 +29,9 @@ const SearchCompoonent: React.FC<RouteChildrenProps> = props => {
   );
 };
 
-const ViewComponent: React.FC<
-  RouteChildrenProps<{ packageName: string }>
-> = props => (
+const ViewComponent: React.FC<RouteChildrenProps<{
+  packageName: string;
+}>> = props => (
   <View packageName={(props.match && props.match.params.packageName) || ""} />
 );
 

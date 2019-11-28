@@ -8,7 +8,7 @@ import {
 } from "observables/getDependencies";
 import React, { useCallback, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { ValueType } from "react-select/src/types";
+import { ValueType } from "react-select";
 import { map } from "rxjs/operators";
 import { getConcurrencyCount } from "store/selectors/concurrency";
 import { isArray } from "utils/typescriptHelpers";

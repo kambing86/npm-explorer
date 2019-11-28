@@ -23,6 +23,7 @@
     ],
     "no-console": ["warn"],
     "spaced-comment": ["error", "always", { "markers": ["/"] }],
-    "comma-dangle": ["error", "always-multiline"]
+    "comma-dangle": ["error", "always-multiline"],
+    "no-shadow": ["warn"]
   }
 }

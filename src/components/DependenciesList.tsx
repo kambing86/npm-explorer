@@ -1,8 +1,14 @@
-import React, { PureComponent } from "react";
+import React, { Component } from "react";
 import AutoSizer from "react-virtualized-auto-sizer";
-import { FixedSizeList as List, ListChildComponentProps } from "react-window";
+import {
+  shouldComponentUpdate,
+  FixedSizeList as List,
+  ListChildComponentProps,
+} from "react-window";
 
-class RowRenderer extends PureComponent<ListChildComponentProps> {
+class RowRenderer extends Component<ListChildComponentProps> {
+  shouldComponentUpdate = shouldComponentUpdate.bind(this);
+
   render() {
     const { data, index, style } = this.props;
     const dependency = (data as string[])[index];
