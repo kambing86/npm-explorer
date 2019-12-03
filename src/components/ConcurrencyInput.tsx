@@ -43,4 +43,4 @@ const ConcurrencyInput: React.FC = () => {
   );
 };
 
-export default ConcurrencyInput;
+export default React.memo(ConcurrencyInput);

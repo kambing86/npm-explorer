@@ -1,4 +1,3 @@
-import { makeStyles } from "@material-ui/core/styles";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import { useObservable } from "hooks";
 import {
@@ -6,29 +5,16 @@ import {
   getAllVersions$,
   PackageVersionInfo,
 } from "observables/getDependencies";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { ValueType } from "react-select";
 import { map } from "rxjs/operators";
 import { getConcurrencyCount } from "store/selectors/concurrency";
-import { isArray } from "utils/typescriptHelpers";
 import DependenciesList from "./DependenciesList";
-import Select from "./ReactWindowSelect";
+import VersionSelect from "./VersionSelect";
 
 interface Props {
   packageName: string;
   showDifferentVersion: boolean;
-}
-
-const useStyles = makeStyles(() => ({
-  reactSelect: {
-    width: "100%",
-  },
-}));
-
-interface VersionInfoWithOptions {
-  options: OptionType[];
-  latest: string;
 }
 
 function convertData(data: PackageVersionInfo): VersionInfoWithOptions {
@@ -41,11 +27,8 @@ function convertData(data: PackageVersionInfo): VersionInfoWithOptions {
   };
 }
 
-const useResult = (
-  packageName: string,
-  showDifferentVersion: boolean,
-  concurrency: number,
-) => {
+const useResult = (packageName: string, showDifferentVersion: boolean) => {
+  const concurrency = useSelector(getConcurrencyCount);
   const [selectedVersion, setSelectedVersion] = useState<OptionType>();
   const [versions, setVersions] = useObservable<VersionInfoWithOptions>();
   const [dependencies, setDependencies] = useObservable<string[]>();
@@ -82,29 +65,12 @@ const useResult = (
 };
 
 const Result: React.FC<Props> = ({ packageName, showDifferentVersion }) => {
-  const classes = useStyles();
-  const concurrency = useSelector(getConcurrencyCount);
   const {
     versions,
     dependencies,
     selectedVersion,
     setSelectedVersion,
-  } = useResult(packageName, showDifferentVersion, concurrency);
-  const selectOnChangedHandler = useCallback(
-    (input: ValueType<OptionType>) => {
-      if (input) {
-        if (isArray(input)) {
-          setSelectedVersion(input[0]);
-        } else {
-          setSelectedVersion(input);
-        }
-      } else {
-        setSelectedVersion(undefined);
-      }
-    },
-    [setSelectedVersion],
-  );
-
+  } = useResult(packageName, showDifferentVersion);
   const {
     data: versionsData,
     error: versionsError,
@@ -126,14 +92,14 @@ const Result: React.FC<Props> = ({ packageName, showDifferentVersion }) => {
   const decodedPackageName = decodeURIComponent(packageName);
   return (
     <>
-      {versionsCompleted && versionsData && (
-        <Select
-          className={classes.reactSelect}
-          options={versionsData.options}
-          value={selectedVersion}
-          onChange={selectOnChangedHandler}
-        />
-      )}
+      <VersionSelect
+        {...{
+          versionsCompleted,
+          versionsData,
+          selectedVersion,
+          setSelectedVersion,
+        }}
+      />
       {!dependenciesCompleted && <CircularProgress className="my-2" />}
       {dependenciesData && (
         <>

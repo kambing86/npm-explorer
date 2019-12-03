@@ -42,6 +42,6 @@ class MenuList extends Component<MenuListComponentProps<OptionType>> {
   }
 }
 
-export default (props: Props<OptionType>) => (
+export default React.memo((props: Props<OptionType>) => (
   <Select {...{ ...props, components: { MenuList } }} />
-);
+));

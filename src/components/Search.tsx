@@ -26,7 +26,6 @@ const useStyles = makeStyles(theme => ({
 
 interface SearchState {
   readonly isLoading: boolean;
-  readonly isMenuOpen: boolean;
   readonly options: OptionType[];
   readonly searchString: string;
 }
@@ -38,7 +37,6 @@ interface SearchProps {
 function getInitialState(): SearchState {
   return {
     isLoading: false,
-    isMenuOpen: false,
     options: [],
     searchString: "",
   };
@@ -46,6 +44,7 @@ function getInitialState(): SearchState {
 
 const useSearch = () => {
   const [searchState, setSearchState] = useState(getInitialState);
+  const [isMenuOpen, setIsMenuOpen] = useStateWithRef(false);
   const searchHistory = useSelector(getSearchHistory);
   const [observerState, setObservable] = useObservable<QueryResult>();
 
@@ -55,7 +54,6 @@ const useSearch = () => {
       setSearchState(prevState => ({
         ...prevState,
         isLoading: true,
-        isMenuOpen: true,
         options: [],
         searchString: searchHistory,
       }));
@@ -105,14 +103,14 @@ const useSearch = () => {
       searchString: value,
     }));
   }, []);
-  const setMenuOpen = useCallback((value: boolean) => {
-    setSearchState(prevState => ({
-      ...prevState,
-      isMenuOpen: value,
-    }));
-  }, []);
 
-  return { searchState, setSearchString, setMenuOpen, searchHistory };
+  return {
+    searchState,
+    setSearchString,
+    isMenuOpen,
+    setIsMenuOpen,
+    searchHistory,
+  };
 };
 
 const Search: React.FC<SearchProps> = ({ onClickSearch }) => {
@@ -120,7 +118,8 @@ const Search: React.FC<SearchProps> = ({ onClickSearch }) => {
   const {
     searchState,
     setSearchString,
-    setMenuOpen,
+    isMenuOpen,
+    setIsMenuOpen,
     searchHistory,
   } = useSearch();
   const [value, setValue] = useStateWithRef("");
@@ -156,21 +155,19 @@ const Search: React.FC<SearchProps> = ({ onClickSearch }) => {
   }, [dispatch, onClickSearch, value]);
   const onKeyDownHandler = useCallback(
     (event: React.KeyboardEvent<HTMLElement>) => {
-      if (event.keyCode === 13) {
-        if (!searchState.isMenuOpen) {
-          onSearchHandler();
-          event.preventDefault();
-        }
+      if (event.keyCode === 13 && !isMenuOpen.current) {
+        onSearchHandler();
+        event.preventDefault();
       }
     },
-    [searchState.isMenuOpen, onSearchHandler],
+    [isMenuOpen, onSearchHandler],
   );
   const onMenuOpenHandler = useCallback(() => {
-    setMenuOpen(true);
-  }, [setMenuOpen]);
+    setIsMenuOpen(true);
+  }, [setIsMenuOpen]);
   const onMenuCloseHandler = useCallback(() => {
-    setMenuOpen(false);
-  }, [setMenuOpen]);
+    setIsMenuOpen(false);
+  }, [setIsMenuOpen]);
   return (
     <>
       <CreatableSelect
