@@ -1,12 +1,12 @@
 import Button, { ButtonTypeMap } from "@material-ui/core/Button";
 import Icon from "@material-ui/core/Icon";
-import React, { MouseEventHandler, PureComponent } from "react";
+import React from "react";
 
-export default class ButtonWithIcon extends PureComponent<
+export default class ButtonWithIcon extends React.PureComponent<
   ButtonTypeMap<{
     label: string;
     icon: string;
-    onClick?: MouseEventHandler;
+    onClick?: React.MouseEventHandler;
     className?: string;
     iconClassName?: string;
   }>["props"]

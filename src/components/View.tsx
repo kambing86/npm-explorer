@@ -41,4 +41,4 @@ const View: React.FC<Props> = ({ packageName }) => {
   );
 };
 
-export default View;
+export default React.memo(View);

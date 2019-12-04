@@ -201,4 +201,4 @@ const Search: React.FC<SearchProps> = ({ onClickSearch }) => {
   );
 };
 
-export default Search;
+export default React.memo(Search);

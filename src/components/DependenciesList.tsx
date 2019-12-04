@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React from "react";
 import AutoSizer from "react-virtualized-auto-sizer";
 import {
   shouldComponentUpdate,
@@ -6,7 +6,7 @@ import {
   ListChildComponentProps,
 } from "react-window";
 
-class RowRenderer extends Component<ListChildComponentProps> {
+class RowRenderer extends React.Component<ListChildComponentProps> {
   shouldComponentUpdate = shouldComponentUpdate.bind(this);
 
   render() {
@@ -24,7 +24,7 @@ function itemKey(index: number, data: string[]) {
   return data[index];
 }
 
-const DependenciesList = ({ data }: { data: string[] }) => (
+const DependenciesList: React.FC<{ data: string[] }> = ({ data }) => (
   <div className="flex-grow-1 flex-shrink-1 align-self-stretch">
     <AutoSizer>
       {({ height, width }) => (
@@ -43,4 +43,4 @@ const DependenciesList = ({ data }: { data: string[] }) => (
   </div>
 );
 
-export default DependenciesList;
+export default React.memo(DependenciesList);

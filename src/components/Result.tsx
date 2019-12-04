@@ -115,4 +115,4 @@ const Result: React.FC<Props> = ({ packageName, showDifferentVersion }) => {
   );
 };
 
-export default Result;
+export default React.memo(Result);

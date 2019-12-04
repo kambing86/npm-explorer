@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React from "react";
 import Select, { MenuListComponentProps, Props } from "react-select";
 import {
   shouldComponentUpdate,
@@ -9,7 +9,7 @@ import { isArray } from "utils/typescriptHelpers";
 
 const height = 35;
 
-class ItemRenderer extends Component<ListChildComponentProps> {
+class ItemRenderer extends React.Component<ListChildComponentProps> {
   shouldComponentUpdate = shouldComponentUpdate.bind(this);
 
   render() {
@@ -18,7 +18,7 @@ class ItemRenderer extends Component<ListChildComponentProps> {
   }
 }
 
-class MenuList extends Component<MenuListComponentProps<OptionType>> {
+class MenuList extends React.Component<MenuListComponentProps<OptionType>> {
   render() {
     const { options, children, maxHeight, getValue } = this.props;
     const value = getValue();
