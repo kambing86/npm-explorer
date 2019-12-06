@@ -3,7 +3,6 @@ import { useObservable } from "hooks";
 import {
   getAllDependencies$,
   getAllVersions$,
-  PackageVersionInfo,
 } from "observables/getDependencies";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";

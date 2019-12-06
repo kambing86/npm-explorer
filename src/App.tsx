@@ -31,9 +31,7 @@ const SearchCompoonent: React.FC<RouteChildrenProps> = props => {
 
 const ViewComponent: React.FC<RouteChildrenProps<{
   packageName: string;
-}>> = props => (
-  <View packageName={(props.match && props.match.params.packageName) || ""} />
-);
+}>> = props => <View packageName={props.match?.params.packageName ?? ""} />;
 
 const NotFoundComponent: React.FC = () => {
   return <div>Page Not Found</div>;
@@ -54,7 +52,7 @@ const App: React.FC = () => {
     <div className={`App d-flex flex-column align-items-center ${classes.app}`}>
       <ThemeProvider theme={theme}>
         <Provider store={store}>
-          <Router basename={process.env.PUBLIC_URL || ""}>
+          <Router basename={process.env.PUBLIC_URL ?? ""}>
             <Switch>
               <Route exact path="/" component={SearchCompoonent} />
               <Route exact path="/:packageName" component={ViewComponent} />

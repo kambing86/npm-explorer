@@ -131,11 +131,6 @@ export const getAllDependencies$ = (
   );
 };
 
-export interface PackageVersionInfo {
-  versions: string[];
-  latest: string;
-}
-
 export const getAllVersions$ = (packageString: string) => {
   return retryFetchPackage$(packageString, "all").pipe(
     map(packageData => {
