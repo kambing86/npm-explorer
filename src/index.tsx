@@ -1,8 +1,8 @@
 import React from "react";
 import ReactDOM from "react-dom";
+import App from "./App";
 import "./index.css";
 import * as serviceWorker from "./serviceWorker";
-import App from "./App";
 
 // @ts-ignore
 // const root = ReactDOM.unstable_createRoot(document.getElementById("root"));

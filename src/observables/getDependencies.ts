@@ -4,8 +4,8 @@ import semver from "semver";
 import { getPackageInfo } from "utils/getPackageInfo";
 import { semverCompare } from "utils/semverCompare";
 import fetchPackage, {
-  isAllVersionPackageMetaData,
   FetchResult,
+  isAllVersionPackageMetaData,
 } from "./fetchPackage";
 import { distinctExpand } from "./operators";
 

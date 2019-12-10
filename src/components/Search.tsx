@@ -1,6 +1,6 @@
 import { makeStyles } from "@material-ui/core/styles";
 import { useObservable, useStateWithRef } from "hooks";
-import { getQueryObservable$, QueryResult } from "observables/queryPackage";
+import { QueryResult, getQueryObservable$ } from "observables/queryPackage";
 import React, { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { InputActionMeta, ValueType } from "react-select";

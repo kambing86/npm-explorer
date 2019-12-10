@@ -1,9 +1,9 @@
 import React from "react";
 import Select, { MenuListComponentProps, Props } from "react-select";
 import {
-  shouldComponentUpdate,
   FixedSizeList as List,
   ListChildComponentProps,
+  shouldComponentUpdate,
 } from "react-window";
 import { isArray } from "utils/typescriptHelpers";
 

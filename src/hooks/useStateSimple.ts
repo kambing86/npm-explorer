@@ -1,4 +1,4 @@
-import { useReducer, Reducer } from "react";
+import { useReducer } from "react";
 
 function reducer<T>(currentState: T, newState: Partial<T>) {
   return {
@@ -8,5 +8,9 @@ function reducer<T>(currentState: T, newState: Partial<T>) {
 }
 
 export function useStateSimple<T extends object>(initialState: () => T) {
-  return useReducer<Reducer<T, Partial<T>>, null>(reducer, null, initialState);
+  return useReducer<React.Reducer<T, Partial<T>>, null>(
+    reducer,
+    null,
+    initialState,
+  );
 }

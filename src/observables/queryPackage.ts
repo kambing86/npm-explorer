@@ -1,4 +1,4 @@
-import { of, EMPTY, Observable } from "rxjs";
+import { EMPTY, Observable, of } from "rxjs";
 import { fromFetch } from "rxjs/fetch";
 import { delay, flatMap } from "rxjs/operators";
 

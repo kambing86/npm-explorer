@@ -4,11 +4,11 @@ import React, { useCallback } from "react";
 import { Provider } from "react-redux";
 import { RouteChildrenProps } from "react-router";
 import { HashRouter as Router, Route, Switch } from "react-router-dom";
+import "./App.css";
 import Search from "./components/Search";
 import View from "./components/View";
 import store from "./store";
 import theme from "./theme";
-import "./App.css";
 
 const SearchCompoonent: React.FC<RouteChildrenProps> = props => {
   const { history } = props;

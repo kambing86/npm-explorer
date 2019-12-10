@@ -1,4 +1,4 @@
-import { useEffect, useState, Dispatch, SetStateAction } from "react";
+import { useEffect, useState } from "react";
 import { Observable } from "rxjs";
 import { useStateSimple } from "./useStateSimple";
 
@@ -20,7 +20,7 @@ export function useObservable<ReturnData>(
   initialObservable?: Observable<ReturnData> | (() => Observable<ReturnData>),
 ): [
   ObserverState<ReturnData>,
-  Dispatch<SetStateAction<Observable<ReturnData>>>,
+  React.Dispatch<React.SetStateAction<Observable<ReturnData>>>,
 ] {
   const [observable, setObservable] = useState<
     Observable<ReturnData> | undefined
@@ -51,6 +51,8 @@ export function useObservable<ReturnData>(
 
   return [
     state,
-    setObservable as Dispatch<SetStateAction<Observable<ReturnData>>>,
+    setObservable as React.Dispatch<
+      React.SetStateAction<Observable<ReturnData>>
+    >,
   ];
 }

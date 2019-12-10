@@ -1,9 +1,9 @@
 import React from "react";
 import AutoSizer from "react-virtualized-auto-sizer";
 import {
-  shouldComponentUpdate,
   FixedSizeList as List,
   ListChildComponentProps,
+  shouldComponentUpdate,
 } from "react-window";
 
 class RowRenderer extends React.Component<ListChildComponentProps> {

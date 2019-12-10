@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, Dispatch, SetStateAction } from "react";
+import { useEffect, useRef, useState } from "react";
 
 interface PromiseState<ReturnData> {
   readonly data?: ReturnData;
@@ -11,7 +11,10 @@ function getInitialState<ReturnData>(): PromiseState<ReturnData> {
 
 export function usePromiseWithSuspense<ReturnData>(
   initialPromise?: () => Promise<ReturnData>,
-): [PromiseState<ReturnData>, Dispatch<SetStateAction<Promise<ReturnData>>>] {
+): [
+  PromiseState<ReturnData>,
+  React.Dispatch<React.SetStateAction<Promise<ReturnData>>>,
+] {
   const [promise, setPromise] = useState<Promise<ReturnData> | undefined>(
     initialPromise,
   );
@@ -58,5 +61,8 @@ export function usePromiseWithSuspense<ReturnData>(
     throw suspensePromise;
   }
 
-  return [state, setPromise as Dispatch<SetStateAction<Promise<ReturnData>>>];
+  return [
+    state,
+    setPromise as React.Dispatch<React.SetStateAction<Promise<ReturnData>>>,
+  ];
 }
