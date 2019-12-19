@@ -10,6 +10,7 @@ import { getSearchHistory } from "store/selectors/search";
 import { isArray } from "utils/typescriptHelpers";
 import ButtonWithIcon from "./ButtonWithIcon";
 import ConcurrencyInput from "./ConcurrencyInput";
+import LoadPromise from "./LoadPromise";
 
 const useStyles = makeStyles(theme => ({
   button: {
@@ -197,6 +198,7 @@ const Search: React.FC<SearchProps> = ({ onClickSearch }) => {
         iconClassName={classes.icon}
       />
       <ConcurrencyInput />
+      <LoadPromise />
     </>
   );
 };

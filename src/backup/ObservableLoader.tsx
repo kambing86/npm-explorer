@@ -35,15 +35,15 @@ function ObservableLoader<ReturnData>({
     const subscription = observable.subscribe(
       data => {
         setState(prevState => ({ ...prevState, data }));
-        onData && onData(data);
+        onData?.(data);
       },
       error => {
         setState(prevState => ({ ...prevState, error }));
-        onError && onError(error);
+        onError?.(error);
       },
       () => {
         setState(prevState => ({ ...prevState, completed: true }));
-        onCompleted && onCompleted();
+        onCompleted?.();
       },
     );
     return () => {

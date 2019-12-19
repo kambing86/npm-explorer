@@ -80,10 +80,10 @@ export function DataLoader<ReturnData>({
       const { data, error, loading } = state;
       if (!loading) {
         // data can be null
-        if (onCompleted && !error && data !== undefined) {
-          onCompleted(data);
-        } else if (onError && error) {
-          onError(error);
+        if (error) {
+          onError?.(error);
+        } else if (data !== undefined) {
+          onCompleted?.(data);
         }
       }
     }

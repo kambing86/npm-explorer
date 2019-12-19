@@ -144,3 +144,7 @@ export const getAllVersions$ = (packageString: string) => {
     }),
   );
 };
+
+export const getAllVersionsAsync = (packageString: string) => {
+  return getAllVersions$(packageString).toPromise();
+};

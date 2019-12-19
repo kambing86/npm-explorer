@@ -24,7 +24,6 @@ const SearchCompoonent: React.FC<RouteChildrenProps> = props => {
     <>
       <h1 className="flex-grow-1">Dependency Explorer</h1>
       <Search onClickSearch={clickSearchHandler} />
-      <div className="flex-grow-1" />
     </>
   );
 };

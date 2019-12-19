@@ -5,9 +5,9 @@ import "./index.css";
 import * as serviceWorker from "./serviceWorker";
 
 // @ts-ignore
-// const root = ReactDOM.unstable_createRoot(document.getElementById("root"));
-// root.render(<App />);
-ReactDOM.render(<App />, document.getElementById("root"));
+const root = ReactDOM.createRoot(document.getElementById("root"));
+root.render(<App />);
+// ReactDOM.render(<App />, document.getElementById("root"));
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.
