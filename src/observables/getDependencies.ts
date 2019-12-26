@@ -1,6 +1,7 @@
 import { from, of } from "rxjs";
 import { distinct, map, mergeMap, retry, scan, take } from "rxjs/operators";
-import semver from "semver";
+// @ts-ignore
+import maxSatisfying from "semver/ranges/max-satisfying";
 import { getPackageInfo } from "utils/getPackageInfo";
 import { semverCompare } from "utils/semverCompare";
 import fetchPackage, {
@@ -51,7 +52,7 @@ const getDependenciesFromFetchResult = (
 ) => (packageData: FetchResult) => {
   if (isAllVersionPackageMetaData(packageData)) {
     if (packageVersionRange) {
-      const maxVersion = semver.maxSatisfying(
+      const maxVersion = maxSatisfying(
         Object.keys(packageData.versions),
         packageVersionRange,
       );
@@ -90,10 +91,8 @@ const getMaxVersionFromFetchResult = (
 ) => (packageData: FetchResult) => {
   if (isAllVersionPackageMetaData(packageData)) {
     const maxVersion =
-      semver.maxSatisfying(
-        Object.keys(packageData.versions),
-        packageVersionRange,
-      ) || packageVersionRange;
+      maxSatisfying(Object.keys(packageData.versions), packageVersionRange) ||
+      packageVersionRange;
     return `${packageName}@${maxVersion}`;
   }
   return `${packageName}@${packageVersionRange}`;
