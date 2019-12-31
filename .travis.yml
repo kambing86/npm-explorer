@@ -22,8 +22,10 @@ jobs:
       name: jest
       script: yarn test
     - stage: build
+      name: build
       script: yarn build
     - stage: deploy
+      name: deploy to github
       deploy:
         provider: pages
         skip_cleanup: true
