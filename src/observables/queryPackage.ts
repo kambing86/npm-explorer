@@ -19,7 +19,7 @@ export const getQueryObservable$ = (
   }
   return of(query).pipe(
     delay(400),
-    flatMap(q =>
+    flatMap((q) =>
       fromFetch(getQueryUrl(q)).pipe(flatMap((res: Response) => res.json())),
     ),
   );

@@ -33,16 +33,16 @@ function ObservableLoader<ReturnData>({
   );
   useEffect(() => {
     const subscription = observable.subscribe(
-      data => {
-        setState(prevState => ({ ...prevState, data }));
+      (data) => {
+        setState((prevState) => ({ ...prevState, data }));
         onData?.(data);
       },
-      error => {
-        setState(prevState => ({ ...prevState, error }));
+      (error) => {
+        setState((prevState) => ({ ...prevState, error }));
         onError?.(error);
       },
       () => {
-        setState(prevState => ({ ...prevState, completed: true }));
+        setState((prevState) => ({ ...prevState, completed: true }));
         onCompleted?.();
       },
     );

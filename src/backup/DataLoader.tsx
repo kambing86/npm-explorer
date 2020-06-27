@@ -47,11 +47,11 @@ export function DataLoader<ReturnData>({
 
       if (!foundCache) {
         const promise = createPromise()
-          .then(res => {
+          .then((res) => {
             delete dataCaches[cacheKey];
             return res;
           })
-          .catch(err => {
+          .catch((err) => {
             delete dataCaches[cacheKey];
             throw err;
           });
@@ -59,12 +59,12 @@ export function DataLoader<ReturnData>({
       }
 
       foundCache
-        .then(unknownData => {
+        .then((unknownData) => {
           if (!cleanup) {
             setState({ data: unknownData as ReturnData, loading: false });
           }
         })
-        .catch(error => {
+        .catch((error) => {
           if (!cleanup) {
             setState({ error, loading: false });
           }

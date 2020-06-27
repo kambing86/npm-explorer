@@ -82,7 +82,7 @@ const getDependencies$ = (packageName: string, packageVersionRange?: string) =>
   retryFetchPackage$(packageName, packageVersionRange).pipe(
     map(getDependenciesFromFetchResult(packageName, packageVersionRange)),
     // convert from Set to Stream
-    mergeMap(dependenciesInSet => from(dependenciesInSet)),
+    mergeMap((dependenciesInSet) => from(dependenciesInSet)),
   );
 
 const getMaxVersionFromFetchResult = (
@@ -107,12 +107,12 @@ export const getAllDependencies$ = (
 ) => {
   return getDependencies$(packageString, packageVersion).pipe(
     // get the dependencies of dependency, with 10 concurrency
-    distinctExpand(dependency => {
+    distinctExpand((dependency) => {
       const { packageName, packageVersionRange } = getPackageInfo(dependency);
       return getDependencies$(packageName, packageVersionRange);
     }, concurrency),
     // get the version number based on showDifferentVersion
-    mergeMap(value => {
+    mergeMap((value) => {
       const { packageName, packageVersionRange } = getPackageInfo(value);
       if (!showDifferentVersion) {
         return of(packageName);
@@ -126,13 +126,13 @@ export const getAllDependencies$ = (
     // get maximum 1000 packages, one good example is bloater
     take(1000),
     scan((acc: string[], value: string) => [...acc, value], []),
-    map(value => value.sort()),
+    map((value) => value.sort()),
   );
 };
 
 export const getAllVersions$ = (packageString: string) => {
   return retryFetchPackage$(packageString, "all").pipe(
-    map(packageData => {
+    map((packageData) => {
       if (isAllVersionPackageMetaData(packageData)) {
         return {
           versions: Object.keys(packageData.versions).sort(semverCompare),

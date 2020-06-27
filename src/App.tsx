@@ -10,10 +10,10 @@ import View from "./components/View";
 import store from "./store";
 import theme from "./theme";
 
-const SearchCompoonent: React.FC<RouteChildrenProps> = props => {
+const SearchCompoonent: React.FC<RouteChildrenProps> = (props) => {
   const { history } = props;
   const clickSearchHandler = useCallback(
-    value => {
+    (value) => {
       if (value) {
         history.push(`/${encodeURIComponent(value)}`);
       }
@@ -30,7 +30,7 @@ const SearchCompoonent: React.FC<RouteChildrenProps> = props => {
 
 const ViewComponent: React.FC<RouteChildrenProps<{
   packageName: string;
-}>> = props => <View packageName={props.match?.params.packageName ?? ""} />;
+}>> = (props) => <View packageName={props.match?.params.packageName ?? ""} />;
 
 const NotFoundComponent: React.FC = () => {
   return <div>Page Not Found</div>;

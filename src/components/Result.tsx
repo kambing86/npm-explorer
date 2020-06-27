@@ -19,7 +19,7 @@ interface Props {
 function convertData(data: PackageVersionInfo): VersionInfoWithOptions {
   return {
     latest: data.latest,
-    options: data.versions.map(value => ({
+    options: data.versions.map((value) => ({
       label: value,
       value,
     })),
@@ -33,7 +33,7 @@ const useResult = (packageName: string, showDifferentVersion: boolean) => {
   const [dependencies, setDependencies] = useObservable<string[]>();
   useEffect(() => {
     setVersions(
-      getAllVersions$(packageName).pipe(map(data => convertData(data))),
+      getAllVersions$(packageName).pipe(map((data) => convertData(data))),
     );
   }, [packageName, setVersions]);
   useEffect(() => {

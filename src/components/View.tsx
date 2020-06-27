@@ -13,7 +13,7 @@ const View: React.FC<Props> = ({ packageName }) => {
   const [diffVersion, setDiffVersion] = useState(true);
   const decodedPackageName = decodeURIComponent(packageName);
   const onChangeHandler = useCallback(() => {
-    setDiffVersion(prevState => !prevState);
+    setDiffVersion((prevState) => !prevState);
   }, []);
   return (
     <>

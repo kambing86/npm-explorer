@@ -33,10 +33,10 @@ export function useObservable<ReturnData>(
       return;
     }
     const subscription = observable.subscribe(
-      data => {
+      (data) => {
         setState({ data });
       },
-      error => {
+      (error) => {
         setState({ error });
       },
       () => {

@@ -24,7 +24,8 @@ class MenuList extends React.Component<MenuListComponentProps<OptionType>> {
     const value = getValue();
     const initialOffset =
       value != null && isArray(value) && value.length > 0
-        ? options.findIndex(option => option.value === value[0].value) * height
+        ? options.findIndex((option) => option.value === value[0].value) *
+          height
         : 0;
 
     return (

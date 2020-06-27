@@ -7,7 +7,7 @@ function reducer<T>(currentState: T, newState: Partial<T>) {
   };
 }
 
-export function useStateSimple<T extends object>(initialState: () => T) {
+export function useStateSimple<T extends unknown>(initialState: () => T) {
   return useReducer<React.Reducer<T, Partial<T>>, null>(
     reducer,
     null,

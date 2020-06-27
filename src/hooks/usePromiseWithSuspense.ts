@@ -30,7 +30,7 @@ export function usePromiseWithSuspense<ReturnData>(
     let cleanup = false;
     loading.current = true;
     setSuspensePromise(
-      new Promise(resolve => {
+      new Promise((resolve) => {
         promise.then(
           (data: ReturnData) => {
             if (!cleanup) {

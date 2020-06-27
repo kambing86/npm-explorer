@@ -12,7 +12,7 @@ import ButtonWithIcon from "./ButtonWithIcon";
 import ConcurrencyInput from "./ConcurrencyInput";
 import LoadPromise from "./LoadPromise";
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   button: {
     padding: theme.spacing(1),
     margin: theme.spacing(1),
@@ -52,7 +52,7 @@ const useSearch = () => {
   // componentDidMount effect
   useEffect(() => {
     if (searchHistory !== "") {
-      setSearchState(prevState => ({
+      setSearchState((prevState) => ({
         ...prevState,
         isLoading: true,
         options: [],
@@ -69,15 +69,15 @@ const useSearch = () => {
     const { data, completed } = observerState;
     if (completed) {
       if (data) {
-        setSearchState(prevState => {
-          const allOptions: OptionType[] = data.map(packageInfo => ({
+        setSearchState((prevState) => {
+          const allOptions: OptionType[] = data.map((packageInfo) => ({
             label: packageInfo.name,
             value: packageInfo.name,
           }));
           const { searchString } = prevState;
           const sortedOption = [
-            ...allOptions.filter(option => option.value === searchString),
-            ...allOptions.filter(option => option.value !== searchString),
+            ...allOptions.filter((option) => option.value === searchString),
+            ...allOptions.filter((option) => option.value !== searchString),
           ];
           return {
             ...prevState,
@@ -86,7 +86,7 @@ const useSearch = () => {
           };
         });
       } else {
-        setSearchState(prevState => ({
+        setSearchState((prevState) => ({
           ...prevState,
           isLoading: false,
           options: [],
@@ -97,7 +97,7 @@ const useSearch = () => {
 
   // callbacks for Search component
   const setSearchString = useCallback((value: string) => {
-    setSearchState(prevState => ({
+    setSearchState((prevState) => ({
       ...prevState,
       isLoading: true,
       options: [],
