@@ -5,7 +5,7 @@ import "./index.css";
 import * as serviceWorker from "./serviceWorker";
 
 // @ts-ignore
-const root = ReactDOM.createRoot(document.getElementById("root"));
+const root = ReactDOM.unstable_createRoot(document.getElementById("root"));
 root.render(<App />);
 // ReactDOM.render(<App />, document.getElementById("root"));
 
