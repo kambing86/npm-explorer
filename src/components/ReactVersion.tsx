@@ -2,7 +2,7 @@ import { usePromiseWithSuspense } from "hooks";
 import { getAllVersionsAsync } from "observables/getDependencies";
 import React, { Suspense } from "react";
 
-function LoadPromise() {
+function ReactVersion() {
   const [data] = usePromiseWithSuspense(() => getAllVersionsAsync("react"));
   return (
     <>
@@ -12,10 +12,12 @@ function LoadPromise() {
   );
 }
 
-export default () => (
+const wrapper = () => (
   <div className="flex-grow-1 d-flex flex-column justify-content-end align-self-end align-items-end">
     <Suspense fallback={<>Loading</>}>
-      <LoadPromise />
+      <ReactVersion />
     </Suspense>
   </div>
 );
+
+export default wrapper;
