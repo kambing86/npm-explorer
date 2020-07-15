@@ -1,6 +1,10 @@
 import { useEffect, useState } from "react";
 import { Observable } from "rxjs";
-import { useStateSimple } from "./useStateSimple";
+import useStateSimple from "./useStateSimple";
+
+/*
+a helper hook to observe an Observable
+*/
 
 interface ObserverState<ReturnData> {
   readonly data?: ReturnData;
@@ -16,7 +20,7 @@ function getInitialState<ReturnData>(): ObserverState<ReturnData> {
   };
 }
 
-export function useObservable<ReturnData>(
+export default function useObservable<ReturnData>(
   initialObservable?: Observable<ReturnData> | (() => Observable<ReturnData>),
 ): [
   ObserverState<ReturnData>,

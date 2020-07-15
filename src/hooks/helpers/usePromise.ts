@@ -1,5 +1,9 @@
 import { useEffect, useState } from "react";
 
+/*
+a helper hook to resolve promise
+*/
+
 interface PromiseState<ReturnData> {
   readonly data?: ReturnData;
   readonly error?: Error;
@@ -12,7 +16,7 @@ function getInitialState<ReturnData>(): PromiseState<ReturnData> {
   };
 }
 
-export function usePromise<ReturnData>(
+export default function usePromise<ReturnData>(
   initialPromise?: () => Promise<ReturnData>,
 ): [
   PromiseState<ReturnData>,

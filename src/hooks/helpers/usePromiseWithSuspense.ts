@@ -1,5 +1,9 @@
 import { useEffect, useRef, useState } from "react";
 
+/*
+a helper hook to allow Suspense to capture the promise
+*/
+
 interface PromiseState<ReturnData> {
   readonly data?: ReturnData;
   readonly error?: Error;
@@ -9,7 +13,7 @@ function getInitialState<ReturnData>(): PromiseState<ReturnData> {
   return {};
 }
 
-export function usePromiseWithSuspense<ReturnData>(
+export default function usePromiseWithSuspense<ReturnData>(
   initialPromise?: () => Promise<ReturnData>,
 ): [
   PromiseState<ReturnData>,

@@ -1,4 +1,4 @@
-import { usePromiseWithSuspense } from "hooks";
+import usePromiseWithSuspense from "hooks/helpers/usePromiseWithSuspense";
 import { getAllVersionsAsync } from "observables/getDependencies";
 import React, { Suspense } from "react";
 

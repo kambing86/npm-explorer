@@ -1,12 +1,9 @@
 import { makeStyles } from "@material-ui/core/styles";
-import { useObservable, useStateWithRef } from "hooks";
-import { QueryResult, getQueryObservable$ } from "observables/queryPackage";
-import React, { useCallback, useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import useStateWithRef from "hooks/helpers/useStateWithRef";
+import useSearch from "hooks/useSearch";
+import React, { useCallback } from "react";
 import { InputActionMeta, ValueType } from "react-select";
 import CreatableSelect from "react-select/creatable";
-import { SET_SEARCH_HISTORY } from "store/actions";
-import { getSearchHistory } from "store/selectors/search";
 import { isArray } from "utils/typescriptHelpers";
 import ButtonWithIcon from "./ButtonWithIcon";
 import ConcurrencyInput from "./ConcurrencyInput";
@@ -25,94 +22,9 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-interface SearchState {
-  readonly isLoading: boolean;
-  readonly options: OptionType[];
-  readonly searchString: string;
-}
-
 interface SearchProps {
   onClickSearch?: (value: string) => void;
 }
-
-function getInitialState(): SearchState {
-  return {
-    isLoading: false,
-    options: [],
-    searchString: "",
-  };
-}
-
-const useSearch = () => {
-  const [searchState, setSearchState] = useState(getInitialState);
-  const [isMenuOpen, setIsMenuOpen] = useStateWithRef(false);
-  const searchHistory = useSelector(getSearchHistory);
-  const [observerState, setObservable] = useObservable<QueryResult>();
-
-  // componentDidMount effect
-  useEffect(() => {
-    if (searchHistory !== "") {
-      setSearchState((prevState) => ({
-        ...prevState,
-        isLoading: true,
-        options: [],
-        searchString: searchHistory,
-      }));
-    }
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
-
-  // check for searchString and do query
-  useEffect(() => {
-    setObservable(getQueryObservable$(searchState.searchString));
-  }, [setObservable, searchState.searchString]);
-  useEffect(() => {
-    const { data, completed } = observerState;
-    if (completed) {
-      if (data) {
-        setSearchState((prevState) => {
-          const allOptions: OptionType[] = data.map((packageInfo) => ({
-            label: packageInfo.name,
-            value: packageInfo.name,
-          }));
-          const { searchString } = prevState;
-          const sortedOption = [
-            ...allOptions.filter((option) => option.value === searchString),
-            ...allOptions.filter((option) => option.value !== searchString),
-          ];
-          return {
-            ...prevState,
-            isLoading: false,
-            options: sortedOption,
-          };
-        });
-      } else {
-        setSearchState((prevState) => ({
-          ...prevState,
-          isLoading: false,
-          options: [],
-        }));
-      }
-    }
-  }, [observerState]);
-
-  // callbacks for Search component
-  const setSearchString = useCallback((value: string) => {
-    setSearchState((prevState) => ({
-      ...prevState,
-      isLoading: true,
-      options: [],
-      searchString: value,
-    }));
-  }, []);
-
-  return {
-    searchState,
-    setSearchString,
-    isMenuOpen,
-    setIsMenuOpen,
-    searchHistory,
-  };
-};
 
 const Search: React.FC<SearchProps> = ({ onClickSearch }) => {
   const classes = useStyles();
@@ -120,11 +32,10 @@ const Search: React.FC<SearchProps> = ({ onClickSearch }) => {
     searchState,
     setSearchString,
     isMenuOpen,
-    setIsMenuOpen,
     searchHistory,
+    setSearchHistory,
   } = useSearch();
-  const [value, setValue] = useStateWithRef("");
-  const dispatch = useDispatch();
+  const [searchValue, setSearchValue] = useStateWithRef("");
 
   const onInputChangeHandler = useCallback(
     (inputValue: string, event: InputActionMeta) => {
@@ -138,22 +49,22 @@ const Search: React.FC<SearchProps> = ({ onClickSearch }) => {
     (input: ValueType<OptionType>) => {
       if (input) {
         if (isArray(input)) {
-          setValue(input[0].value);
+          setSearchValue(input[0].value);
         } else {
-          setValue(input.value);
+          setSearchValue(input.value);
         }
       } else {
-        setValue("");
+        setSearchValue("");
       }
     },
-    [setValue],
+    [setSearchValue],
   );
   const onSearchHandler = useCallback(() => {
-    dispatch(SET_SEARCH_HISTORY(value.current));
+    setSearchHistory(searchValue.current);
     if (onClickSearch) {
-      onClickSearch(value.current);
+      onClickSearch(searchValue.current);
     }
-  }, [dispatch, onClickSearch, value]);
+  }, [setSearchHistory, onClickSearch, searchValue]);
   const onKeyDownHandler = useCallback(
     (event: React.KeyboardEvent<HTMLElement>) => {
       if (event.keyCode === 13 && !isMenuOpen.current) {
@@ -164,11 +75,11 @@ const Search: React.FC<SearchProps> = ({ onClickSearch }) => {
     [isMenuOpen, onSearchHandler],
   );
   const onMenuOpenHandler = useCallback(() => {
-    setIsMenuOpen(true);
-  }, [setIsMenuOpen]);
+    isMenuOpen.current = true;
+  }, [isMenuOpen]);
   const onMenuCloseHandler = useCallback(() => {
-    setIsMenuOpen(false);
-  }, [setIsMenuOpen]);
+    isMenuOpen.current = false;
+  }, [isMenuOpen]);
   return (
     <>
       <CreatableSelect
@@ -194,7 +105,7 @@ const Search: React.FC<SearchProps> = ({ onClickSearch }) => {
         color="primary"
         className={classes.button}
         onClick={onSearchHandler}
-        disabled={value.current === ""}
+        disabled={searchValue.current === ""}
         iconClassName={classes.icon}
       />
       <ConcurrencyInput />
