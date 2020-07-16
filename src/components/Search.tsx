@@ -2,6 +2,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import useStateWithRef from "hooks/helpers/useStateWithRef";
 import useSearch from "hooks/useSearch";
 import React, { useCallback } from "react";
+import { RouteChildrenProps } from "react-router-dom";
 import { InputActionMeta, ValueType } from "react-select";
 import CreatableSelect from "react-select/creatable";
 import { isArray } from "utils/typescriptHelpers";
@@ -26,7 +27,7 @@ interface SearchProps {
   onClickSearch?: (value: string) => void;
 }
 
-const Search: React.FC<SearchProps> = ({ onClickSearch }) => {
+const Search: React.FC<SearchProps> = React.memo(({ onClickSearch }) => {
   const classes = useStyles();
   const {
     searchState,
@@ -112,6 +113,22 @@ const Search: React.FC<SearchProps> = ({ onClickSearch }) => {
       <ReactVersion />
     </>
   );
-};
+});
 
-export default React.memo(Search);
+export default (props: RouteChildrenProps) => {
+  const { history } = props;
+  const clickSearchHandler = useCallback(
+    (value) => {
+      if (value) {
+        history.push(`/${encodeURIComponent(value)}`);
+      }
+    },
+    [history],
+  );
+  return (
+    <>
+      <h1 className="flex-grow-1">Dependency Explorer</h1>
+      <Search onClickSearch={clickSearchHandler} />
+    </>
+  );
+};

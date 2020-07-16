@@ -1,36 +1,15 @@
 import { makeStyles } from "@material-ui/core/styles";
 import { ThemeProvider } from "@material-ui/styles";
-import React, { useCallback } from "react";
+import React, { Suspense, lazy } from "react";
 import { Provider } from "react-redux";
-import { RouteChildrenProps } from "react-router";
 import { HashRouter as Router, Route, Switch } from "react-router-dom";
 import "./App.css";
-import Search from "./components/Search";
-import View from "./components/View";
 import store from "./store";
 import theme from "./theme";
 
-const SearchCompoonent: React.FC<RouteChildrenProps> = (props) => {
-  const { history } = props;
-  const clickSearchHandler = useCallback(
-    (value) => {
-      if (value) {
-        history.push(`/${encodeURIComponent(value)}`);
-      }
-    },
-    [history],
-  );
-  return (
-    <>
-      <h1 className="flex-grow-1">Dependency Explorer</h1>
-      <Search onClickSearch={clickSearchHandler} />
-    </>
-  );
-};
+const SearchComponent = lazy(() => import("./components/Search"));
 
-const ViewComponent: React.FC<RouteChildrenProps<{
-  packageName: string;
-}>> = (props) => <View packageName={props.match?.params.packageName ?? ""} />;
+const ViewComponent = lazy(() => import("./components/View"));
 
 const NotFoundComponent: React.FC = () => {
   return <div>Page Not Found</div>;
@@ -51,13 +30,15 @@ const App: React.FC = () => {
     <div className={`App d-flex flex-column align-items-center ${classes.app}`}>
       <ThemeProvider theme={theme}>
         <Provider store={store}>
-          <Router basename={process.env.PUBLIC_URL ?? ""}>
-            <Switch>
-              <Route exact path="/" component={SearchCompoonent} />
-              <Route exact path="/:packageName" component={ViewComponent} />
-              <Route component={NotFoundComponent} />
-            </Switch>
-          </Router>
+          <Suspense fallback={<>Loading...</>}>
+            <Router basename={process.env.PUBLIC_URL ?? ""}>
+              <Switch>
+                <Route exact path="/" component={SearchComponent} />
+                <Route exact path="/:packageName" component={ViewComponent} />
+                <Route component={NotFoundComponent} />
+              </Switch>
+            </Router>
+          </Suspense>
         </Provider>
       </ThemeProvider>
     </div>

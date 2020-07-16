@@ -14,7 +14,7 @@ function ReactVersion() {
 
 const wrapper = () => (
   <div className="flex-grow-1 d-flex flex-column justify-content-end align-self-end align-items-end">
-    <Suspense fallback={<>Loading</>}>
+    <Suspense fallback={<>Loading...</>}>
       <ReactVersion />
     </Suspense>
   </div>
