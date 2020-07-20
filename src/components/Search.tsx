@@ -23,12 +23,10 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-interface SearchProps {
-  onClickSearch?: (value: string) => void;
-}
-
-const Search: React.FC<SearchProps> = React.memo(({ onClickSearch }) => {
+const Search = (props: RouteChildrenProps) => {
+  const { history } = props;
   const classes = useStyles();
+
   const {
     searchState,
     setSearchString,
@@ -61,11 +59,10 @@ const Search: React.FC<SearchProps> = React.memo(({ onClickSearch }) => {
     [setSearchValue],
   );
   const onSearchHandler = useCallback(() => {
-    setSearchHistory(searchValue.current);
-    if (onClickSearch) {
-      onClickSearch(searchValue.current);
-    }
-  }, [setSearchHistory, onClickSearch, searchValue]);
+    const val = searchValue.current;
+    setSearchHistory(val);
+    history.push(`/${encodeURIComponent(val)}`);
+  }, [setSearchHistory, searchValue, history]);
   const onKeyDownHandler = useCallback(
     (event: React.KeyboardEvent<HTMLElement>) => {
       if (event.keyCode === 13 && !isMenuOpen.current) {
@@ -83,6 +80,7 @@ const Search: React.FC<SearchProps> = React.memo(({ onClickSearch }) => {
   }, [isMenuOpen]);
   return (
     <>
+      <h1 className="flex-grow-1">Dependency Explorer</h1>
       <CreatableSelect
         options={searchState.options}
         isLoading={searchState.isLoading}
@@ -113,22 +111,6 @@ const Search: React.FC<SearchProps> = React.memo(({ onClickSearch }) => {
       <ReactVersion />
     </>
   );
-});
-
-export default (props: RouteChildrenProps) => {
-  const { history } = props;
-  const clickSearchHandler = useCallback(
-    (value) => {
-      if (value) {
-        history.push(`/${encodeURIComponent(value)}`);
-      }
-    },
-    [history],
-  );
-  return (
-    <>
-      <h1 className="flex-grow-1">Dependency Explorer</h1>
-      <Search onClickSearch={clickSearchHandler} />
-    </>
-  );
 };
+
+export default React.memo(Search);

@@ -2,22 +2,24 @@ import usePromiseWithSuspense from "hooks/helpers/usePromiseWithSuspense";
 import { getAllVersionsAsync } from "observables/getDependencies";
 import React, { Suspense } from "react";
 
-function ReactVersion() {
-  const [data] = usePromiseWithSuspense(() => getAllVersionsAsync("react"));
+function ReactVersionContent() {
+  const [reactPackages] = usePromiseWithSuspense<
+    PackageVersionInfo | undefined
+  >(() => getAllVersionsAsync("react"));
   return (
     <>
       <div>React</div>
-      <div>latest version: {data.data?.latest}</div>
+      <div>latest version: {reactPackages.data?.latest}</div>
     </>
   );
 }
 
-const wrapper = () => (
+const ReactVersion = () => (
   <div className="flex-grow-1 d-flex flex-column justify-content-end align-self-end align-items-end">
     <Suspense fallback={<>Loading...</>}>
-      <ReactVersion />
+      <ReactVersionContent />
     </Suspense>
   </div>
 );
 
-export default wrapper;
+export default ReactVersion;

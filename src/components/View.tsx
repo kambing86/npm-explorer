@@ -5,11 +5,10 @@ import React, { useCallback, useState } from "react";
 import { Link, RouteChildrenProps } from "react-router-dom";
 import Result from "./Result";
 
-interface Props {
+const View: React.FC<RouteChildrenProps<{
   packageName: string;
-}
-
-const View: React.FC<Props> = React.memo(({ packageName }) => {
+}>> = (props) => {
+  const packageName = props.match?.params.packageName ?? "";
   const [diffVersion, setDiffVersion] = useState(true);
   const decodedPackageName = decodeURIComponent(packageName);
   const onChangeHandler = useCallback(() => {
@@ -39,10 +38,6 @@ const View: React.FC<Props> = React.memo(({ packageName }) => {
       />
     </>
   );
-});
+};
 
-export default (
-  props: RouteChildrenProps<{
-    packageName: string;
-  }>,
-) => <View packageName={props.match?.params.packageName ?? ""} />;
+export default React.memo(View);
