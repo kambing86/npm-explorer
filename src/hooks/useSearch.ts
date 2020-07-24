@@ -40,14 +40,18 @@ export default function useSearch() {
     }
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
-  const setSearchHistory = useCallback(
-    (searchString: string) => {
-      dispatch(SET_SEARCH_HISTORY(searchString));
-    },
-    [dispatch],
-  );
+  // callbacks for Search component
+  const setSearchString = useCallback((value: string) => {
+    setSearchState((prevState) => ({
+      ...prevState,
+      isLoading: true,
+      options: [],
+      searchString: value,
+    }));
+  }, []);
 
   // check for searchString and do query
+  // triggered by componentDidMount or setSearchString
   useEffect(() => {
     setQuery(getQueryObservable$(searchState.searchString));
   }, [setQuery, searchState.searchString]);
@@ -83,15 +87,12 @@ export default function useSearch() {
     }
   }, [queryState]);
 
-  // callbacks for Search component
-  const setSearchString = useCallback((value: string) => {
-    setSearchState((prevState) => ({
-      ...prevState,
-      isLoading: true,
-      options: [],
-      searchString: value,
-    }));
-  }, []);
+  const setSearchHistory = useCallback(
+    (searchString: string) => {
+      dispatch(SET_SEARCH_HISTORY(searchString));
+    },
+    [dispatch],
+  );
 
   return {
     searchState,

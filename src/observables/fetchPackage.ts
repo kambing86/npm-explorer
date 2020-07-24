@@ -1,6 +1,6 @@
 import { Observable } from "rxjs";
 import { fromFetch } from "rxjs/fetch";
-import { finalize, flatMap, share } from "rxjs/operators";
+import { finalize, mergeMap, share } from "rxjs/operators";
 
 const registryUrl = "https://npm-registry-proxy.glitch.me/";
 // backup url
@@ -32,13 +32,14 @@ export function isAllVersionPackageMetaData(
   return Boolean((result as AllVersionsPackageMetaData).versions);
 }
 
-export default (packageQuery: string): Observable<FetchResult> => {
+// will get from cache and share the same Observable if still in fetching
+const fetchPackage = (packageQuery: string): Observable<FetchResult> => {
   let cache = registryCache[packageQuery];
   if (!cache) {
     cache = registryCache[packageQuery] = fromFetch(
       `${registryUrl}${packageQuery}`,
     ).pipe(
-      flatMap((res: Response) => res.json()),
+      mergeMap((res: Response) => res.json()),
       finalize(() => {
         delete registryCache[packageQuery];
       }),
@@ -47,3 +48,5 @@ export default (packageQuery: string): Observable<FetchResult> => {
   }
   return cache;
 };
+
+export default fetchPackage;

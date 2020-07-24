@@ -3,7 +3,7 @@ import React from "react";
 import ObservableLoader, { ObservableLoaderProps } from "./ObservableLoader";
 import { useConcurrency } from "./useConcurrency";
 
-export default ({
+const LoaderWithCurrency = ({
   packageName,
   showDifferentVersion,
   children,
@@ -25,3 +25,5 @@ export default ({
     </ObservableLoader>
   );
 };
+
+export default LoaderWithCurrency;

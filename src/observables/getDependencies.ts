@@ -1,6 +1,5 @@
-import { from, of } from "rxjs";
+import { firstValueFrom, from, of } from "rxjs";
 import { distinct, map, mergeMap, retry, scan, take } from "rxjs/operators";
-// @ts-ignore
 import maxSatisfying from "semver/ranges/max-satisfying";
 import { getPackageInfo } from "utils/getPackageInfo";
 import { semverCompare } from "utils/semverCompare";
@@ -10,9 +9,9 @@ import fetchPackage, {
 } from "./fetchPackage";
 import { distinctExpand } from "./operators";
 
-const dependenciesField = "dependencies";
-const distributionTags = "dist-tags";
-const latestTag = "latest";
+const DEPENDENCIES_FIELD = "dependencies";
+const DISTRIBUTION_TAGS = "dist-tags";
+const LATEST_TAG = "latest";
 
 // convert dependencies Object to Set with `package@version` format
 const getDependenciesInSet = (dependencies?: { [key: string]: string }) => {
@@ -35,12 +34,15 @@ const retryFetchPackage$ = (
   of(
     `${packageName}${
       // check if packageName has "/" eg. @angular/core
-      packageVersionRange || packageName.includes("/") ? `` : `/${latestTag}`
+      packageVersionRange || packageName.includes("/") ? `` : `/${LATEST_TAG}`
     }`,
   ).pipe(
     mergeMap(fetchPackage),
     // retry 2 times if fail
-    retry(2),
+    retry({
+      count: 2,
+      resetOnSuccess: true,
+    }),
   );
 
 // use semver with packageVersionRange to get the max satisfying version
@@ -58,7 +60,7 @@ const getDependenciesFromFetchResult = (
       );
       if (maxVersion) {
         return getDependenciesInSet(
-          packageData.versions[maxVersion][dependenciesField],
+          packageData.versions[maxVersion][DEPENDENCIES_FIELD],
         );
       }
       // eslint-disable-next-line no-console
@@ -66,15 +68,15 @@ const getDependenciesFromFetchResult = (
         `no such version ${packageVersionRange} for ${packageName}, use latest tag`,
       );
     }
-    const latestVersion = packageData[distributionTags][latestTag];
+    const latestVersion = packageData[DISTRIBUTION_TAGS][LATEST_TAG];
     const latestVersionMeta = packageData.versions[latestVersion];
     if (latestVersionMeta) {
-      return getDependenciesInSet(latestVersionMeta[dependenciesField]);
+      return getDependenciesInSet(latestVersionMeta[DEPENDENCIES_FIELD]);
     }
     console.warn(`no latest version for ${packageName}`); // eslint-disable-line no-console
     return new Set<string>();
   }
-  return getDependenciesInSet(packageData[dependenciesField]);
+  return getDependenciesInSet(packageData[DEPENDENCIES_FIELD]);
 };
 
 // Observable that returns all the dependencies for one package in `package@version` format
@@ -106,14 +108,14 @@ export const getAllDependencies$ = (
   packageVersion?: string,
 ) => {
   return getDependencies$(packageString, packageVersion).pipe(
-    // get the dependencies of dependency, with 10 concurrency
+    // get the dependencies of dependency, with concurrency
     distinctExpand((dependency) => {
       const { packageName, packageVersionRange } = getPackageInfo(dependency);
       return getDependencies$(packageName, packageVersionRange);
     }, concurrency),
     // get the version number based on showDifferentVersion
-    mergeMap((value) => {
-      const { packageName, packageVersionRange } = getPackageInfo(value);
+    mergeMap((dependency) => {
+      const { packageName, packageVersionRange } = getPackageInfo(dependency);
       if (!showDifferentVersion) {
         return of(packageName);
       }
@@ -136,7 +138,7 @@ export const getAllVersions$ = (packageString: string) => {
       if (isAllVersionPackageMetaData(packageData)) {
         return {
           versions: Object.keys(packageData.versions).sort(semverCompare),
-          latest: packageData[distributionTags][latestTag],
+          latest: packageData[DISTRIBUTION_TAGS][LATEST_TAG],
         } as PackageVersionInfo;
       }
       throw new Error("couldn't find all versions package.json");
@@ -145,5 +147,5 @@ export const getAllVersions$ = (packageString: string) => {
 };
 
 export const getAllVersionsAsync = (packageString: string) => {
-  return getAllVersions$(packageString).toPromise();
+  return firstValueFrom(getAllVersions$(packageString));
 };

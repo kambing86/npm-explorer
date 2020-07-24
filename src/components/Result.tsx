@@ -1,6 +1,6 @@
 import CircularProgress from "@material-ui/core/CircularProgress";
 import useResult from "hooks/useResult";
-import React from "react";
+import React, { useMemo } from "react";
 import DependenciesList from "./DependenciesList";
 import VersionSelect from "./VersionSelect";
 
@@ -16,6 +16,9 @@ const Result: React.FC<Props> = ({ packageName, showDifferentVersion }) => {
     selectedVersion,
     setSelectedVersion,
   } = useResult(packageName, showDifferentVersion);
+  const decodedPackageName = useMemo(() => decodeURIComponent(packageName), [
+    packageName,
+  ]);
   const {
     data: versionsData,
     error: versionsError,
@@ -34,7 +37,6 @@ const Result: React.FC<Props> = ({ packageName, showDifferentVersion }) => {
     console.error(dependenciesError); // eslint-disable-line no-console
     return <div>Error: {dependenciesError.message}</div>;
   }
-  const decodedPackageName = decodeURIComponent(packageName);
   return (
     <>
       <VersionSelect

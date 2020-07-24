@@ -1,6 +1,6 @@
 import { EMPTY, Observable, of } from "rxjs";
 import { fromFetch } from "rxjs/fetch";
-import { delay, flatMap } from "rxjs/operators";
+import { delay, mergeMap } from "rxjs/operators";
 
 const getQueryUrl = (query: string) =>
   `https://npm-registry-proxy.glitch.me/search/suggestions?q=${query}`;
@@ -19,8 +19,7 @@ export const getQueryObservable$ = (
   }
   return of(query).pipe(
     delay(400),
-    flatMap((q) =>
-      fromFetch(getQueryUrl(q)).pipe(flatMap((res: Response) => res.json())),
-    ),
+    mergeMap((q) => fromFetch(getQueryUrl(q))),
+    mergeMap((res) => res.json()),
   );
 };

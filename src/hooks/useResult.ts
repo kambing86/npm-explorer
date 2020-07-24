@@ -26,17 +26,24 @@ export default function useResult(
   const [selectedVersion, setSelectedVersion] = useState<OptionType>();
   const [versions, setVersions] = useObservable<VersionInfoWithOptions>();
   const [dependencies, setDependencies] = useObservable<string[]>();
+
+  // step 1: get all versions based on package name
   useEffect(() => {
     setVersions(
       getAllVersions$(packageName).pipe(map((data) => convertData(data))),
     );
   }, [packageName, setVersions]);
+
+  // step 2: after get all versions completed, set latest version by default
   useEffect(() => {
     if (versions.completed && versions.data) {
       const latestVersion = versions.data.latest;
       setSelectedVersion({ label: latestVersion, value: latestVersion });
     }
   }, [versions]);
+
+  // step 3: get all dependencies based on selected version
+  // can be triggered by step 2 or user through setSelectedVersion
   useEffect(() => {
     if (selectedVersion === undefined) return;
     setDependencies(
