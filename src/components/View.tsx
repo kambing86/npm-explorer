@@ -5,9 +5,11 @@ import React, { useCallback, useState } from "react";
 import { Link, RouteChildrenProps } from "react-router-dom";
 import Result from "./Result";
 
-const View: React.FC<RouteChildrenProps<{
-  packageName: string;
-}>> = (props) => {
+const View = (
+  props: RouteChildrenProps<{
+    packageName: string;
+  }>,
+): JSX.Element => {
   const packageName = props.match?.params.packageName ?? "";
   const [diffVersion, setDiffVersion] = useState(true);
   const decodedPackageName = decodeURIComponent(packageName);

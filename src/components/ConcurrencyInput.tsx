@@ -17,7 +17,7 @@ const useStyles = makeStyles({
   },
 });
 
-const ConcurrencyInput: React.FC = () => {
+const ConcurrencyInput = (): JSX.Element => {
   const classes = useStyles();
   const dispatch = useDispatch();
   const concurrency = useSelector(getConcurrencyCount);

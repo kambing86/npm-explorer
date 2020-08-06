@@ -24,7 +24,11 @@ function itemKey(index: number, data: string[]) {
   return data[index];
 }
 
-const DependenciesList: React.FC<{ data: string[] }> = ({ data }) => (
+interface Props {
+  data: string[];
+}
+
+const DependenciesList = ({ data }: Props): JSX.Element => (
   <div className="flex-grow-1 flex-shrink-1 align-self-stretch">
     <AutoSizer>
       {({ height, width }) => (

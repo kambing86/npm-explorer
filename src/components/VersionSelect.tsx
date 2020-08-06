@@ -10,17 +10,19 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-const VersionSelect: React.FC<{
+interface Props {
   versionsCompleted: boolean;
   versionsData?: VersionInfoWithOptions;
   selectedVersion?: OptionType;
   setSelectedVersion: (version?: OptionType) => void;
-}> = ({
+}
+
+const VersionSelect = ({
   versionsCompleted,
   versionsData,
   selectedVersion,
   setSelectedVersion,
-}) => {
+}: Props): JSX.Element | null => {
   const classes = useStyles();
   const selectOnChangedHandler = useCallback(
     (input: ValueType<OptionType>) => {
