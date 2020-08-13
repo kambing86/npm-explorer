@@ -13,8 +13,8 @@ verified the result with <https://npm.anvaka.com/#/>
 tested with
 
 - `react`
-- `bloater` with a lot of dependencies
-- `jest` with circular dependencies (the autocomplete API doesn't show `jest`, so need to select `Create "jest"`)
+- `bloater` with a lot of dependencies (display max 1000 packages)
+- `jest` with circular dependencies (v22.4.3)
 - `@angular/core` with scope
 
 ## Available Scripts
