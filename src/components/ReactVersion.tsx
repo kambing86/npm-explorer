@@ -3,9 +3,9 @@ import { getAllVersionsAsync } from "observables/getDependencies";
 import React, { Suspense } from "react";
 
 function ReactVersionContent() {
-  const [reactPackages] = usePromiseWithSuspense<
-    PackageVersionInfo | undefined
-  >(() => getAllVersionsAsync("react"));
+  const [reactPackages] = usePromiseWithSuspense(() =>
+    getAllVersionsAsync("react"),
+  );
   return (
     <>
       <div>React</div>
