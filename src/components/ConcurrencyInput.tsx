@@ -2,7 +2,6 @@ import FormControl from "@material-ui/core/FormControl";
 import Input from "@material-ui/core/Input";
 import InputLabel from "@material-ui/core/InputLabel";
 import { makeStyles } from "@material-ui/core/styles";
-import { PositionProperty, TextAlignProperty } from "csstype";
 import React, { useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { SET_CONCURRENCY } from "store/actions";
@@ -10,10 +9,10 @@ import { getConcurrencyCount } from "store/selectors/concurrency";
 
 const useStyles = makeStyles({
   inputLabel: {
-    position: "static" as PositionProperty,
+    position: "static",
   },
   input: {
-    textAlign: "center" as TextAlignProperty,
+    textAlign: "center",
   },
 });
 
