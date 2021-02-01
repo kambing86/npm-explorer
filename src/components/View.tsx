@@ -9,7 +9,7 @@ const View = (
   props: RouteChildrenProps<{
     packageName: string;
   }>,
-): JSX.Element => {
+) => {
   const packageName = props.match?.params.packageName ?? "";
   const [diffVersion, setDiffVersion] = useState(true);
   const decodedPackageName = decodeURIComponent(packageName);

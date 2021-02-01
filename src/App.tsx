@@ -11,7 +11,7 @@ const SearchComponent = lazy(() => import("./components/Search"));
 
 const ViewComponent = lazy(() => import("./components/View"));
 
-const NotFoundComponent = (): JSX.Element => {
+const NotFoundComponent = () => {
   return <div>Page Not Found</div>;
 };
 
@@ -24,7 +24,7 @@ const useStyles = makeStyles({
   },
 });
 
-const App = (): JSX.Element => {
+const App = () => {
   const classes = useStyles();
   return (
     <div className={`App d-flex flex-column align-items-center ${classes.app}`}>

@@ -21,7 +21,7 @@ const VersionSelect = ({
   versionsData,
   selectedVersion,
   setSelectedVersion,
-}: Props): JSX.Element | null => {
+}: Props) => {
   const classes = useStyles();
   const selectOnChangedHandler = useCallback(
     (input: ValueType<OptionType, false>) => {

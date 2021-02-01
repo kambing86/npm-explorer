@@ -9,7 +9,7 @@ interface Props {
   showDifferentVersion: boolean;
 }
 
-const Result = ({ packageName, showDifferentVersion }: Props): JSX.Element => {
+const Result = ({ packageName, showDifferentVersion }: Props) => {
   const {
     versions,
     dependencies,

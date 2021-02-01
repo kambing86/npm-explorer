@@ -29,7 +29,7 @@ interface Props {
   data: string[];
 }
 
-const DependenciesList = ({ data }: Props): JSX.Element => (
+const DependenciesList = ({ data }: Props) => (
   <div className="flex-grow-1 flex-shrink-1 align-self-stretch">
     <AutoSizer>
       {({ height, width }) => (
