@@ -18,7 +18,9 @@ class ItemRenderer extends React.Component<ListChildComponentProps> {
   }
 }
 
-class MenuList extends React.Component<MenuListComponentProps<OptionType>> {
+class MenuList extends React.Component<
+  MenuListComponentProps<OptionType, false>
+> {
   render() {
     const { options, children, maxHeight, getValue } = this.props;
     const value = getValue();

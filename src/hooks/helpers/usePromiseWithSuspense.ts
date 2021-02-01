@@ -24,9 +24,9 @@ export default function usePromiseWithSuspense<ReturnData>(
   );
   const [state, setState] = useState<PromiseState<ReturnData>>(getInitialState);
   const loading = useRef(false);
-  const [suspensePromise, setSuspensePromise] = useState<Promise<
-    undefined
-  > | null>(null);
+  const [suspensePromise, setSuspensePromise] = useState<Promise<void> | null>(
+    null,
+  );
   useEffect(() => {
     if (!promise) {
       return;

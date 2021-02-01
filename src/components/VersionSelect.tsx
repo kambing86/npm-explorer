@@ -1,7 +1,6 @@
 import { makeStyles } from "@material-ui/core/styles";
 import React, { useCallback } from "react";
 import { ValueType } from "react-select";
-import { isArray } from "utils/typescriptHelpers";
 import Select from "./ReactWindowSelect";
 
 const useStyles = makeStyles(() => ({
@@ -25,13 +24,9 @@ const VersionSelect = ({
 }: Props): JSX.Element | null => {
   const classes = useStyles();
   const selectOnChangedHandler = useCallback(
-    (input: ValueType<OptionType>) => {
+    (input: ValueType<OptionType, false>) => {
       if (input) {
-        if (isArray(input)) {
-          setSelectedVersion(input[0]);
-        } else {
-          setSelectedVersion(input);
-        }
+        setSelectedVersion(input);
       } else {
         setSelectedVersion(undefined);
       }

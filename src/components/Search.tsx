@@ -5,7 +5,6 @@ import React, { useCallback } from "react";
 import { RouteChildrenProps } from "react-router-dom";
 import { InputActionMeta, ValueType } from "react-select";
 import CreatableSelect from "react-select/creatable";
-import { isArray } from "utils/typescriptHelpers";
 import ButtonWithIcon from "./ButtonWithIcon";
 import ConcurrencyInput from "./ConcurrencyInput";
 import ReactVersion from "./ReactVersion";
@@ -45,13 +44,9 @@ const Search = (props: RouteChildrenProps) => {
     [setSearchString],
   );
   const onChangeHandler = useCallback(
-    (input: ValueType<OptionType>) => {
+    (input: ValueType<OptionType, false>) => {
       if (input) {
-        if (isArray(input)) {
-          setSearchValue(input[0].value);
-        } else {
-          setSearchValue(input.value);
-        }
+        setSearchValue(input.value);
       } else {
         setSearchValue("");
       }

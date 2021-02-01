@@ -4,6 +4,7 @@ import App from "./App";
 import "./index.css";
 import * as serviceWorker from "./serviceWorker";
 
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 const root = ReactDOM.unstable_createRoot(document.getElementById("root"));
 root.render(<App />);
