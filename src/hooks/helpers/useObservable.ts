@@ -40,7 +40,7 @@ export default function useObservable<ReturnData>(
       (data) => {
         setState({ data });
       },
-      (error) => {
+      (error: Error) => {
         setState({ error });
       },
       () => {

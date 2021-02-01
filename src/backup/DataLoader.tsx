@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 interface DataCache {
   [cacheKey: string]: Promise<unknown> | undefined;
@@ -37,6 +37,8 @@ export function DataLoader<ReturnData>({
     getInitialState,
   );
   const [currentCacheKey, setCurrentCacheKey] = useState<string>();
+  const createPromiseRef = useRef(createPromise);
+  createPromiseRef.current = createPromise;
   useEffect(() => {
     if (cacheKey !== currentCacheKey) {
       setState(getInitialState);
@@ -46,12 +48,13 @@ export function DataLoader<ReturnData>({
       let foundCache = dataCaches[cacheKey];
 
       if (!foundCache) {
-        const promise = createPromise()
+        const promise = createPromiseRef
+          .current()
           .then((res) => {
             delete dataCaches[cacheKey];
             return res;
           })
-          .catch((err) => {
+          .catch((err: Error) => {
             delete dataCaches[cacheKey];
             throw err;
           });
@@ -64,7 +67,7 @@ export function DataLoader<ReturnData>({
             setState({ data: unknownData as ReturnData, loading: false });
           }
         })
-        .catch((error) => {
+        .catch((error: Error) => {
           if (!cleanup) {
             setState({ error, loading: false });
           }
@@ -74,7 +77,7 @@ export function DataLoader<ReturnData>({
         cleanup = true;
       };
     }
-  }, [cacheKey, currentCacheKey]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [cacheKey, currentCacheKey]);
   useEffect(() => {
     if (onCompleted || onError) {
       const { data, error, loading } = state;

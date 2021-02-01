@@ -37,7 +37,7 @@ function ObservableLoader<ReturnData>({
         setState((prevState) => ({ ...prevState, data }));
         onData?.(data);
       },
-      (error) => {
+      (error: Error) => {
         setState((prevState) => ({ ...prevState, error }));
         onError?.(error);
       },

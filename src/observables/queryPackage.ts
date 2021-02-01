@@ -20,6 +20,6 @@ export const getQueryObservable$ = (
   return of(query).pipe(
     delay(400),
     mergeMap((q) => fromFetch(getQueryUrl(q))),
-    mergeMap((res) => res.json()),
+    mergeMap((res) => res.json() as Promise<PackageQuery[]>),
   );
 };

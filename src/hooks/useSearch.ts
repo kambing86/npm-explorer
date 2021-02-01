@@ -28,17 +28,19 @@ export default function useSearch() {
 
   // componentDidMount effect
   // should not trigger useEffect when searchHistory changed
+  const searchHistoryRef = useRef(searchHistory);
   useEffect(() => {
-    if (searchHistory !== "") {
+    const searchString = searchHistoryRef.current;
+    if (searchString !== "") {
       setSearchState((prevState) => ({
         ...prevState,
         isLoading: true,
         options: [],
-        searchString: searchHistory,
+        searchString,
       }));
       isMenuOpen.current = true;
     }
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  }, []);
 
   // callbacks for Search component
   const setSearchString = useCallback((value: string) => {

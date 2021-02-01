@@ -10,6 +10,7 @@ class RowRenderer extends React.Component<ListChildComponentProps> {
   shouldComponentUpdate = shouldComponentUpdate.bind(this);
 
   render() {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     const { data, index, style } = this.props;
     const dependency = (data as string[])[index];
     return (

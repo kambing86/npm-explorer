@@ -13,6 +13,7 @@ class ItemRenderer extends React.Component<ListChildComponentProps> {
   shouldComponentUpdate = shouldComponentUpdate.bind(this);
 
   render() {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment,@typescript-eslint/no-unsafe-member-access
     const item = this.props.data[this.props.index];
     return <div style={this.props.style}>{item}</div>;
   }

@@ -2,7 +2,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import { ThemeProvider } from "@material-ui/styles";
 import React, { Suspense, lazy } from "react";
 import { Provider } from "react-redux";
-import { HashRouter as Router, Route, Switch } from "react-router-dom";
+import { Route, HashRouter as Router, Switch } from "react-router-dom";
 import "./App.css";
 import store from "./store";
 import theme from "./theme";
