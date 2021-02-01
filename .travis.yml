@@ -32,6 +32,7 @@ jobs:
         github_token: $GITHUB_TOKEN
         local_dir: ./build
         keep_history: false
+        verbose: true
         on:
           branch: master
 branches:
