@@ -1,14 +1,16 @@
-import { combineReducers, createStore } from "redux";
-import { composeWithDevTools } from "redux-devtools-extension";
-import { INIT } from "./actions";
-import { getReducersMap } from "./reducers";
+import { RematchDispatch, RematchRootState, init } from "@rematch/core";
+import immerPlugin from "@rematch/immer";
+import { RootModel, models } from "./models";
 
-export function getReducers() {
-  return combineReducers(getReducersMap());
-}
+export const store = init<RootModel>({
+  name: "npm-explorer",
+  models,
+  // add immerPlugin to your store
+  plugins: [immerPlugin()],
+});
 
-export function getInitialState() {
-  return getReducers()(undefined, INIT());
-}
+export type Store = typeof store;
+export type Dispatch = RematchDispatch<RootModel>;
+export type RootState = RematchRootState<RootModel>;
 
-export default createStore(getReducers(), composeWithDevTools());
+export default store;

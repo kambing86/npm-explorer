@@ -4,7 +4,7 @@ import InputLabel from "@material-ui/core/InputLabel";
 import { makeStyles } from "@material-ui/core/styles";
 import React, { useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { SET_CONCURRENCY } from "store/actions";
+import { Dispatch } from "store";
 import { getConcurrencyCount } from "store/selectors/concurrency";
 
 const useStyles = makeStyles({
@@ -18,11 +18,11 @@ const useStyles = makeStyles({
 
 const ConcurrencyInput = () => {
   const classes = useStyles();
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<Dispatch>();
   const concurrency = useSelector(getConcurrencyCount);
   const onChangeHandler = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
-      dispatch(SET_CONCURRENCY(Number(event.target.value)));
+      dispatch.concurrency.SET_CONCURRENCY(Number(event.target.value));
     },
     [dispatch],
   );

@@ -1,7 +1,7 @@
 import { QueryResult, getQueryObservable$ } from "observables/queryPackage";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { SET_SEARCH_HISTORY } from "store/actions";
+import { Dispatch } from "store";
 import { getSearchHistory } from "store/selectors/search";
 import useObservable from "./helpers/useObservable";
 
@@ -24,7 +24,7 @@ export default function useSearch() {
   const isMenuOpen = useRef(false);
   const searchHistory = useSelector(getSearchHistory);
   const [queryState, setQuery] = useObservable<QueryResult>();
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<Dispatch>();
 
   // componentDidMount effect
   // should not trigger useEffect when searchHistory changed
@@ -91,7 +91,7 @@ export default function useSearch() {
 
   const setSearchHistory = useCallback(
     (searchString: string) => {
-      dispatch(SET_SEARCH_HISTORY(searchString));
+      dispatch.search.SET_SEARCH_HISTORY(searchString);
     },
     [dispatch],
   );
