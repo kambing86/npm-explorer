@@ -1,3 +1,3 @@
-import { GlobalState } from "store/types";
+import { RootState } from "store";
 
-export const getSearchHistory = (state: GlobalState) => state.search.history;
+export const getSearchHistory = (state: RootState) => state.search.history;
