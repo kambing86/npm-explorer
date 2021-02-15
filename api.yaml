@@ -1,0 +1,127 @@
+openapi: 3.0.3
+info:
+  title: i18n System
+  description: "This is the API specification for the i18n System API"
+  version: 0.0.1
+servers:
+  - url: /api
+paths:
+  /getKeys:
+    post:
+      summary: Get keys and values
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                locale:
+                  $ref: "#/components/schemas/Locale"
+                keys:
+                  $ref: "#/components/schemas/Keys"
+      responses:
+        "200":
+          description: success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Data"
+  /setKeys:
+    post:
+      summary: Set keys with value from the request body
+      security:
+        - apiKeyAuth: []
+        - bearerAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                locale:
+                  $ref: "#/components/schemas/Locale"
+                data:
+                  $ref: "#/components/schemas/Data"
+      responses:
+        "200":
+          description: success
+          content:
+            application/json:
+              schema:
+                type: boolean
+  /uploadAsset:
+    post:
+      summary: upload binary asset and associating it to a specific key
+      security:
+        - apiKeyAuth: []
+        - bearerAuth: []
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                key:
+                  $ref: "#/components/schemas/Key"
+                data:
+                  type: string
+                  format: binary
+      responses:
+        "200":
+          description: success
+          content:
+            application/json:
+              schema:
+                type: boolean
+  /setDefaultLocale:
+    post:
+      summary: set default locale
+      security:
+        - apiKeyAuth: []
+        - bearerAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                locale:
+                  $ref: "#/components/schemas/Locale"
+      responses:
+        "200":
+          description: success
+          content:
+            application/json:
+              schema:
+                type: boolean
+components:
+  securitySchemes:
+    apiKeyAuth:
+      type: apiKey
+      in: header
+      name: client-key
+    bearerAuth: # arbitrary name for the security scheme
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  schemas:
+    Locale:
+      type: string
+      description: language to be used, if none provided, `en` will be used
+      example: en-us
+    Key:
+      type: string
+      description: key with json path pattern
+      example: "main.nav"
+    Keys:
+      type: array
+      description: array of keys
+      items:
+        $ref: "#/components/schemas/Key"
+      example: ["main.nav", "main.footer"]
+    Data:
+      type: object
+      description: key value data
+      example:
+        main.nav.casino: Casino
+        main.nav.sports: Sports
+        main.nav.lottery: Lottery
+        main.footer.sitemap: Sitemap
+        main.footer.tnc: Terms and conditions
