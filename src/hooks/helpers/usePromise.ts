@@ -4,42 +4,50 @@ import { useEffect, useState } from "react";
 a helper hook to resolve promise
 */
 
-interface PromiseState<ReturnData> {
+interface PromiseState<ReturnData, ErrorThrown> {
   readonly data?: ReturnData;
-  readonly error?: Error;
+  readonly error?: ErrorThrown;
+  readonly init: boolean;
   readonly loading: boolean;
 }
 
-function getInitialState<ReturnData>(): PromiseState<ReturnData> {
+function getInitialState<ReturnData, ErrorThrown>(): PromiseState<
+  ReturnData,
+  ErrorThrown
+> {
   return {
-    loading: true,
+    init: false,
+    loading: false,
   };
 }
 
-export default function usePromise<ReturnData>(
+export default function usePromise<ReturnData, ErrorThrown = Error>(
   initialPromise?: () => Promise<ReturnData>,
 ): [
-  PromiseState<ReturnData>,
+  PromiseState<ReturnData, ErrorThrown>,
   React.Dispatch<React.SetStateAction<Promise<ReturnData>>>,
 ] {
   const [promise, setPromise] = useState<Promise<ReturnData> | undefined>(
     initialPromise,
   );
-  const [state, setState] = useState<PromiseState<ReturnData>>(getInitialState);
+  const [state, setState] = useState<PromiseState<ReturnData, ErrorThrown>>(
+    getInitialState,
+  );
   useEffect(() => {
     if (!promise) {
       return;
     }
+    setState({ init: true, loading: true });
     let cleanup = false;
     promise.then(
       (data: ReturnData) => {
         if (!cleanup) {
-          setState({ data, loading: false });
+          setState((val) => ({ ...val, data, loading: false }));
         }
       },
-      (error: Error) => {
+      (error: ErrorThrown) => {
         if (!cleanup) {
-          setState({ error, loading: false });
+          setState((val) => ({ ...val, error, loading: false }));
         }
       },
     );

@@ -4,25 +4,33 @@ import { useEffect, useRef, useState } from "react";
 a helper hook to allow Suspense to capture the promise
 */
 
-interface PromiseState<ReturnData> {
+interface PromiseState<ReturnData, ErrorThrown> {
   readonly data?: ReturnData;
-  readonly error?: Error;
+  readonly error?: ErrorThrown;
+  readonly init: boolean;
 }
 
-function getInitialState<ReturnData>(): PromiseState<ReturnData> {
-  return {};
+function getInitialState<ReturnData, ErrorThrown>(): PromiseState<
+  ReturnData,
+  ErrorThrown
+> {
+  return {
+    init: false,
+  };
 }
 
-export default function usePromiseWithSuspense<ReturnData>(
+export default function usePromiseWithSuspense<ReturnData, ErrorThrown = Error>(
   initialPromise?: () => Promise<ReturnData>,
 ): [
-  PromiseState<ReturnData>,
+  PromiseState<ReturnData, ErrorThrown>,
   React.Dispatch<React.SetStateAction<Promise<ReturnData>>>,
 ] {
   const [promise, setPromise] = useState<Promise<ReturnData> | undefined>(
     initialPromise,
   );
-  const [state, setState] = useState<PromiseState<ReturnData>>(getInitialState);
+  const [state, setState] = useState<PromiseState<ReturnData, ErrorThrown>>(
+    getInitialState,
+  );
   const loading = useRef(false);
   const [suspensePromise, setSuspensePromise] = useState<Promise<void> | null>(
     null,
@@ -31,6 +39,7 @@ export default function usePromiseWithSuspense<ReturnData>(
     if (!promise) {
       return;
     }
+    setState({ init: true });
     let cleanup = false;
     loading.current = true;
     setSuspensePromise(
@@ -39,14 +48,14 @@ export default function usePromiseWithSuspense<ReturnData>(
           (data: ReturnData) => {
             if (!cleanup) {
               loading.current = false;
-              setState({ data });
+              setState((val) => ({ ...val, data }));
             }
             resolve();
           },
-          (error: Error) => {
+          (error: ErrorThrown) => {
             if (!cleanup) {
               loading.current = false;
-              setState({ error });
+              setState((val) => ({ ...val, error }));
             }
             resolve();
           },
