@@ -1,6 +1,6 @@
 import usePromiseWithSuspense from "hooks/helpers/usePromiseWithSuspense";
 import { getAllVersionsAsync } from "observables/getDependencies";
-import React, { Suspense } from "react";
+import { Suspense } from "react";
 
 function ReactVersionContent() {
   const [reactPackages] = usePromiseWithSuspense(() =>

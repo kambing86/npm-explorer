@@ -1,4 +1,4 @@
-import React from "react";
+import { Component, memo } from "react";
 import Select, { MenuListComponentProps, Props } from "react-select";
 import {
   FixedSizeList as List,
@@ -9,7 +9,7 @@ import { isArray } from "utils/typescriptHelpers";
 
 const height = 35;
 
-class ItemRenderer extends React.Component<ListChildComponentProps> {
+class ItemRenderer extends Component<ListChildComponentProps> {
   shouldComponentUpdate = shouldComponentUpdate.bind(this);
 
   render() {
@@ -19,9 +19,7 @@ class ItemRenderer extends React.Component<ListChildComponentProps> {
   }
 }
 
-class MenuList extends React.Component<
-  MenuListComponentProps<OptionType, false>
-> {
+class MenuList extends Component<MenuListComponentProps<OptionType, false>> {
   render() {
     const { options, children, maxHeight, getValue } = this.props;
     const value = getValue();
@@ -50,4 +48,4 @@ const ReactWindowSelect = (props: Props<OptionType>) => (
   <Select {...{ ...props, components: { MenuList } }} />
 );
 
-export default React.memo(ReactWindowSelect);
+export default memo(ReactWindowSelect);

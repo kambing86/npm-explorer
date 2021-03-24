@@ -1,5 +1,5 @@
 import { makeStyles } from "@material-ui/core/styles";
-import React, { useCallback } from "react";
+import { memo, useCallback } from "react";
 import { ValueType } from "react-select";
 import Select from "./ReactWindowSelect";
 
@@ -46,4 +46,4 @@ const VersionSelect = ({
   );
 };
 
-export default React.memo(VersionSelect);
+export default memo(VersionSelect);

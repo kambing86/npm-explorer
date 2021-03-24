@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { ReactNode, useEffect, useState } from "react";
 import { Observable } from "rxjs";
 
 interface ObservableLoaderState<ReturnData> {
@@ -9,7 +9,7 @@ interface ObservableLoaderState<ReturnData> {
 
 export interface ObservableLoaderProps<ReturnData> {
   observable: Observable<ReturnData>;
-  children(data: ObservableLoaderState<ReturnData>): React.ReactNode;
+  children(data: ObservableLoaderState<ReturnData>): ReactNode;
   onData?(data: ReturnData): void;
   onError?(err: Error): void;
   onCompleted?(): void;

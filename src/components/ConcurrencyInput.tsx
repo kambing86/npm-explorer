@@ -2,7 +2,7 @@ import FormControl from "@material-ui/core/FormControl";
 import Input from "@material-ui/core/Input";
 import InputLabel from "@material-ui/core/InputLabel";
 import { makeStyles } from "@material-ui/core/styles";
-import React, { useCallback } from "react";
+import { ChangeEvent, memo, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { SET_CONCURRENCY } from "store/actions";
 import { getConcurrencyCount } from "store/selectors/concurrency";
@@ -21,7 +21,7 @@ const ConcurrencyInput = () => {
   const dispatch = useDispatch();
   const concurrency = useSelector(getConcurrencyCount);
   const onChangeHandler = useCallback(
-    (event: React.ChangeEvent<HTMLInputElement>) => {
+    (event: ChangeEvent<HTMLInputElement>) => {
       dispatch(SET_CONCURRENCY(Number(event.target.value)));
     },
     [dispatch],
@@ -42,4 +42,4 @@ const ConcurrencyInput = () => {
   );
 };
 
-export default React.memo(ConcurrencyInput);
+export default memo(ConcurrencyInput);

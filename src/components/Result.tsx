@@ -1,6 +1,6 @@
 import CircularProgress from "@material-ui/core/CircularProgress";
 import useResult from "hooks/useResult";
-import React, { useMemo } from "react";
+import { memo, useMemo } from "react";
 import DependenciesList from "./DependenciesList";
 import VersionSelect from "./VersionSelect";
 
@@ -62,4 +62,4 @@ const Result = ({ packageName, showDifferentVersion }: Props) => {
   );
 };
 
-export default React.memo(Result);
+export default memo(Result);

@@ -1,6 +1,6 @@
 import { makeStyles } from "@material-ui/core/styles";
 import { ThemeProvider } from "@material-ui/styles";
-import React, { Suspense, lazy } from "react";
+import { Suspense, lazy } from "react";
 import { Provider } from "react-redux";
 import { Route, HashRouter as Router, Switch } from "react-router-dom";
 import "./App.css";

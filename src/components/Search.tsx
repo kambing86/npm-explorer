@@ -1,7 +1,7 @@
 import { makeStyles } from "@material-ui/core/styles";
 import useStateWithRef from "hooks/helpers/useStateWithRef";
 import useSearch from "hooks/useSearch";
-import React, { useCallback } from "react";
+import { KeyboardEvent, memo, useCallback } from "react";
 import { RouteChildrenProps } from "react-router-dom";
 import { InputActionMeta, ValueType } from "react-select";
 import CreatableSelect from "react-select/creatable";
@@ -59,8 +59,8 @@ const Search = (props: RouteChildrenProps) => {
     history.push(`/${encodeURIComponent(val)}`);
   }, [setSearchHistory, searchValue, history]);
   const onKeyDownHandler = useCallback(
-    (event: React.KeyboardEvent<HTMLElement>) => {
-      if (event.keyCode === 13 && !isMenuOpen.current) {
+    (event: KeyboardEvent<HTMLElement>) => {
+      if (event.key === "Enter" && !isMenuOpen.current) {
         onSearchHandler();
         event.preventDefault();
       }
@@ -108,4 +108,4 @@ const Search = (props: RouteChildrenProps) => {
   );
 };
 
-export default React.memo(Search);
+export default memo(Search);

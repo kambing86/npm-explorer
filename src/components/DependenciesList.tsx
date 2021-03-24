@@ -1,4 +1,4 @@
-import React from "react";
+import { Component, memo } from "react";
 import AutoSizer from "react-virtualized-auto-sizer";
 import {
   FixedSizeList as List,
@@ -6,7 +6,7 @@ import {
   shouldComponentUpdate,
 } from "react-window";
 
-class RowRenderer extends React.Component<ListChildComponentProps> {
+class RowRenderer extends Component<ListChildComponentProps> {
   shouldComponentUpdate = shouldComponentUpdate.bind(this);
 
   render() {
@@ -48,4 +48,4 @@ const DependenciesList = ({ data }: Props) => (
   </div>
 );
 
-export default React.memo(DependenciesList);
+export default memo(DependenciesList);

@@ -1,5 +1,12 @@
 import { noop } from "lodash";
-import React, { useContext, useReducer } from "react";
+import {
+  Dispatch,
+  ReactNode,
+  Reducer,
+  createContext,
+  useContext,
+  useReducer,
+} from "react";
 import { getInitialState, getReducers } from "store";
 import { Action, GlobalState } from "store/types";
 
@@ -7,16 +14,13 @@ function reducer(state: GlobalState, action: Action) {
   return getReducers()(state, action);
 }
 
-const GlobalStateContext = React.createContext<
-  [GlobalState, React.Dispatch<Action>]
->([getInitialState(), noop]);
+const GlobalStateContext = createContext<[GlobalState, Dispatch<Action>]>([
+  getInitialState(),
+  noop,
+]);
 
-export function GlobalStateProvider({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
-  const contextValue = useReducer<React.Reducer<GlobalState, Action>, null>(
+export function GlobalStateProvider({ children }: { children: ReactNode }) {
+  const contextValue = useReducer<Reducer<GlobalState, Action>, null>(
     reducer,
     null,
     getInitialState,

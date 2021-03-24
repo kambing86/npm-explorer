@@ -1,17 +1,20 @@
 import { noop } from "lodash";
-import React, { useContext, useState } from "react";
+import {
+  Dispatch,
+  ReactNode,
+  SetStateAction,
+  createContext,
+  useContext,
+  useState,
+} from "react";
 
 const defaultValue = 2;
 
-const ConcurrencyContext = React.createContext<
-  [number, React.Dispatch<React.SetStateAction<number>>]
+const ConcurrencyContext = createContext<
+  [number, Dispatch<SetStateAction<number>>]
 >([defaultValue, noop]);
 
-export const ConcurrencyProvider = ({
-  children,
-}: {
-  children: React.ReactNode;
-}) => {
+export const ConcurrencyProvider = ({ children }: { children: ReactNode }) => {
   const contextValue = useState(defaultValue);
   return (
     <ConcurrencyContext.Provider value={contextValue}>

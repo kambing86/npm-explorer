@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import { ReactNode, useEffect, useRef, useState } from "react";
 
 interface DataCache {
   [cacheKey: string]: Promise<unknown> | undefined;
@@ -9,7 +9,7 @@ const dataCaches: DataCache = {};
 export interface DataLoaderProps<ReturnData> {
   cacheKey: string;
   createPromise(): Promise<ReturnData>;
-  children(data: DataLoaderState<ReturnData>): React.ReactNode;
+  children(data: DataLoaderState<ReturnData>): ReactNode;
   onCompleted?(data: ReturnData): void;
   onError?(err: Error): void;
 }

@@ -1,7 +1,7 @@
 import Checkbox from "@material-ui/core/Checkbox";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import FormGroup from "@material-ui/core/FormGroup";
-import React, { useCallback, useState } from "react";
+import { memo, useCallback, useState } from "react";
 import { Link, RouteChildrenProps } from "react-router-dom";
 import Result from "./Result";
 
@@ -42,4 +42,4 @@ const View = (
   );
 };
 
-export default React.memo(View);
+export default memo(View);
