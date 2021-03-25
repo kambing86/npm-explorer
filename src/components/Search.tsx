@@ -2,7 +2,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import useStateWithRef from "hooks/helpers/useStateWithRef";
 import useSearch from "hooks/useSearch";
 import { KeyboardEvent, memo, useCallback } from "react";
-import { RouteChildrenProps } from "react-router-dom";
+import { Link, RouteChildrenProps } from "react-router-dom";
 import { InputActionMeta, ValueType } from "react-select";
 import CreatableSelect from "react-select/creatable";
 import ButtonWithIcon from "./ButtonWithIcon";
@@ -104,6 +104,7 @@ const Search = (props: RouteChildrenProps) => {
       />
       <ConcurrencyInput />
       <ReactVersion />
+      <Link to="/chart">Chart</Link>
     </>
   );
 };
