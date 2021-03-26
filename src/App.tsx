@@ -7,9 +7,7 @@ import "./App.css";
 import store from "./store";
 import theme from "./theme";
 
-const SearchComponent = lazy(() => import("./components/Search"));
-const ChartComponent = lazy(() => import("./components/Chart"));
-const ViewComponent = lazy(() => import("./components/View"));
+const DashboardPage = lazy(() => import("./components/Dashboard"));
 
 const NotFoundComponent = () => {
   return <div>Page Not Found</div>;
@@ -33,9 +31,7 @@ const App = () => {
           <Suspense fallback={<>Loading...</>}>
             <Router basename={process.env.PUBLIC_URL ?? ""}>
               <Switch>
-                <Route exact path="/" component={SearchComponent} />
-                <Route exact path="/chart" component={ChartComponent} />
-                <Route exact path="/:packageName" component={ViewComponent} />
+                <Route exact path="/" component={DashboardPage} />
                 <Route component={NotFoundComponent} />
               </Switch>
             </Router>
