@@ -2,8 +2,6 @@ import { format } from "date-fns";
 import { GroupedObservable, Observable } from "rxjs";
 import { groupBy, map, mergeMap, scan, share } from "rxjs/operators";
 
-const lastPriceMap = new Map<string, number>();
-
 interface Options {
   intervalInMs: number;
   maxPriceChange: number;
@@ -36,36 +34,39 @@ export type MapPriceSession<T = undefined> = Omit<
   "mapData"
 >;
 
-const getPrice$ = (name: string, options: Options = defaultOptions) => {
-  const priceTick$ = new Observable<number>((subscriber) => {
-    const lastPrice = lastPriceMap.get(name);
-    let price = lastPrice ?? Math.random() * 10000;
-    if (lastPrice === undefined) {
-      lastPriceMap.set(name, price);
-    }
-    const _id = setInterval(() => {
-      const changes = price * Math.random() * options.maxPriceChange;
-      price += changes * (Math.random() > 0.5 ? 1 : -1);
-      lastPriceMap.set(name, price);
+const cacheObservable = new Map<string, Observable<Price>>();
+
+export const getPrice$ = (name: string) => {
+  if (!cacheObservable.has(name)) {
+    const priceTick$ = new Observable<number>((subscriber) => {
+      let price = Math.random() * 10000;
       subscriber.next(price);
-    }, options.intervalInMs);
-    return () => {
-      clearInterval(_id);
-    };
-  });
-  return priceTick$.pipe(
-    map((val) => ({ name, price: val, time: new Date() } as Price)),
-    share(),
-  );
+      const _id = setInterval(() => {
+        const changes = price * Math.random() * defaultOptions.maxPriceChange;
+        price += changes * (Math.random() > 0.5 ? 1 : -1);
+        subscriber.next(price);
+      }, defaultOptions.intervalInMs);
+      return () => {
+        clearInterval(_id);
+      };
+    });
+    cacheObservable.set(
+      name,
+      priceTick$.pipe(
+        map((val) => ({ name, price: val, time: new Date() } as Price)),
+        share(),
+      ),
+    );
+  }
+  return cacheObservable.get(name) as Observable<Price>;
 };
 
 export const getPriceSession$ = <T>(
   name: string,
   maxSession: number,
   mapFunc: (val: MapPriceSession<T>) => T,
-  options: Options = defaultOptions,
 ) => {
-  return getPrice$(name, options).pipe(
+  return getPrice$(name).pipe(
     groupBy((val) => format(val.time, "yyyyMMddHHmm")),
     mergeMap(mapToPriceSession(mapFunc)),
     scan((acc, val) => {

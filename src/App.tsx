@@ -7,6 +7,9 @@ import "./App.css";
 import store from "./store";
 import theme from "./theme";
 
+import "ag-grid-community/dist/styles/ag-grid.css";
+import "ag-grid-community/dist/styles/ag-theme-alpine.css";
+
 const DashboardPage = lazy(() => import("./components/Dashboard"));
 
 const NotFoundComponent = () => {
@@ -15,7 +18,6 @@ const NotFoundComponent = () => {
 
 const useStyles = makeStyles({
   app: {
-    maxWidth: "800px",
     margin: "0 auto",
     flex: "1 0 auto",
     padding: "1rem",
@@ -25,7 +27,7 @@ const useStyles = makeStyles({
 const App = () => {
   const classes = useStyles();
   return (
-    <div className={`App d-flex flex-column align-items-center ${classes.app}`}>
+    <div className={`App d-flex flex-wrap align-items-center ${classes.app}`}>
       <ThemeProvider theme={theme}>
         <Provider store={store}>
           <Suspense fallback={<>Loading...</>}>

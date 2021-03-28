@@ -1,9 +1,7 @@
-import { concurrency } from "./concurrency";
-import { search } from "./search";
+import { order } from "./order";
 
 export function getReducersMap() {
   return {
-    concurrency,
-    search,
+    order,
   };
 }
