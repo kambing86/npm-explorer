@@ -1,21 +1,8 @@
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-# NPM EXPLORER
+# COIN TRADING
 
-deployed to <https://kambing86.github.io/npm-explorer>
-
-This project uses <https://npm-registry-proxy.glitch.me/> API to check dependencies
-
-run `npm start` or `yarn start` to play
-
-verified the result with <https://npm.anvaka.com/#/>
-
-tested with
-
-- `react`
-- `bloater` with a lot of dependencies (display max 1000 packages)
-- `jest` with circular dependencies (v22.4.3)
-- `@angular/core` with scope
+deployed to <https://kambing86.github.io/coin-trading>
 
 ## Available Scripts
 
