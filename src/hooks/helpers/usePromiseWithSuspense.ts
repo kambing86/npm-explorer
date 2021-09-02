@@ -28,9 +28,8 @@ export default function usePromiseWithSuspense<ReturnData, ErrorThrown = Error>(
   const [promise, setPromise] = useState<Promise<ReturnData> | undefined>(
     initialPromise,
   );
-  const [state, setState] = useState<PromiseState<ReturnData, ErrorThrown>>(
-    getInitialState,
-  );
+  const [state, setState] =
+    useState<PromiseState<ReturnData, ErrorThrown>>(getInitialState);
   const loading = useRef(false);
   const [suspensePromise, setSuspensePromise] = useState<Promise<void> | null>(
     null,

@@ -33,9 +33,8 @@ export function DataLoader<ReturnData>({
   onCompleted,
   onError,
 }: DataLoaderProps<ReturnData>) {
-  const [state, setState] = useState<DataLoaderState<ReturnData>>(
-    getInitialState,
-  );
+  const [state, setState] =
+    useState<DataLoaderState<ReturnData>>(getInitialState);
   const [currentCacheKey, setCurrentCacheKey] = useState<string>();
   const createPromiseRef = useRef(createPromise);
   createPromiseRef.current = createPromise;

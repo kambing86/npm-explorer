@@ -28,9 +28,8 @@ function ObservableLoader<ReturnData>({
   onError,
   onCompleted,
 }: ObservableLoaderProps<ReturnData>) {
-  const [state, setState] = useState<ObservableLoaderState<ReturnData>>(
-    getInitialState,
-  );
+  const [state, setState] =
+    useState<ObservableLoaderState<ReturnData>>(getInitialState);
   useEffect(() => {
     const subscription = observable.subscribe(
       (data) => {

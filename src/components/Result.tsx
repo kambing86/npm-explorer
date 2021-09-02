@@ -10,15 +10,12 @@ interface Props {
 }
 
 const Result = ({ packageName, showDifferentVersion }: Props) => {
-  const {
-    versions,
-    dependencies,
-    selectedVersion,
-    setSelectedVersion,
-  } = useResult(packageName, showDifferentVersion);
-  const decodedPackageName = useMemo(() => decodeURIComponent(packageName), [
-    packageName,
-  ]);
+  const { versions, dependencies, selectedVersion, setSelectedVersion } =
+    useResult(packageName, showDifferentVersion);
+  const decodedPackageName = useMemo(
+    () => decodeURIComponent(packageName),
+    [packageName],
+  );
   const {
     data: versionsData,
     error: versionsError,

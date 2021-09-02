@@ -29,9 +29,8 @@ export default function useObservable<ReturnData>(
   const [observable, setObservable] = useState<
     Observable<ReturnData> | undefined
   >(initialObservable);
-  const [state, setState] = useStateSimple<ObserverState<ReturnData>>(
-    getInitialState,
-  );
+  const [state, setState] =
+    useStateSimple<ObserverState<ReturnData>>(getInitialState);
   useEffect(() => {
     if (!observable) {
       return;

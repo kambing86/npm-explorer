@@ -48,36 +48,35 @@ const retryFetchPackage$ = (
 // use semver with packageVersionRange to get the max satisfying version
 // if there is no such version, use latest tag version
 // then use that version to get the correct dependencies
-const getDependenciesFromFetchResult = (
-  packageName: string,
-  packageVersionRange?: string,
-) => (packageData: FetchResult) => {
-  if (isAllVersionPackageMetaData(packageData)) {
-    if (packageVersionRange) {
-      const maxVersion = maxSatisfying(
-        Object.keys(packageData.versions),
-        packageVersionRange,
-      );
-      if (maxVersion) {
-        return getDependenciesInSet(
-          packageData.versions[maxVersion][DEPENDENCIES_FIELD],
+const getDependenciesFromFetchResult =
+  (packageName: string, packageVersionRange?: string) =>
+  (packageData: FetchResult) => {
+    if (isAllVersionPackageMetaData(packageData)) {
+      if (packageVersionRange) {
+        const maxVersion = maxSatisfying(
+          Object.keys(packageData.versions),
+          packageVersionRange,
+        );
+        if (maxVersion) {
+          return getDependenciesInSet(
+            packageData.versions[maxVersion][DEPENDENCIES_FIELD],
+          );
+        }
+        // eslint-disable-next-line no-console
+        console.warn(
+          `no such version ${packageVersionRange} for ${packageName}, use latest tag`,
         );
       }
-      // eslint-disable-next-line no-console
-      console.warn(
-        `no such version ${packageVersionRange} for ${packageName}, use latest tag`,
-      );
+      const latestVersion = packageData[DISTRIBUTION_TAGS][LATEST_TAG];
+      const latestVersionMeta = packageData.versions[latestVersion];
+      if (latestVersionMeta) {
+        return getDependenciesInSet(latestVersionMeta[DEPENDENCIES_FIELD]);
+      }
+      console.warn(`no latest version for ${packageName}`); // eslint-disable-line no-console
+      return new Set<string>();
     }
-    const latestVersion = packageData[DISTRIBUTION_TAGS][LATEST_TAG];
-    const latestVersionMeta = packageData.versions[latestVersion];
-    if (latestVersionMeta) {
-      return getDependenciesInSet(latestVersionMeta[DEPENDENCIES_FIELD]);
-    }
-    console.warn(`no latest version for ${packageName}`); // eslint-disable-line no-console
-    return new Set<string>();
-  }
-  return getDependenciesInSet(packageData[DEPENDENCIES_FIELD]);
-};
+    return getDependenciesInSet(packageData[DEPENDENCIES_FIELD]);
+  };
 
 // Observable that returns all the dependencies for one package in `package@version` format
 const getDependencies$ = (packageName: string, packageVersionRange?: string) =>
@@ -87,18 +86,17 @@ const getDependencies$ = (packageName: string, packageVersionRange?: string) =>
     mergeMap((dependenciesInSet) => from(dependenciesInSet)),
   );
 
-const getMaxVersionFromFetchResult = (
-  packageName: string,
-  packageVersionRange: string,
-) => (packageData: FetchResult) => {
-  if (isAllVersionPackageMetaData(packageData)) {
-    const maxVersion =
-      maxSatisfying(Object.keys(packageData.versions), packageVersionRange) ||
-      packageVersionRange;
-    return `${packageName}@${maxVersion}`;
-  }
-  return `${packageName}@${packageVersionRange}`;
-};
+const getMaxVersionFromFetchResult =
+  (packageName: string, packageVersionRange: string) =>
+  (packageData: FetchResult) => {
+    if (isAllVersionPackageMetaData(packageData)) {
+      const maxVersion =
+        maxSatisfying(Object.keys(packageData.versions), packageVersionRange) ||
+        packageVersionRange;
+      return `${packageName}@${maxVersion}`;
+    }
+    return `${packageName}@${packageVersionRange}`;
+  };
 
 // Observable that get all dependencies for the package recursively
 export const getAllDependencies$ = (
