@@ -1,6 +1,6 @@
 import usePromiseWithSuspense from "hooks/helpers/usePromiseWithSuspense";
 import { getAllVersionsAsync } from "observables/getDependencies";
-import { Suspense } from "react";
+import { Suspense, version } from "react";
 
 function ReactVersionContent() {
   const [reactPackages] = usePromiseWithSuspense(() =>
@@ -9,7 +9,8 @@ function ReactVersionContent() {
   return (
     <>
       <div>React</div>
-      <div>latest version: {reactPackages.data?.latest}</div>
+      <div>latest stable version: {reactPackages.data?.latest}</div>
+      <div>using version: {version}</div>
     </>
   );
 }
