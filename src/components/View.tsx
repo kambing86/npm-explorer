@@ -2,15 +2,12 @@ import Checkbox from "@material-ui/core/Checkbox";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import FormGroup from "@material-ui/core/FormGroup";
 import { memo, useCallback, useState } from "react";
-import { Link, RouteChildrenProps } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import Result from "./Result";
 
-const View = (
-  props: RouteChildrenProps<{
-    packageName: string;
-  }>,
-) => {
-  const packageName = props.match?.params.packageName ?? "";
+const View = () => {
+  const params = useParams<"packageName">();
+  const { packageName = "" } = params;
   const [diffVersion, setDiffVersion] = useState(true);
   const decodedPackageName = decodeURIComponent(packageName);
   const onChangeHandler = useCallback(() => {

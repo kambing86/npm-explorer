@@ -2,7 +2,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import useStateWithRef from "hooks/helpers/useStateWithRef";
 import useSearch from "hooks/useSearch";
 import { KeyboardEvent, memo, useCallback } from "react";
-import { RouteChildrenProps } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { InputActionMeta, ValueType } from "react-select";
 import CreatableSelect from "react-select/creatable";
 import ButtonWithIcon from "./ButtonWithIcon";
@@ -22,8 +22,8 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Search = (props: RouteChildrenProps) => {
-  const { history } = props;
+const Search = () => {
+  const navigate = useNavigate();
   const classes = useStyles();
 
   const {
@@ -56,8 +56,8 @@ const Search = (props: RouteChildrenProps) => {
   const onSearchHandler = useCallback(() => {
     const val = searchValue.current;
     setSearchHistory(val);
-    history.push(`/${encodeURIComponent(val)}`);
-  }, [setSearchHistory, searchValue, history]);
+    navigate(`/${encodeURIComponent(val)}`);
+  }, [setSearchHistory, searchValue, navigate]);
   const onKeyDownHandler = useCallback(
     (event: KeyboardEvent<HTMLElement>) => {
       if (event.key === "Enter" && !isMenuOpen.current) {

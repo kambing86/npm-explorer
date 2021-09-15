@@ -1,8 +1,8 @@
 import { makeStyles } from "@material-ui/core/styles";
 import { ThemeProvider } from "@material-ui/styles";
-import { Suspense, lazy } from "react";
+import { StrictMode, Suspense, lazy } from "react";
 import { Provider } from "react-redux";
-import { Route, HashRouter as Router, Switch } from "react-router-dom";
+import { HashRouter as Router, useRoutes } from "react-router-dom";
 import "./App.css";
 import store from "./store";
 import theme from "./theme";
@@ -24,21 +24,37 @@ const useStyles = makeStyles({
   },
 });
 
+const AppRoutes = () => {
+  const routes = useRoutes(
+    [
+      {
+        path: "/",
+        element: <SearchComponent />,
+      },
+      { path: "/:packageName", element: <ViewComponent /> },
+      {
+        path: "*",
+        element: <NotFoundComponent />,
+      },
+    ],
+    {},
+  );
+  return routes;
+};
+
 const App = () => {
   const classes = useStyles();
   return (
     <div className={`App d-flex flex-column align-items-center ${classes.app}`}>
       <ThemeProvider theme={theme}>
         <Provider store={store}>
-          <Suspense fallback={<>Loading...</>}>
-            <Router basename={process.env.PUBLIC_URL ?? ""}>
-              <Switch>
-                <Route exact path="/" component={SearchComponent} />
-                <Route exact path="/:packageName" component={ViewComponent} />
-                <Route component={NotFoundComponent} />
-              </Switch>
-            </Router>
-          </Suspense>
+          <StrictMode>
+            <Suspense fallback={<>Loading...</>}>
+              <Router>
+                <AppRoutes />
+              </Router>
+            </Suspense>
+          </StrictMode>
         </Provider>
       </ThemeProvider>
     </div>
