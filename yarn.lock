@@ -9529,7 +9529,7 @@ react-dev-utils@^11.0.3:
     strip-ansi "6.0.0"
     text-table "0.2.0"
 
-react-dom@0.0.0-experimental-a77dd13ed:
+react-dom@experimental:
   version "0.0.0-experimental-a77dd13ed"
   resolved "https://registry.yarnpkg.com/react-dom/-/react-dom-0.0.0-experimental-a77dd13ed.tgz#8eac3782f465673405d74d3af96c4e325a3b85f1"
   integrity sha512-9ekTSYnIgKMRn+o7aYgZLMKSoFY8dApzGrnH5oNz120/+NrTtXi0J0AzsCntEGvrz4JIrMzg2Chu0X+XBli0XA==
@@ -9708,7 +9708,7 @@ react-window@^1.8.6:
     "@babel/runtime" "^7.0.0"
     memoize-one ">=3.1.1 <6"
 
-react@0.0.0-experimental-a77dd13ed:
+react@experimental:
   version "0.0.0-experimental-a77dd13ed"
   resolved "https://registry.yarnpkg.com/react/-/react-0.0.0-experimental-a77dd13ed.tgz#412759fc311c81ac7fec2c29a611d08036316c86"
   integrity sha512-JuA9A2NfWwkvou8JXBf06/vEM6eMYfLS3AlpUMd8sMUHKdZkMCKLMNnOSOSk2pemptdf8kQhjKJGbnQgbYrwVg==
