@@ -2,7 +2,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import { ThemeProvider } from "@material-ui/styles";
 import { StrictMode, Suspense, lazy } from "react";
 import { Provider } from "react-redux";
-import { HashRouter as Router, useRoutes } from "react-router-dom";
+import { Route, HashRouter as Router, Routes } from "react-router-dom";
 import "./App.css";
 import store from "./store";
 import theme from "./theme";
@@ -24,24 +24,6 @@ const useStyles = makeStyles({
   },
 });
 
-const AppRoutes = () => {
-  const routes = useRoutes(
-    [
-      {
-        path: "/",
-        element: <SearchComponent />,
-      },
-      { path: "/:packageName", element: <ViewComponent /> },
-      {
-        path: "*",
-        element: <NotFoundComponent />,
-      },
-    ],
-    {},
-  );
-  return routes;
-};
-
 const App = () => {
   const classes = useStyles();
   return (
@@ -51,7 +33,11 @@ const App = () => {
           <StrictMode>
             <Suspense fallback={<>Loading...</>}>
               <Router>
-                <AppRoutes />
+                <Routes>
+                  <Route path="/" element={<SearchComponent />} />
+                  <Route path="/:packageName" element={<ViewComponent />} />
+                  <Route element={<NotFoundComponent />} />
+                </Routes>
               </Router>
             </Suspense>
           </StrictMode>
