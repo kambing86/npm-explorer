@@ -1,3 +1,3 @@
-import { createTheme } from "@material-ui/core";
+import { createTheme } from "@mui/material";
 
 export default createTheme();

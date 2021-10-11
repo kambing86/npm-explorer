@@ -1,5 +1,4 @@
-import { makeStyles } from "@material-ui/core/styles";
-import { ThemeProvider } from "@material-ui/styles";
+import { ThemeProvider, makeStyles } from "@mui/styles";
 import { StrictMode, Suspense, lazy } from "react";
 import { Provider } from "react-redux";
 import { Route, HashRouter as Router, Routes } from "react-router-dom";

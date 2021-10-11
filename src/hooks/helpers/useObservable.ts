@@ -35,17 +35,17 @@ export default function useObservable<ReturnData>(
     if (!observable) {
       return;
     }
-    const subscription = observable.subscribe(
-      (data) => {
+    const subscription = observable.subscribe({
+      next(data) {
         setState({ data });
       },
-      (error: Error) => {
+      error(error: Error) {
         setState({ error });
       },
-      () => {
+      complete() {
         setState({ completed: true });
       },
-    );
+    });
     return () => {
       setState(getInitialState());
       subscription.unsubscribe();

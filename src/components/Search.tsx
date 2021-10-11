@@ -1,4 +1,5 @@
-import { makeStyles } from "@material-ui/core/styles";
+import { Theme } from "@mui/material";
+import { makeStyles } from "@mui/styles";
 import useStateWithRef from "hooks/helpers/useStateWithRef";
 import useSearch from "hooks/useSearch";
 import { KeyboardEvent, memo, useCallback } from "react";
@@ -9,7 +10,7 @@ import ButtonWithIcon from "./ButtonWithIcon";
 import ConcurrencyInput from "./ConcurrencyInput";
 import ReactVersion from "./ReactVersion";
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles<Theme>((theme) => ({
   button: {
     padding: theme.spacing(1),
     margin: theme.spacing(1),
@@ -77,6 +78,7 @@ const Search = () => {
     <>
       <h1 className="flex-grow-1">Dependency Explorer</h1>
       <CreatableSelect
+        styles={{ menu: (base) => ({ ...base, zIndex: 10 }) }}
         options={searchState.options}
         isLoading={searchState.isLoading}
         onInputChange={onInputChangeHandler}

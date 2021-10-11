@@ -1,4 +1,4 @@
-import { makeStyles } from "@material-ui/core/styles";
+import { makeStyles } from "@mui/styles";
 import { memo, useCallback } from "react";
 import { ValueType } from "react-select";
 import Select from "./ReactWindowSelect";
@@ -38,6 +38,7 @@ const VersionSelect = ({
   }
   return (
     <Select
+      styles={{ menu: (base) => ({ ...base, zIndex: 10 }) }}
       className={classes.reactSelect}
       options={versionsData.options}
       value={selectedVersion}

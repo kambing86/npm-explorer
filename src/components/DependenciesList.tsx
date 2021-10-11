@@ -1,4 +1,5 @@
-import { Component, memo } from "react";
+import { TextField } from "@mui/material";
+import { Component, memo, useState } from "react";
 import AutoSizer from "react-virtualized-auto-sizer";
 import {
   FixedSizeList as List,
@@ -29,23 +30,38 @@ interface Props {
   data: string[];
 }
 
-const DependenciesList = ({ data }: Props) => (
-  <div className="flex-grow-1 flex-shrink-1 align-self-stretch">
-    <AutoSizer>
-      {({ height, width }) => (
-        <List
-          width={width}
-          height={height}
-          itemCount={data.length}
-          itemSize={30}
-          itemData={data}
-          itemKey={itemKey}
-        >
-          {RowRenderer}
-        </List>
-      )}
-    </AutoSizer>
-  </div>
-);
+const DependenciesList = ({ data }: Props) => {
+  const [filter, setFilter] = useState("");
+  const filteredData =
+    filter === "" ? data : data.filter((d) => d.includes(filter));
+  return (
+    <div className="flex-grow-1 flex-shrink-1 align-self-stretch">
+      <TextField
+        margin="normal"
+        fullWidth={true}
+        label="Filter"
+        value={filter}
+        onChange={(event) => {
+          setFilter(event.target.value);
+        }}
+        inputProps={{ style: { textAlign: "center" } }}
+      />
+      <AutoSizer>
+        {({ height, width }) => (
+          <List
+            width={width}
+            height={height}
+            itemCount={filteredData.length}
+            itemSize={30}
+            itemData={filteredData}
+            itemKey={itemKey}
+          >
+            {RowRenderer}
+          </List>
+        )}
+      </AutoSizer>
+    </div>
+  );
+};
 
 export default memo(DependenciesList);

@@ -1,5 +1,4 @@
-import Button, { ButtonTypeMap } from "@material-ui/core/Button";
-import Icon from "@material-ui/core/Icon";
+import { Button, ButtonTypeMap, Icon } from "@mui/material";
 import { MouseEventHandler, PureComponent } from "react";
 
 export default class ButtonWithIcon extends PureComponent<
@@ -23,13 +22,14 @@ export default class ButtonWithIcon extends PureComponent<
     } = this.props;
     return (
       <Button
+        sx={{ marginTop: 1 }}
         className={className}
         onClick={onClick}
         disabled={disabled}
+        endIcon={<Icon className={iconClassName}>{icon}</Icon>}
         {...buttonProps}
       >
         {label}
-        <Icon className={iconClassName}>{icon}</Icon>
       </Button>
     );
   }
