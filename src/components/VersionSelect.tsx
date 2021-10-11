@@ -1,6 +1,6 @@
 import { makeStyles } from "@mui/styles";
 import { memo, useCallback } from "react";
-import { ValueType } from "react-select";
+import { SingleValue } from "react-select";
 import Select from "./ReactWindowSelect";
 
 const useStyles = makeStyles(() => ({
@@ -24,7 +24,7 @@ const VersionSelect = ({
 }: Props) => {
   const classes = useStyles();
   const selectOnChangedHandler = useCallback(
-    (input: ValueType<OptionType, false>) => {
+    (input: SingleValue<OptionType>) => {
       if (input) {
         setSelectedVersion(input);
       } else {
@@ -38,6 +38,7 @@ const VersionSelect = ({
   }
   return (
     <Select
+      isMulti={false}
       styles={{ menu: (base) => ({ ...base, zIndex: 10 }) }}
       className={classes.reactSelect}
       options={versionsData.options}

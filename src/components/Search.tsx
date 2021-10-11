@@ -4,7 +4,7 @@ import useStateWithRef from "hooks/helpers/useStateWithRef";
 import useSearch from "hooks/useSearch";
 import { KeyboardEvent, memo, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
-import { InputActionMeta, ValueType } from "react-select";
+import { InputActionMeta, SingleValue } from "react-select";
 import CreatableSelect from "react-select/creatable";
 import ButtonWithIcon from "./ButtonWithIcon";
 import ConcurrencyInput from "./ConcurrencyInput";
@@ -45,7 +45,7 @@ const Search = () => {
     [setSearchString],
   );
   const onChangeHandler = useCallback(
-    (input: ValueType<OptionType, false>) => {
+    (input: SingleValue<OptionType>) => {
       if (input) {
         setSearchValue(input.value);
       } else {
@@ -78,6 +78,7 @@ const Search = () => {
     <>
       <h1 className="flex-grow-1">Dependency Explorer</h1>
       <CreatableSelect
+        isMulti={false}
         styles={{ menu: (base) => ({ ...base, zIndex: 10 }) }}
         options={searchState.options}
         isLoading={searchState.isLoading}

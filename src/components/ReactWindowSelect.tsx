@@ -1,5 +1,5 @@
-import { Component, memo } from "react";
-import Select, { MenuListComponentProps, Props } from "react-select";
+import { Component, ReactChild, memo } from "react";
+import Select, { MenuListProps, Props } from "react-select";
 import {
   FixedSizeList as List,
   ListChildComponentProps,
@@ -19,7 +19,7 @@ class ItemRenderer extends Component<ListChildComponentProps> {
   }
 }
 
-class MenuList extends Component<MenuListComponentProps<OptionType, false>> {
+class MenuList extends Component<MenuListProps<OptionType, false, never>> {
   render() {
     const { options, children, maxHeight, getValue } = this.props;
     const value = getValue();
@@ -28,12 +28,12 @@ class MenuList extends Component<MenuListComponentProps<OptionType, false>> {
         ? options.findIndex((option) => option.value === value[0].value) *
           height
         : 0;
-
+    const count = (children as ReactChild[]).length;
     return (
       <List
         width="100%"
         height={maxHeight}
-        itemCount={options.length}
+        itemCount={count}
         itemSize={height}
         itemData={children}
         initialScrollOffset={initialOffset}
@@ -44,8 +44,8 @@ class MenuList extends Component<MenuListComponentProps<OptionType, false>> {
   }
 }
 
-const ReactWindowSelect = (props: Props<OptionType>) => (
-  <Select {...{ ...props, components: { MenuList } }} />
+const ReactWindowSelect = (props: Props<OptionType, false, never>) => (
+  <Select isMulti={false} {...{ ...props, components: { MenuList } }} />
 );
 
 export default memo(ReactWindowSelect);
