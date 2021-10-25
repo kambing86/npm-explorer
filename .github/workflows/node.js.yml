@@ -22,7 +22,7 @@ jobs:
       - run: yarn install
       - run: yarn lint
       - run: yarn prettier
-      - run: yarn test
+      - run: yarn test --passWithNoTests
   deploy:
     needs: [test]
     runs-on: ubuntu-latest
