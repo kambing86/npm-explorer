@@ -1,48 +1,39 @@
-import { ThemeProvider, makeStyles } from "@mui/styles";
+import { ThemeProvider } from "@mui/system";
+import { useAppTheme } from "hooks/useAppTheme";
+import MainLayout from "layout/MainLayout";
 import { StrictMode, Suspense, lazy } from "react";
-import { Provider } from "react-redux";
+import { useSelector } from "react-redux";
 import { Route, HashRouter as Router, Routes } from "react-router-dom";
+import { State } from "store";
 import "./App.css";
-import store from "./store";
-import theme from "./theme";
 
-const SearchComponent = lazy(() => import("./components/Search"));
+const SearchComponent = lazy(() => import("./views/Search"));
 
-const ViewComponent = lazy(() => import("./components/View"));
+const PackageComponent = lazy(() => import("./views/Package"));
 
 const NotFoundComponent = () => {
   return <div>Page Not Found</div>;
 };
 
-const useStyles = makeStyles({
-  app: {
-    maxWidth: "800px",
-    margin: "0 auto",
-    flex: "1 0 auto",
-    padding: "1rem",
-  },
-});
-
 const App = () => {
-  const classes = useStyles();
+  const { theme } = useAppTheme();
+  const title = useSelector((state: State) => state.theme.title);
   return (
-    <div className={`App d-flex flex-column align-items-center ${classes.app}`}>
-      <ThemeProvider theme={theme}>
-        <Provider store={store}>
-          <StrictMode>
-            <Suspense fallback={<>Loading...</>}>
-              <Router>
-                <Routes>
-                  <Route path="/" element={<SearchComponent />} />
-                  <Route path="/:packageName" element={<ViewComponent />} />
-                  <Route element={<NotFoundComponent />} />
-                </Routes>
-              </Router>
-            </Suspense>
-          </StrictMode>
-        </Provider>
-      </ThemeProvider>
-    </div>
+    <ThemeProvider theme={theme}>
+      <MainLayout title={title}>
+        <StrictMode>
+          <Suspense fallback={<>Loading...</>}>
+            <Router>
+              <Routes>
+                <Route path="/" element={<SearchComponent />} />
+                <Route path="/:packageName" element={<PackageComponent />} />
+                <Route element={<NotFoundComponent />} />
+              </Routes>
+            </Router>
+          </Suspense>
+        </StrictMode>
+      </MainLayout>
+    </ThemeProvider>
   );
 };
 

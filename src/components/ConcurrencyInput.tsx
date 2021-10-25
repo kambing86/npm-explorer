@@ -1,15 +1,17 @@
 import { TextField } from "@mui/material";
 import { ChangeEvent, memo, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { SET_CONCURRENCY } from "store/actions";
-import { getConcurrencyCount } from "store/selectors/concurrency";
+import { State } from "store";
+import { concurrencySlice } from "store/slices/concurrency";
 
 const ConcurrencyInput = () => {
   const dispatch = useDispatch();
-  const concurrency = useSelector(getConcurrencyCount);
+  const concurrency = useSelector((state: State) => state.concurrency.count);
   const onChangeHandler = useCallback(
     (event: ChangeEvent<HTMLInputElement>) => {
-      dispatch(SET_CONCURRENCY(Number(event.target.value)));
+      dispatch(
+        concurrencySlice.actions.setConcurrency(Number(event.target.value)),
+      );
     },
     [dispatch],
   );

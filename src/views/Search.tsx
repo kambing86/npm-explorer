@@ -1,14 +1,16 @@
-import { Theme } from "@mui/material";
+import { Box, Theme } from "@mui/material";
 import { makeStyles } from "@mui/styles";
+import ButtonWithIcon from "components/ButtonWithIcon";
+import ConcurrencyInput from "components/ConcurrencyInput";
+import ReactVersion from "components/ReactVersion";
 import useStateWithRef from "hooks/helpers/useStateWithRef";
 import useSearch from "hooks/useSearch";
-import { KeyboardEvent, memo, useCallback } from "react";
+import { KeyboardEvent, memo, useCallback, useLayoutEffect } from "react";
+import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { InputActionMeta, SingleValue } from "react-select";
 import CreatableSelect from "react-select/creatable";
-import ButtonWithIcon from "./ButtonWithIcon";
-import ConcurrencyInput from "./ConcurrencyInput";
-import ReactVersion from "./ReactVersion";
+import { themeSlice } from "store/slices/theme";
 
 const useStyles = makeStyles<Theme>((theme) => ({
   button: {
@@ -18,8 +20,13 @@ const useStyles = makeStyles<Theme>((theme) => ({
   icon: {
     marginLeft: theme.spacing(1),
   },
-  reactSelect: {
+  paper: {
     width: "100%",
+    minHeight: "100vh",
+    padding: theme.spacing(2),
+    display: "flex",
+    overflow: "auto",
+    flexDirection: "column",
   },
 }));
 
@@ -74,27 +81,34 @@ const Search = () => {
   const onMenuCloseHandler = useCallback(() => {
     isMenuOpen.current = false;
   }, [isMenuOpen]);
+
+  const dispatch = useDispatch();
+  useLayoutEffect(() => {
+    dispatch(themeSlice.actions.setTitle("Dependency Explorer"));
+  }, [dispatch]);
+
   return (
     <>
-      <h1 className="flex-grow-1">Dependency Explorer</h1>
-      <CreatableSelect
-        isMulti={false}
-        styles={{ menu: (base) => ({ ...base, zIndex: 10 }) }}
-        options={searchState.options}
-        isLoading={searchState.isLoading}
-        onInputChange={onInputChangeHandler}
-        onChange={onChangeHandler}
-        className={classes.reactSelect}
-        // remove default filterOption
-        filterOption={null}
-        createOptionPosition="first"
-        onKeyDown={onKeyDownHandler}
-        onMenuOpen={onMenuOpenHandler}
-        onMenuClose={onMenuCloseHandler}
-        defaultInputValue={searchHistory}
-        defaultMenuIsOpen={searchHistory !== ""}
-        autoFocus={searchHistory !== ""}
-      />
+      <Box sx={{ flexGrow: 1 }} />
+      <Box color="black">
+        <CreatableSelect
+          isMulti={false}
+          styles={{ menu: (base) => ({ ...base, zIndex: 10 }) }}
+          options={searchState.options}
+          isLoading={searchState.isLoading}
+          onInputChange={onInputChangeHandler}
+          onChange={onChangeHandler}
+          // remove default filterOption
+          filterOption={null}
+          createOptionPosition="first"
+          onKeyDown={onKeyDownHandler}
+          onMenuOpen={onMenuOpenHandler}
+          onMenuClose={onMenuCloseHandler}
+          defaultInputValue={searchHistory}
+          defaultMenuIsOpen={searchHistory !== ""}
+          autoFocus={searchHistory !== ""}
+        />
+      </Box>
       <ButtonWithIcon
         label="Search"
         icon="search"

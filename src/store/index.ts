@@ -1,14 +1,18 @@
 import { combineReducers, createStore } from "redux";
 import { composeWithDevTools } from "redux-devtools-extension";
-import { INIT } from "./actions";
-import { getReducersMap } from "./reducers";
+import concurrency from "./slices/concurrency";
+import search from "./slices/search";
+import theme from "./slices/theme";
 
-export function getReducers() {
-  return combineReducers(getReducersMap());
-}
+const store = createStore(
+  combineReducers({
+    concurrency,
+    search,
+    theme,
+  }),
+  composeWithDevTools(),
+);
 
-export function getInitialState() {
-  return getReducers()(undefined, INIT());
-}
+export type State = ReturnType<typeof store.getState>;
 
-export default createStore(getReducers(), composeWithDevTools());
+export default store;

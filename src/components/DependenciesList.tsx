@@ -35,7 +35,7 @@ const DependenciesList = ({ data }: Props) => {
   const filteredData =
     filter === "" ? data : data.filter((d) => d.includes(filter));
   return (
-    <div className="flex-grow-1 flex-shrink-1 align-self-stretch">
+    <>
       <TextField
         margin="normal"
         fullWidth={true}
@@ -46,21 +46,23 @@ const DependenciesList = ({ data }: Props) => {
         }}
         inputProps={{ style: { textAlign: "center" } }}
       />
-      <AutoSizer>
-        {({ height, width }) => (
-          <List
-            width={width}
-            height={height}
-            itemCount={filteredData.length}
-            itemSize={30}
-            itemData={filteredData}
-            itemKey={itemKey}
-          >
-            {RowRenderer}
-          </List>
-        )}
-      </AutoSizer>
-    </div>
+      <div className="flex-grow-1 flex-shrink-1 align-self-stretch">
+        <AutoSizer>
+          {({ height, width }) => (
+            <List
+              width={width}
+              height={height}
+              itemCount={filteredData.length}
+              itemSize={30}
+              itemData={filteredData}
+              itemKey={itemKey}
+            >
+              {RowRenderer}
+            </List>
+          )}
+        </AutoSizer>
+      </div>
+    </>
   );
 };
 

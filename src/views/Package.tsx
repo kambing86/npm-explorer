@@ -1,9 +1,11 @@
-import { Checkbox, FormControlLabel, FormGroup } from "@mui/material";
-import { memo, useCallback, useState } from "react";
+import { Box, Checkbox, FormControlLabel, FormGroup } from "@mui/material";
+import Result from "components/Result";
+import { memo, useCallback, useLayoutEffect, useState } from "react";
+import { useDispatch } from "react-redux";
 import { Link, useParams } from "react-router-dom";
-import Result from "./Result";
+import { themeSlice } from "store/slices/theme";
 
-const View = () => {
+const Package = () => {
   const params = useParams<"packageName">();
   const { packageName = "" } = params;
   const [diffVersion, setDiffVersion] = useState(true);
@@ -11,8 +13,21 @@ const View = () => {
   const onChangeHandler = useCallback(() => {
     setDiffVersion((prevState) => !prevState);
   }, []);
+
+  const dispatch = useDispatch();
+  useLayoutEffect(() => {
+    dispatch(themeSlice.actions.setTitle(decodedPackageName));
+  }, [dispatch, decodedPackageName]);
+
   return (
-    <>
+    <Box
+      sx={{
+        flexGrow: 1,
+        display: "flex",
+        flexFlow: "column",
+        alignItems: "center",
+      }}
+    >
       <Link to="/">Dependency Explorer</Link>
       <h1>PACKAGE OVERVIEW</h1>
       <h2>{decodedPackageName}</h2>
@@ -33,8 +48,8 @@ const View = () => {
         packageName={decodedPackageName}
         showDifferentVersion={diffVersion}
       />
-    </>
+    </Box>
   );
 };
 
-export default memo(View);
+export default memo(Package);

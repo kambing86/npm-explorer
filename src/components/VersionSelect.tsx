@@ -1,13 +1,7 @@
-import { makeStyles } from "@mui/styles";
+import { Box } from "@mui/material";
 import { memo, useCallback } from "react";
 import { SingleValue } from "react-select";
 import Select from "./ReactWindowSelect";
-
-const useStyles = makeStyles(() => ({
-  reactSelect: {
-    width: "100%",
-  },
-}));
 
 interface Props {
   versionsCompleted: boolean;
@@ -22,7 +16,6 @@ const VersionSelect = ({
   selectedVersion,
   setSelectedVersion,
 }: Props) => {
-  const classes = useStyles();
   const selectOnChangedHandler = useCallback(
     (input: SingleValue<OptionType>) => {
       if (input) {
@@ -37,14 +30,15 @@ const VersionSelect = ({
     return null;
   }
   return (
-    <Select
-      isMulti={false}
-      styles={{ menu: (base) => ({ ...base, zIndex: 10 }) }}
-      className={classes.reactSelect}
-      options={versionsData.options}
-      value={selectedVersion}
-      onChange={selectOnChangedHandler}
-    />
+    <Box color="black" sx={{ width: "100%" }}>
+      <Select
+        isMulti={false}
+        styles={{ menu: (base) => ({ ...base, zIndex: 10 }) }}
+        options={versionsData.options}
+        value={selectedVersion}
+        onChange={selectOnChangedHandler}
+      />
+    </Box>
   );
 };
 

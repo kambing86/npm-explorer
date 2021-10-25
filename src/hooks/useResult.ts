@@ -5,7 +5,7 @@ import {
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { map } from "rxjs/operators";
-import { getConcurrencyCount } from "store/selectors/concurrency";
+import { State } from "store";
 import useObservable from "./helpers/useObservable";
 
 function convertData(data: PackageVersionInfo): VersionInfoWithOptions {
@@ -22,7 +22,7 @@ export default function useResult(
   packageName: string,
   showDifferentVersion: boolean,
 ) {
-  const concurrency = useSelector(getConcurrencyCount);
+  const concurrency = useSelector((state: State) => state.concurrency.count);
   const [selectedVersion, setSelectedVersion] = useState<OptionType>();
   const [versions, setVersions] = useObservable<VersionInfoWithOptions>();
   const [dependencies, setDependencies] = useObservable<string[]>();

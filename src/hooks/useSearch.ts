@@ -1,8 +1,8 @@
 import { QueryResult, getQueryObservable$ } from "observables/queryPackage";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { SET_SEARCH_HISTORY } from "store/actions";
-import { getSearchHistory } from "store/selectors/search";
+import { State } from "store";
+import { searchSlice } from "store/slices/search";
 import useObservable from "./helpers/useObservable";
 
 interface SearchState {
@@ -22,7 +22,7 @@ function getInitialState(): SearchState {
 export default function useSearch() {
   const [searchState, setSearchState] = useState(getInitialState);
   const isMenuOpen = useRef(false);
-  const searchHistory = useSelector(getSearchHistory);
+  const searchHistory = useSelector((state: State) => state.search.history);
   const [queryState, setQuery] = useObservable<QueryResult>();
   const dispatch = useDispatch();
 
@@ -91,7 +91,7 @@ export default function useSearch() {
 
   const setSearchHistory = useCallback(
     (searchString: string) => {
-      dispatch(SET_SEARCH_HISTORY(searchString));
+      dispatch(searchSlice.actions.setSearchHistory(searchString));
     },
     [dispatch],
   );
