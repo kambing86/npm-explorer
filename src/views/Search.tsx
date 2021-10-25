@@ -88,9 +88,16 @@ const Search = () => {
   }, [dispatch]);
 
   return (
-    <>
+    <Box
+      sx={{
+        flexGrow: 1,
+        display: "flex",
+        flexFlow: "column",
+        alignItems: "center",
+      }}
+    >
       <Box sx={{ flexGrow: 1 }} />
-      <Box color="black">
+      <Box color="black" sx={{ width: "100%" }}>
         <CreatableSelect
           isMulti={false}
           styles={{ menu: (base) => ({ ...base, zIndex: 10 }) }}
@@ -121,7 +128,7 @@ const Search = () => {
       />
       <ConcurrencyInput />
       <ReactVersion />
-    </>
+    </Box>
   );
 };
 
