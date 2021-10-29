@@ -3,7 +3,7 @@ import { fromFetch } from "rxjs/fetch";
 import { delay, mergeMap } from "rxjs/operators";
 
 const getQueryUrl = (query: string) =>
-  `https://npm-registry-proxy.glitch.me/search/suggestions?q=${query}`;
+  `https://npm-proxy.glitch.me/search/suggestions?q=${query}`;
 
 interface PackageQuery {
   name: string;

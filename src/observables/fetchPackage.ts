@@ -2,7 +2,7 @@ import { Observable } from "rxjs";
 import { fromFetch } from "rxjs/fetch";
 import { finalize, mergeMap, share } from "rxjs/operators";
 
-const registryUrl = "https://npm-registry-proxy.glitch.me/";
+const registryUrl = "https://npm-proxy.glitch.me/registry/";
 // backup url
 // const registryUrl = "https://registry.npmjs.cf/";
 
