@@ -1,4 +1,4 @@
-import { ThemeProvider } from "@mui/system";
+import { ThemeProvider } from "@mui/material";
 import { useAppTheme } from "hooks/useAppTheme";
 import MainLayout from "layout/MainLayout";
 import { StrictMode, Suspense, lazy } from "react";

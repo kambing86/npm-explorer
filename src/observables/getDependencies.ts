@@ -34,7 +34,7 @@ const retryFetchPackage$ = (
   of(
     `${packageName}${
       // check if packageName has "/" eg. @angular/core
-      packageVersionRange || packageName.includes("/") ? `` : `/${LATEST_TAG}`
+      packageVersionRange ? `` : `/${LATEST_TAG}`
     }`,
   ).pipe(
     mergeMap(fetchPackage),
