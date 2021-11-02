@@ -1,13 +1,9 @@
-import {
-  PaletteMode,
-  ThemeOptions,
-  createTheme,
-  useMediaQuery,
-} from "@mui/material";
+import { PaletteMode, ThemeOptions, createTheme } from "@mui/material";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { State } from "store";
 import { DARK, LIGHT, themeSlice } from "store/slices/theme";
+import { useMediaQuery } from "./helpers/useMediaQuery";
 
 // set it here https://material-ui.com/customization/default-theme/
 const getTheme = (themeMode: PaletteMode | null) => {

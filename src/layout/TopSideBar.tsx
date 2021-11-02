@@ -1,6 +1,6 @@
-import LightThemeIcon from "@mui/icons-material/Brightness4";
-import DarkThemeIcon from "@mui/icons-material/Brightness7";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
+import DarkModeIcon from "@mui/icons-material/DarkMode";
+import LightModeIcon from "@mui/icons-material/LightMode";
 import MenuIcon from "@mui/icons-material/Menu";
 import { IconButton, Toolbar, Typography } from "@mui/material";
 import { useAppTheme } from "hooks/useAppTheme";
@@ -52,9 +52,9 @@ const TopSideBar = ({ title }: Props) => {
           </Typography>
           <IconButton color="inherit" onClick={toggleDarkMode}>
             {theme.palette.mode === "light" ? (
-              <LightThemeIcon />
+              <LightModeIcon />
             ) : (
-              <DarkThemeIcon />
+              <DarkModeIcon />
             )}
           </IconButton>
         </Toolbar>
