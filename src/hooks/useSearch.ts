@@ -11,7 +11,10 @@ interface SearchState {
   readonly searchString: string;
 }
 
-function getInitialState(): SearchState {
+function getInitialState(searchHistory: string): SearchState {
+  if (searchHistory !== "") {
+    return { isLoading: true, options: [], searchString: searchHistory };
+  }
   return {
     isLoading: false,
     options: [],
@@ -20,9 +23,11 @@ function getInitialState(): SearchState {
 }
 
 export default function useSearch() {
-  const [searchState, setSearchState] = useState(getInitialState);
-  const isMenuOpen = useRef(false);
   const searchHistory = useSelector((state: State) => state.search.history);
+  const [searchState, setSearchState] = useState(() =>
+    getInitialState(searchHistory),
+  );
+  const [isMenuOpen, setIsMenuOpen] = useState(searchHistory !== "");
   const [queryState, setQuery] = useObservable<QueryResult>();
   const dispatch = useDispatch();
 
@@ -38,7 +43,6 @@ export default function useSearch() {
         options: [],
         searchString,
       }));
-      isMenuOpen.current = true;
     }
   }, []);
 
@@ -100,6 +104,7 @@ export default function useSearch() {
     searchState,
     setSearchString,
     isMenuOpen,
+    setIsMenuOpen,
     searchHistory,
     setSearchHistory,
   };

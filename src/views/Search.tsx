@@ -1,15 +1,26 @@
-import { Box, Theme } from "@mui/material";
+import {
+  Autocomplete,
+  AutocompleteRenderInputParams,
+  Box,
+  TextField,
+  Theme,
+} from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import ButtonWithIcon from "components/ButtonWithIcon";
 import ConcurrencyInput from "components/ConcurrencyInput";
 import ReactVersion from "components/ReactVersion";
 import useStateWithRef from "hooks/helpers/useStateWithRef";
 import useSearch from "hooks/useSearch";
-import { KeyboardEvent, memo, useCallback, useLayoutEffect } from "react";
+import {
+  KeyboardEvent,
+  memo,
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+} from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { InputActionMeta, SingleValue } from "react-select";
-import CreatableSelect from "react-select/creatable";
 import { themeSlice } from "store/slices/theme";
 
 const useStyles = makeStyles<Theme>((theme) => ({
@@ -38,25 +49,37 @@ const Search = () => {
     searchState,
     setSearchString,
     isMenuOpen,
+    setIsMenuOpen,
     searchHistory,
     setSearchHistory,
   } = useSearch();
-  const [searchValue, setSearchValue] = useStateWithRef("");
+  const [searchValue, setSearchValue] = useStateWithRef(searchHistory);
+
+  // auto focus input when search history is not empty
+  const inputRef = useRef<HTMLInputElement>(null);
+  const searchHistoryRef = useRef(searchHistory);
+  useEffect(() => {
+    if (searchHistoryRef.current !== "") {
+      inputRef.current?.focus();
+    }
+  }, []);
 
   const onInputChangeHandler = useCallback(
-    (inputValue: string, event: InputActionMeta) => {
-      if (event.action === "input-change") {
-        setSearchString(inputValue);
+    (_event: unknown, value: string, reason: string) => {
+      if (reason === "input") {
+        setSearchString(value);
       }
     },
     [setSearchString],
   );
   const onChangeHandler = useCallback(
-    (input: SingleValue<OptionType>) => {
-      if (input) {
-        setSearchValue(input.value);
-      } else {
+    (_event: unknown, option: string | OptionType | null) => {
+      if (option == null) {
         setSearchValue("");
+      } else if (typeof option === "string") {
+        setSearchValue(option);
+      } else {
+        setSearchValue(option.value);
       }
     },
     [setSearchValue],
@@ -66,21 +89,31 @@ const Search = () => {
     setSearchHistory(val);
     navigate(`/${encodeURIComponent(val)}`);
   }, [setSearchHistory, searchValue, navigate]);
+  const isMenuOpenRef = useRef(isMenuOpen);
+  isMenuOpenRef.current = isMenuOpen;
   const onKeyDownHandler = useCallback(
     (event: KeyboardEvent<HTMLElement>) => {
-      if (event.key === "Enter" && !isMenuOpen.current) {
+      if (event.key === "Enter" && !isMenuOpenRef.current) {
         onSearchHandler();
         event.preventDefault();
       }
     },
-    [isMenuOpen, onSearchHandler],
+    [onSearchHandler],
   );
   const onMenuOpenHandler = useCallback(() => {
-    isMenuOpen.current = true;
-  }, [isMenuOpen]);
+    setIsMenuOpen(true);
+  }, [setIsMenuOpen]);
   const onMenuCloseHandler = useCallback(() => {
-    isMenuOpen.current = false;
-  }, [isMenuOpen]);
+    setIsMenuOpen(false);
+  }, [setIsMenuOpen]);
+
+  const filterOptions = useCallback((options: OptionType[]) => options, []);
+  const renderInput = useCallback(
+    (params: AutocompleteRenderInputParams) => (
+      <TextField inputRef={inputRef} {...params} label="Search package" />
+    ),
+    [],
+  );
 
   const dispatch = useDispatch();
   useLayoutEffect(() => {
@@ -98,22 +131,19 @@ const Search = () => {
     >
       <Box sx={{ flexGrow: 1 }} />
       <Box color="black" sx={{ width: "100%" }}>
-        <CreatableSelect
-          isMulti={false}
-          styles={{ menu: (base) => ({ ...base, zIndex: 10 }) }}
+        <Autocomplete
+          freeSolo
           options={searchState.options}
-          isLoading={searchState.isLoading}
+          loading={searchState.isLoading}
           onInputChange={onInputChangeHandler}
           onChange={onChangeHandler}
-          // remove default filterOption
-          filterOption={null}
-          createOptionPosition="first"
           onKeyDown={onKeyDownHandler}
-          onMenuOpen={onMenuOpenHandler}
-          onMenuClose={onMenuCloseHandler}
-          defaultInputValue={searchHistory}
-          defaultMenuIsOpen={searchHistory !== ""}
-          autoFocus={searchHistory !== ""}
+          onOpen={onMenuOpenHandler}
+          onClose={onMenuCloseHandler}
+          open={isMenuOpen}
+          defaultValue={searchHistory}
+          filterOptions={filterOptions}
+          renderInput={renderInput}
         />
       </Box>
       <ButtonWithIcon
