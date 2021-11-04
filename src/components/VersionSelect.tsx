@@ -1,7 +1,11 @@
-import { Box } from "@mui/material";
+import {
+  Autocomplete,
+  AutocompleteRenderInputParams,
+  Box,
+  TextField,
+} from "@mui/material";
 import { memo, useCallback } from "react";
-import { SingleValue } from "react-select";
-import Select from "./ReactWindowSelect";
+import ListboxComponent from "./ReactWindowAutoComplete";
 
 interface Props {
   versionsCompleted: boolean;
@@ -16,27 +20,32 @@ const VersionSelect = ({
   selectedVersion,
   setSelectedVersion,
 }: Props) => {
-  const selectOnChangedHandler = useCallback(
-    (input: SingleValue<OptionType>) => {
-      if (input) {
-        setSelectedVersion(input);
-      } else {
-        setSelectedVersion(undefined);
+  const onChangeHandler = useCallback(
+    (_event: unknown, option: OptionType | null) => {
+      if (option !== null) {
+        setSelectedVersion(option);
       }
     },
     [setSelectedVersion],
+  );
+  const renderInput = useCallback(
+    (params: AutocompleteRenderInputParams) => (
+      <TextField {...params} label="Version" />
+    ),
+    [],
   );
   if (!versionsCompleted || !versionsData) {
     return null;
   }
   return (
     <Box color="black" sx={{ width: "100%" }}>
-      <Select
-        isMulti={false}
-        styles={{ menu: (base) => ({ ...base, zIndex: 10 }) }}
+      <Autocomplete
         options={versionsData.options}
+        onChange={onChangeHandler}
         value={selectedVersion}
-        onChange={selectOnChangedHandler}
+        renderInput={renderInput}
+        ListboxComponent={ListboxComponent}
+        renderOption={(props, option) => [props, option]}
       />
     </Box>
   );

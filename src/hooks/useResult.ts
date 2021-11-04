@@ -2,7 +2,7 @@ import {
   getAllDependencies$,
   getAllVersions$,
 } from "observables/getDependencies";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import { map } from "rxjs/operators";
 import { State } from "store";
@@ -35,12 +35,23 @@ export default function useResult(
   }, [packageName, setVersions]);
 
   // step 2: after get all versions completed, set latest version by default
-  useEffect(() => {
-    if (versions.completed && versions.data) {
+  const firstSelected = useRef(false);
+  const selectedVersionMemo = useMemo(() => {
+    if (
+      (selectedVersion === undefined || !firstSelected.current) &&
+      versions.completed &&
+      versions.data
+    ) {
+      firstSelected.current = true;
       const latestVersion = versions.data.latest;
-      setSelectedVersion({ label: latestVersion, value: latestVersion });
+      const latestOption = versions.data.options.find(
+        (option) => option.label === latestVersion,
+      );
+      setSelectedVersion(latestOption);
+      return latestOption;
     }
-  }, [versions]);
+    return selectedVersion;
+  }, [selectedVersion, versions]);
 
   // step 3: get all dependencies based on selected version
   // can be triggered by step 2 or user through setSelectedVersion
@@ -62,5 +73,10 @@ export default function useResult(
     concurrency,
   ]);
 
-  return { versions, dependencies, selectedVersion, setSelectedVersion };
+  return {
+    versions,
+    dependencies,
+    selectedVersion: selectedVersionMemo,
+    setSelectedVersion,
+  };
 }

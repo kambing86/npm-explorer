@@ -49,7 +49,7 @@ const Result = ({ packageName, showDifferentVersion }: Props) => {
         <>
           <div>
             Found {dependenciesData.length} dependencies for{" "}
-            {decodedPackageName}
+            {`${decodedPackageName}@${selectedVersion?.label ?? ""}`}
           </div>
           <DependenciesList data={dependenciesData} />
         </>
