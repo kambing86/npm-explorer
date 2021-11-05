@@ -1,8 +1,14 @@
-import { Box, Checkbox, FormControlLabel, FormGroup } from "@mui/material";
+import {
+  Box,
+  Checkbox,
+  FormControlLabel,
+  FormGroup,
+  Link,
+} from "@mui/material";
 import Result from "components/Result";
 import { memo, useCallback, useLayoutEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { Link, useParams } from "react-router-dom";
+import { Link as RouterLink, useParams } from "react-router-dom";
 import { themeSlice } from "store/slices/theme";
 
 const Package = () => {
@@ -28,7 +34,9 @@ const Package = () => {
         alignItems: "center",
       }}
     >
-      <Link to="/">Dependency Explorer</Link>
+      <Link component={RouterLink} to="/">
+        Dependency Explorer
+      </Link>
       <h1>PACKAGE OVERVIEW</h1>
       <h2>{decodedPackageName}</h2>
       <FormGroup>
