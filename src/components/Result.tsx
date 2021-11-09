@@ -10,8 +10,13 @@ interface Props {
 }
 
 const Result = ({ packageName, showDifferentVersion }: Props) => {
-  const { versions, dependencies, selectedVersion, setSelectedVersion } =
-    useResult(packageName, showDifferentVersion);
+  const {
+    versions,
+    dependencies,
+    selectedVersion,
+    setSelectedVersion,
+    selectedIndex,
+  } = useResult(packageName, showDifferentVersion);
   const decodedPackageName = useMemo(
     () => decodeURIComponent(packageName),
     [packageName],
@@ -42,6 +47,7 @@ const Result = ({ packageName, showDifferentVersion }: Props) => {
           versionsData,
           selectedVersion,
           setSelectedVersion,
+          selectedIndex,
         }}
       />
       {!dependenciesCompleted && <CircularProgress className="my-2" />}

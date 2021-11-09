@@ -73,10 +73,18 @@ export default function useResult(
     concurrency,
   ]);
 
+  const selectedIndex = useMemo(() => {
+    const options = versions.data?.options;
+    return options === undefined || selectedVersionMemo === undefined
+      ? -1
+      : options.indexOf(selectedVersionMemo);
+  }, [versions.data, selectedVersionMemo]);
+
   return {
     versions,
     dependencies,
     selectedVersion: selectedVersionMemo,
     setSelectedVersion,
+    selectedIndex,
   };
 }

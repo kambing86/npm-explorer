@@ -39,12 +39,16 @@ const OuterElementType = React.forwardRef<HTMLDivElement>((props, ref) => {
   return <div ref={ref} {...props} {...outerProps} />;
 });
 
+interface ListboxComponentProps extends React.HTMLAttributes<HTMLElement> {
+  selectedIndex: number;
+}
+
 // Adapter for react-window
-const ListboxComponent = React.forwardRef<
+const ListboxComponent: React.ForwardRefRenderFunction<
   HTMLDivElement,
-  React.HTMLAttributes<HTMLElement>
->(function ListboxComponent(props, ref) {
-  const { children, ...other } = props;
+  ListboxComponentProps
+> = (props, ref) => {
+  const { children, selectedIndex, ...other } = props;
   const itemData: React.ReactChild[] = [];
   (children as React.ReactChild[]).forEach(
     (item: React.ReactChild & { children?: React.ReactChild[] }) => {
@@ -73,12 +77,15 @@ const ListboxComponent = React.forwardRef<
           itemSize={itemSize}
           overscanCount={5}
           itemCount={itemCount}
+          initialScrollOffset={selectedIndex * itemSize}
         >
           {renderRow}
         </FixedSizeList>
       </OuterElementContext.Provider>
     </div>
   );
-});
+};
 
-export default ListboxComponent;
+export default React.forwardRef<HTMLDivElement, ListboxComponentProps>(
+  ListboxComponent,
+);

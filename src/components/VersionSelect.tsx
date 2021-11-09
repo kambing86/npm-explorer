@@ -12,6 +12,7 @@ interface Props {
   versionsData?: VersionInfoWithOptions;
   selectedVersion?: OptionType;
   setSelectedVersion: (version?: OptionType) => void;
+  selectedIndex: number;
 }
 
 const VersionSelect = ({
@@ -19,6 +20,7 @@ const VersionSelect = ({
   versionsData,
   selectedVersion,
   setSelectedVersion,
+  selectedIndex,
 }: Props) => {
   const onChangeHandler = useCallback(
     (_event: unknown, option: OptionType | null) => {
@@ -44,7 +46,12 @@ const VersionSelect = ({
         onChange={onChangeHandler}
         value={selectedVersion}
         renderInput={renderInput}
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
         ListboxComponent={ListboxComponent}
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        ListboxProps={{ selectedIndex }}
         renderOption={(props, option) => [props, option]}
       />
     </Box>
