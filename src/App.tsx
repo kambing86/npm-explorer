@@ -1,4 +1,9 @@
-import { ThemeProvider } from "@mui/material";
+import {
+  Backdrop,
+  CircularProgress,
+  ThemeProvider,
+  Typography,
+} from "@mui/material";
 import { useAppTheme } from "hooks/useAppTheme";
 import MainLayout from "layout/MainLayout";
 import { StrictMode, Suspense, lazy } from "react";
@@ -19,10 +24,24 @@ const App = () => {
   const { theme } = useAppTheme();
   const title = useSelector((state: State) => state.theme.title);
   return (
-    <ThemeProvider theme={theme}>
-      <MainLayout title={title}>
-        <StrictMode>
-          <Suspense fallback={<>Loading...</>}>
+    <StrictMode>
+      <ThemeProvider theme={theme}>
+        <MainLayout title={title}>
+          <Suspense
+            fallback={
+              <Backdrop
+                sx={{
+                  color: "#fff",
+                  zIndex: (t) => t.zIndex.drawer + 1,
+                  flexDirection: "column",
+                }}
+                open={true}
+              >
+                <Typography>Loading...</Typography>
+                <CircularProgress color="inherit" />
+              </Backdrop>
+            }
+          >
             <Router>
               <Routes>
                 <Route path="/" element={<SearchComponent />} />
@@ -31,9 +50,9 @@ const App = () => {
               </Routes>
             </Router>
           </Suspense>
-        </StrictMode>
-      </MainLayout>
-    </ThemeProvider>
+        </MainLayout>
+      </ThemeProvider>
+    </StrictMode>
   );
 };
 
