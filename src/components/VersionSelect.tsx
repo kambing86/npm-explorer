@@ -47,11 +47,13 @@ const VersionSelect = ({
         value={selectedVersion}
         renderInput={renderInput}
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
+        // @ts-expect-error
         ListboxComponent={ListboxComponent}
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
+        // @ts-expect-error
         ListboxProps={{ selectedIndex }}
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-expect-error
         renderOption={(props, option) => [props, option]}
       />
     </Box>

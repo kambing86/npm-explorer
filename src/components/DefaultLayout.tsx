@@ -1,8 +1,10 @@
-const Header: React.FC = ({ children }) => <>{children}</>;
+type ReactFCWithChildren = React.FC<{ children?: React.ReactNode }>;
 
-const Body: React.FC = ({ children }) => <>{children}</>;
+const Header: ReactFCWithChildren = ({ children }) => <>{children}</>;
 
-const Footer: React.FC = ({ children }) => <>{children}</>;
+const Body: ReactFCWithChildren = ({ children }) => <>{children}</>;
+
+const Footer: ReactFCWithChildren = ({ children }) => <>{children}</>;
 
 type Node = React.ReactElement<{ children: React.ReactNode }>;
 
