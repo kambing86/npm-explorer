@@ -1,9 +1,5 @@
-import {
-  Backdrop,
-  CircularProgress,
-  ThemeProvider,
-  Typography,
-} from "@mui/material";
+import { ThemeProvider } from "@mui/material";
+import LoadingBackdrop from "components/LoadingBackdrop";
 import { useAppTheme } from "hooks/useAppTheme";
 import MainLayout from "layout/MainLayout";
 import { StrictMode, Suspense, lazy } from "react";
@@ -27,21 +23,7 @@ const App = () => {
     <StrictMode>
       <ThemeProvider theme={theme}>
         <MainLayout title={title}>
-          <Suspense
-            fallback={
-              <Backdrop
-                sx={{
-                  color: "#fff",
-                  zIndex: (t) => t.zIndex.drawer + 1,
-                  flexDirection: "column",
-                }}
-                open={true}
-              >
-                <Typography>Loading...</Typography>
-                <CircularProgress color="inherit" />
-              </Backdrop>
-            }
-          >
+          <Suspense fallback={<LoadingBackdrop />}>
             <Router>
               <Routes>
                 <Route path="/" element={<SearchComponent />} />
