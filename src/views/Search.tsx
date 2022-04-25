@@ -3,9 +3,7 @@ import {
   AutocompleteRenderInputParams,
   Box,
   TextField,
-  Theme,
 } from "@mui/material";
-import { makeStyles } from "@mui/styles";
 import ButtonWithIcon from "components/ButtonWithIcon";
 import ConcurrencyInput from "components/ConcurrencyInput";
 import ReactVersion from "components/ReactVersion";
@@ -16,27 +14,8 @@ import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { titleSlice } from "store/slices/title.slice";
 
-const useStyles = makeStyles<Theme>((theme) => ({
-  button: {
-    padding: theme.spacing(1),
-    margin: theme.spacing(1),
-  },
-  icon: {
-    marginLeft: theme.spacing(1),
-  },
-  paper: {
-    width: "100%",
-    minHeight: "100vh",
-    padding: theme.spacing(2),
-    display: "flex",
-    overflow: "auto",
-    flexDirection: "column",
-  },
-}));
-
 const Search = () => {
   const navigate = useNavigate();
-  const classes = useStyles();
 
   const {
     searchState,
@@ -144,10 +123,8 @@ const Search = () => {
         icon="search"
         variant="contained"
         color="primary"
-        className={classes.button}
         onClick={onSearchHandler}
         disabled={searchValue.current === ""}
-        iconClassName={classes.icon}
       />
       <ConcurrencyInput />
       <ReactVersion />
