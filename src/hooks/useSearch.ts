@@ -2,7 +2,7 @@ import { QueryResult, getQueryObservable$ } from "observables/queryPackage";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { State } from "store";
-import { searchSlice } from "store/slices/search";
+import { searchSlice } from "store/slices/search.slice";
 import useObservable from "./helpers/useObservable";
 
 interface SearchState {

@@ -6,10 +6,10 @@ import {
   Link,
 } from "@mui/material";
 import Result from "components/Result";
-import { memo, useCallback, useLayoutEffect, useState } from "react";
+import { memo, useCallback, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { Link as RouterLink, useParams } from "react-router-dom";
-import { themeSlice } from "store/slices/theme";
+import { titleSlice } from "store/slices/title.slice";
 
 const Package = () => {
   const params = useParams<"packageName">();
@@ -21,8 +21,8 @@ const Package = () => {
   }, []);
 
   const dispatch = useDispatch();
-  useLayoutEffect(() => {
-    dispatch(themeSlice.actions.setTitle(decodedPackageName));
+  useEffect(() => {
+    dispatch(titleSlice.actions.setTitle(decodedPackageName));
   }, [dispatch, decodedPackageName]);
 
   return (

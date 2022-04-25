@@ -1,17 +1,18 @@
-import { combineReducers, createStore } from "redux";
-import { composeWithDevTools } from "redux-devtools-extension";
-import concurrency from "./slices/concurrency";
-import search from "./slices/search";
-import theme from "./slices/theme";
+import { configureStore } from "@reduxjs/toolkit";
+import search from "./slices/search.slice";
+import theme from "./slices/theme.slice";
+import title from "./slices/title.slice";
 
-const store = createStore(
-  combineReducers({
-    concurrency,
+const store = configureStore({
+  reducer: {
     search,
     theme,
-  }),
-  composeWithDevTools(),
-);
+    title,
+  },
+  devTools: {
+    name: "npm-explorer",
+  },
+});
 
 export type State = ReturnType<typeof store.getState>;
 

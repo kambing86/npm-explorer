@@ -11,17 +11,10 @@ import ConcurrencyInput from "components/ConcurrencyInput";
 import ReactVersion from "components/ReactVersion";
 import useStateWithRef from "hooks/helpers/useStateWithRef";
 import useSearch from "hooks/useSearch";
-import {
-  KeyboardEvent,
-  memo,
-  useCallback,
-  useEffect,
-  useLayoutEffect,
-  useRef,
-} from "react";
+import { KeyboardEvent, memo, useCallback, useEffect, useRef } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { themeSlice } from "store/slices/theme";
+import { titleSlice } from "store/slices/title.slice";
 
 const useStyles = makeStyles<Theme>((theme) => ({
   button: {
@@ -116,8 +109,8 @@ const Search = () => {
   );
 
   const dispatch = useDispatch();
-  useLayoutEffect(() => {
-    dispatch(themeSlice.actions.setTitle("Dependency Explorer"));
+  useEffect(() => {
+    dispatch(titleSlice.actions.setTitle("Dependency Explorer"));
   }, [dispatch]);
 
   return (

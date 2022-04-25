@@ -1,12 +1,12 @@
-import { PaletteMode, ThemeOptions, createTheme } from "@mui/material";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { Palette, ThemeOptions, createTheme } from "@mui/material/styles";
+import { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { State } from "store";
-import { DARK, LIGHT, themeSlice } from "store/slices/theme";
+import { DARK, LIGHT, themeSlice } from "store/slices/theme.slice";
 import { useMediaQuery } from "./helpers/useMediaQuery";
 
 // set it here https://material-ui.com/customization/default-theme/
-const getTheme = (themeMode: PaletteMode | null) => {
+const getTheme = (themeMode: Palette["mode"] | null) => {
   const mode = themeMode === DARK ? DARK : LIGHT;
   const options: ThemeOptions =
     mode === DARK
@@ -44,40 +44,27 @@ const getTheme = (themeMode: PaletteMode | null) => {
   return createTheme(options);
 };
 
-export const useThemeType = () => {
-  return useSelector((state: State) => state.theme.themeType);
-};
-
 // if user change the theme, it should save to localStorage and use it
 // else will change the theme based on the machine dark mode
 export const useAppTheme = () => {
   const prefersDarkMode = useMediaQuery("(prefers-color-scheme: dark)");
-  const initThemeType = useThemeType();
-  const themeType = initThemeType ?? (prefersDarkMode ? DARK : LIGHT);
-
-  const [theme, setTheme] = useState(getTheme(themeType));
+  const themeMode = useSelector((state: State) => state.theme);
+  const [theme, setTheme] = useState(getTheme(themeMode));
+  const dispatch = useDispatch();
+  const toggleDarkMode = useCallback(() => {
+    dispatch(themeSlice.actions.toggleTheme());
+  }, [dispatch]);
+  // if localStorage has no saved theme type, then set using media query
   useEffect(() => {
-    if (themeType === DARK) {
+    if (!prefersDarkMode || themeMode !== null) return;
+    toggleDarkMode();
+  }, [prefersDarkMode, themeMode, toggleDarkMode]);
+  useEffect(() => {
+    if (themeMode === DARK) {
       setTheme(getTheme(DARK));
     } else {
       setTheme(getTheme(LIGHT));
     }
-  }, [themeType]);
-
-  const initThemeTypeRef = useRef(initThemeType);
-  initThemeTypeRef.current = initThemeType;
-  const prefersDarkModeRef = useRef(prefersDarkMode);
-  prefersDarkModeRef.current = prefersDarkMode;
-  const dispatch = useDispatch();
-  const toggleDarkMode = useCallback(() => {
-    if (initThemeTypeRef.current === null) {
-      dispatch(
-        themeSlice.actions.initThemeMode(
-          prefersDarkModeRef.current ? DARK : LIGHT,
-        ),
-      );
-    }
-    dispatch(themeSlice.actions.toggleTheme());
-  }, [dispatch]);
+  }, [themeMode]);
   return { theme, toggleDarkMode };
 };

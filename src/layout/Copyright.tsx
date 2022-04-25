@@ -1,4 +1,5 @@
-import { Link, Typography } from "@mui/material";
+import Link from "@mui/material/Link";
+import Typography from "@mui/material/Typography";
 import React, { ComponentProps } from "react";
 
 const Copyright = (props: ComponentProps<typeof Typography>) => {
@@ -10,7 +11,7 @@ const Copyright = (props: ComponentProps<typeof Typography>) => {
       {...props}
     >
       {"Copyright © "}
-      <Link color="inherit" href="https://github.com/kambing86">
+      <Link color="text.secondary" href="https://github.com/kambing86">
         kambing86
       </Link>{" "}
       {new Date().getFullYear()}

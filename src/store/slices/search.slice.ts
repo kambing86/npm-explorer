@@ -2,10 +2,12 @@ import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 
 type State = Readonly<{
   history: string;
+  concurrency: number;
 }>;
 
 const initialState: State = {
   history: "",
+  concurrency: 2,
 };
 
 export const searchSlice = createSlice({
@@ -14,6 +16,9 @@ export const searchSlice = createSlice({
   reducers: {
     setSearchHistory(state, action: PayloadAction<string>) {
       state.history = action.payload;
+    },
+    setConcurrency(state, action: PayloadAction<number>) {
+      state.concurrency = action.payload;
     },
   },
 });

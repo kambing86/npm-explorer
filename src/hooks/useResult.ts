@@ -22,7 +22,7 @@ export default function useResult(
   packageName: string,
   showDifferentVersion: boolean,
 ) {
-  const concurrency = useSelector((state: State) => state.concurrency.count);
+  const concurrency = useSelector((state: State) => state.search.concurrency);
   const [selectedVersion, setSelectedVersion] = useState<OptionType>();
   const [versions, setVersions] = useObservable<VersionInfoWithOptions>();
   const [dependencies, setDependencies] = useObservable<string[]>();

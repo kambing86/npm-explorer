@@ -18,7 +18,7 @@ const NotFoundComponent = () => {
 
 const App = () => {
   const { theme } = useAppTheme();
-  const title = useSelector((state: State) => state.theme.title);
+  const title = useSelector((state: State) => state.title);
   return (
     <StrictMode>
       <ThemeProvider theme={theme}>
