@@ -14,4 +14,6 @@ export const titleSlice = createSlice({
   },
 });
 
+export const titleActions = titleSlice.actions;
+
 export default titleSlice.reducer;

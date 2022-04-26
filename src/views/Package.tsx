@@ -9,7 +9,7 @@ import Result from "components/Result";
 import { memo, useCallback, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { Link as RouterLink, useParams } from "react-router-dom";
-import { titleSlice } from "store/slices/title.slice";
+import { titleActions } from "store/slices/title.slice";
 
 const Package = () => {
   const params = useParams<"packageName">();
@@ -22,7 +22,7 @@ const Package = () => {
 
   const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(titleSlice.actions.setTitle(decodedPackageName));
+    dispatch(titleActions.setTitle(decodedPackageName));
   }, [dispatch, decodedPackageName]);
 
   return (

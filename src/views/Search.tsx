@@ -12,7 +12,7 @@ import useSearch from "hooks/useSearch";
 import { KeyboardEvent, memo, useCallback, useEffect, useRef } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { titleSlice } from "store/slices/title.slice";
+import { titleActions } from "store/slices/title.slice";
 
 const Search = () => {
   const navigate = useNavigate();
@@ -89,7 +89,7 @@ const Search = () => {
 
   const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(titleSlice.actions.setTitle("Dependency Explorer"));
+    dispatch(titleActions.setTitle("Dependency Explorer"));
   }, [dispatch]);
 
   return (
