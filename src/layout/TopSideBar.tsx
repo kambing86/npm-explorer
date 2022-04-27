@@ -1,10 +1,5 @@
-import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
-import DarkModeIcon from "@mui/icons-material/DarkMode";
-import HistoryIcon from "@mui/icons-material/History";
-import HomeIcon from "@mui/icons-material/Home";
-import LightModeIcon from "@mui/icons-material/LightMode";
-import MenuIcon from "@mui/icons-material/Menu";
 import Divider from "@mui/material/Divider";
+import Icon from "@mui/material/Icon";
 import IconButton from "@mui/material/IconButton";
 import List from "@mui/material/List";
 import Toolbar from "@mui/material/Toolbar";
@@ -46,7 +41,7 @@ const TopSideBar = ({ title }: Props) => {
               ...(isOpen && { display: "none" }),
             }}
           >
-            <MenuIcon />
+            <Icon>menu</Icon>
           </IconButton>
           <Typography
             component="h1"
@@ -59,9 +54,9 @@ const TopSideBar = ({ title }: Props) => {
           </Typography>
           <IconButton color="inherit" onClick={toggleDarkMode}>
             {theme.palette.mode === "light" ? (
-              <LightModeIcon />
+              <Icon>light_mode</Icon>
             ) : (
-              <DarkModeIcon />
+              <Icon>dark_mode</Icon>
             )}
           </IconButton>
         </Toolbar>
@@ -76,17 +71,13 @@ const TopSideBar = ({ title }: Props) => {
           }}
         >
           <IconButton onClick={handleDrawerClose}>
-            <ChevronLeftIcon />
+            <Icon>chevron_left</Icon>
           </IconButton>
         </Toolbar>
         <Divider />
         <List>
-          <SideBarLink
-            path="/"
-            text="Dependency Explorer"
-            icon={<HomeIcon />}
-          />
-          <SideBarLink path="/history" text="History" icon={<HistoryIcon />} />
+          <SideBarLink path="/" text="Dependency Explorer" icon="home" />
+          <SideBarLink path="/history" text="History" icon="history" />
         </List>
       </Drawer>
     </>

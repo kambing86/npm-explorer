@@ -1,14 +1,16 @@
 import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
 import Checkbox from "@mui/material/Checkbox";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import FormGroup from "@mui/material/FormGroup";
-import Link from "@mui/material/Link";
+import Icon from "@mui/material/Icon";
 import Result from "components/Result";
 import { useUpdateTitle } from "hooks/useUpdateTitle";
 import { memo, useCallback, useState } from "react";
-import { Link as RouterLink, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 const Package = () => {
+  const navigate = useNavigate();
   const params = useParams<"packageName">();
   const { packageName = "" } = params;
   const [diffVersion, setDiffVersion] = useState(true);
@@ -28,9 +30,13 @@ const Package = () => {
         alignItems: "center",
       }}
     >
-      <Link component={RouterLink} to="/">
+      <Button
+        variant="outlined"
+        startIcon={<Icon>home</Icon>}
+        onClick={() => navigate("/")}
+      >
         Dependency Explorer
-      </Link>
+      </Button>
       <h1>PACKAGE OVERVIEW</h1>
       <h2>{decodedPackageName}</h2>
       <FormGroup>

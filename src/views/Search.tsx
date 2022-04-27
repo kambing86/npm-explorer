@@ -2,8 +2,9 @@ import Autocomplete, {
   AutocompleteRenderInputParams,
 } from "@mui/material/Autocomplete";
 import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+import Icon from "@mui/material/Icon";
 import TextField from "@mui/material/TextField";
-import ButtonWithIcon from "components/ButtonWithIcon";
 import ConcurrencyInput from "components/ConcurrencyInput";
 import ReactVersion from "components/ReactVersion";
 import useStateWithRef from "hooks/helpers/useStateWithRef";
@@ -113,14 +114,16 @@ const Search = () => {
           renderInput={renderInput}
         />
       </Box>
-      <ButtonWithIcon
-        label="Search"
-        icon="search"
+      <Button
+        sx={{ marginTop: 1 }}
         variant="contained"
         color="primary"
         onClick={onSearchHandler}
         disabled={searchValue.current === ""}
-      />
+        startIcon={<Icon>search</Icon>}
+      >
+        Search
+      </Button>
       <ConcurrencyInput />
       <ReactVersion />
     </Box>

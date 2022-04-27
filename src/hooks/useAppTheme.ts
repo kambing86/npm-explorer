@@ -1,4 +1,4 @@
-import { Palette, ThemeOptions, createTheme } from "@mui/material/styles";
+import { Palette, createTheme } from "@mui/material/styles";
 import { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { State } from "store";
@@ -8,40 +8,11 @@ import { useMediaQuery } from "./helpers/useMediaQuery";
 // set it here https://material-ui.com/customization/default-theme/
 const getTheme = (themeMode: Palette["mode"] | null) => {
   const mode = themeMode === DARK ? DARK : LIGHT;
-  const options: ThemeOptions =
-    mode === DARK
-      ? {
-          palette: {
-            mode,
-            background: {
-              default: "#121212",
-            },
-            primary: {
-              contrastText: "rgba(0, 0, 0, 0.87)",
-              dark: "rgb(100, 141, 174)",
-              light: "rgb(166, 212, 250)",
-              main: "#90caf9",
-            },
-            secondary: {
-              contrastText: "rgba(0, 0, 0, 0.87)",
-              dark: "rgb(170, 100, 123)",
-              light: "rgb(246, 165, 192)",
-              main: "#f48fb1",
-            },
-          },
-        }
-      : {
-          palette: {
-            mode,
-            action: {
-              hover: "rgba(0, 0, 0, 0.1)",
-              hoverOpacity: 0.1,
-              selected: "rgba(0, 0, 0, 0.2)",
-              selectedOpacity: 0.2,
-            },
-          },
-        };
-  return createTheme(options);
+  return createTheme({
+    palette: {
+      mode,
+    },
+  });
 };
 
 // if user change the theme, it should save to localStorage and use it
