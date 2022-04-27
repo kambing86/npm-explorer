@@ -1,4 +1,4 @@
-import { CircularProgress } from "@mui/material";
+import CircularProgress from "@mui/material/CircularProgress";
 import useResult from "hooks/useResult";
 import { memo, useMemo } from "react";
 import DependenciesList from "./DependenciesList";

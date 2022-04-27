@@ -1,4 +1,4 @@
-import { TextField } from "@mui/material";
+import TextField from "@mui/material/TextField";
 import { ChangeEvent, memo, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { State } from "store";

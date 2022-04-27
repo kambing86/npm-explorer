@@ -1,7 +1,8 @@
 /* eslint-disable */
 // copy from https://mui.com/components/autocomplete/#virtualization
 // modified to use FixedSizeList and use custom option
-import { ListSubheader, Typography } from "@mui/material";
+import ListSubheader from "@mui/material/ListSubheader";
+import Typography from "@mui/material/Typography";
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import React from "react";
@@ -12,7 +13,7 @@ const LISTBOX_PADDING = 8; // px
 function renderRow(props: ListChildComponentProps) {
   const { data, index, style } = props;
   const dataSet = data[index];
-  const inlineStyle = {
+  const inlineStyle: React.CSSProperties = {
     ...style,
     top: (style.top as number) + LISTBOX_PADDING,
   };

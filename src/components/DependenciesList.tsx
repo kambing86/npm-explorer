@@ -1,4 +1,4 @@
-import { TextField } from "@mui/material";
+import TextField from "@mui/material/TextField";
 import { Component, memo, useState } from "react";
 import AutoSizer from "react-virtualized-auto-sizer";
 import {
@@ -7,15 +7,22 @@ import {
   shouldComponentUpdate,
 } from "react-window";
 
-class RowRenderer extends Component<ListChildComponentProps> {
+class RowRenderer extends Component<ListChildComponentProps<string[]>> {
   shouldComponentUpdate = shouldComponentUpdate.bind(this);
 
   render() {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     const { data, index, style } = this.props;
-    const dependency = (data as string[])[index];
+    const dependency = data.at(index) ?? "";
     return (
-      <div className="text-center" style={style}>
+      <div
+        className="text-center"
+        style={{
+          ...style,
+          overflow: "hidden",
+          whiteSpace: "nowrap",
+          textOverflow: "ellipsis",
+        }}
+      >
         {dependency}
       </div>
     );

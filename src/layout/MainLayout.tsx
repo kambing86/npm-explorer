@@ -1,4 +1,5 @@
-import { Box, Toolbar } from "@mui/material";
+import Box from "@mui/material/Box";
+import Toolbar from "@mui/material/Toolbar";
 import React from "react";
 import Copyright from "./Copyright";
 import TopSideBar from "./TopSideBar";

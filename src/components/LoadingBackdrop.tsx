@@ -1,7 +1,13 @@
-import { Backdrop, CircularProgress, Typography } from "@mui/material";
+import Backdrop from "@mui/material/Backdrop";
+import CircularProgress from "@mui/material/CircularProgress";
+import Typography from "@mui/material/Typography";
 import React from "react";
 
-const LoadingBackdrop = () => {
+interface Props {
+  loadingText?: string;
+}
+
+const LoadingBackdrop = ({ loadingText = "Loading..." }: Props) => {
   return (
     <Backdrop
       sx={{
@@ -11,7 +17,7 @@ const LoadingBackdrop = () => {
       }}
       open={true}
     >
-      <Typography>Loading...</Typography>
+      <Typography>{loadingText}</Typography>
       <CircularProgress color="inherit" />
     </Backdrop>
   );

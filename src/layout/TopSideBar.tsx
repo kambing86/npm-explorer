@@ -1,12 +1,19 @@
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import DarkModeIcon from "@mui/icons-material/DarkMode";
+import HistoryIcon from "@mui/icons-material/History";
+import HomeIcon from "@mui/icons-material/Home";
 import LightModeIcon from "@mui/icons-material/LightMode";
 import MenuIcon from "@mui/icons-material/Menu";
-import { IconButton, Toolbar, Typography } from "@mui/material";
+import Divider from "@mui/material/Divider";
+import IconButton from "@mui/material/IconButton";
+import List from "@mui/material/List";
+import Toolbar from "@mui/material/Toolbar";
+import Typography from "@mui/material/Typography";
 import { useAppTheme } from "hooks/useAppTheme";
 import React, { useCallback, useState } from "react";
 import AppBar from "./AppBar";
 import Drawer from "./Drawer";
+import SideBarLink from "./SideBarLink";
 
 interface Props {
   title?: string;
@@ -72,6 +79,15 @@ const TopSideBar = ({ title }: Props) => {
             <ChevronLeftIcon />
           </IconButton>
         </Toolbar>
+        <Divider />
+        <List>
+          <SideBarLink
+            path="/"
+            text="Dependency Explorer"
+            icon={<HomeIcon />}
+          />
+          <SideBarLink path="/history" text="History" icon={<HistoryIcon />} />
+        </List>
       </Drawer>
     </>
   );

@@ -1,21 +1,21 @@
-import {
-  Autocomplete,
+import Autocomplete, {
   AutocompleteRenderInputParams,
-  Box,
-  TextField,
-} from "@mui/material";
+} from "@mui/material/Autocomplete";
+import Box from "@mui/material/Box";
+import TextField from "@mui/material/TextField";
 import ButtonWithIcon from "components/ButtonWithIcon";
 import ConcurrencyInput from "components/ConcurrencyInput";
 import ReactVersion from "components/ReactVersion";
 import useStateWithRef from "hooks/helpers/useStateWithRef";
 import useSearch from "hooks/useSearch";
+import { useUpdateTitle } from "hooks/useUpdateTitle";
 import { KeyboardEvent, memo, useCallback, useEffect, useRef } from "react";
-import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { titleActions } from "store/slices/title.slice";
 
 const Search = () => {
   const navigate = useNavigate();
+
+  useUpdateTitle("Dependency Explorer");
 
   const {
     searchState,
@@ -59,7 +59,7 @@ const Search = () => {
   const onSearchHandler = useCallback(() => {
     const val = searchValue.current;
     setSearchHistory(val);
-    navigate(`/${encodeURIComponent(val)}`);
+    navigate(`/package/${encodeURIComponent(val)}`);
   }, [setSearchHistory, searchValue, navigate]);
   const isMenuOpenRef = useRef(isMenuOpen);
   isMenuOpenRef.current = isMenuOpen;
@@ -86,11 +86,6 @@ const Search = () => {
     ),
     [],
   );
-
-  const dispatch = useDispatch();
-  useEffect(() => {
-    dispatch(titleActions.setTitle("Dependency Explorer"));
-  }, [dispatch]);
 
   return (
     <Box

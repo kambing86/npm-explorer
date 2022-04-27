@@ -1,15 +1,12 @@
-import {
-  Box,
-  Checkbox,
-  FormControlLabel,
-  FormGroup,
-  Link,
-} from "@mui/material";
+import Box from "@mui/material/Box";
+import Checkbox from "@mui/material/Checkbox";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import FormGroup from "@mui/material/FormGroup";
+import Link from "@mui/material/Link";
 import Result from "components/Result";
-import { memo, useCallback, useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useUpdateTitle } from "hooks/useUpdateTitle";
+import { memo, useCallback, useState } from "react";
 import { Link as RouterLink, useParams } from "react-router-dom";
-import { titleActions } from "store/slices/title.slice";
 
 const Package = () => {
   const params = useParams<"packageName">();
@@ -20,10 +17,7 @@ const Package = () => {
     setDiffVersion((prevState) => !prevState);
   }, []);
 
-  const dispatch = useDispatch();
-  useEffect(() => {
-    dispatch(titleActions.setTitle(decodedPackageName));
-  }, [dispatch, decodedPackageName]);
+  useUpdateTitle(decodedPackageName);
 
   return (
     <Box

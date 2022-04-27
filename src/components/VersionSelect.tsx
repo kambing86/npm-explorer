@@ -1,9 +1,8 @@
-import {
-  Autocomplete,
+import Autocomplete, {
   AutocompleteRenderInputParams,
-  Box,
-  TextField,
-} from "@mui/material";
+} from "@mui/material/Autocomplete";
+import Box from "@mui/material/Box";
+import TextField from "@mui/material/TextField";
 import { memo, useCallback } from "react";
 import ListboxComponent from "./ReactWindowAutoComplete";
 

@@ -1,4 +1,5 @@
-import { Button, ButtonTypeMap, Icon } from "@mui/material";
+import Button, { ButtonTypeMap } from "@mui/material/Button";
+import Icon from "@mui/material/Icon";
 import { MouseEventHandler, PureComponent } from "react";
 
 export default class ButtonWithIcon extends PureComponent<
