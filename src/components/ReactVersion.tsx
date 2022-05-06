@@ -1,7 +1,6 @@
 import usePromiseWithSuspense from "hooks/helpers/usePromiseWithSuspense";
 import { getAllVersionsAsync } from "observables/getDependencies";
-import { Suspense, version } from "react";
-import LoadingBackdrop from "./LoadingBackdrop";
+import { version } from "react";
 
 function ReactVersionContent() {
   const [reactPackages] = usePromiseWithSuspense(() =>
@@ -18,9 +17,7 @@ function ReactVersionContent() {
 
 const ReactVersion = () => (
   <div className="flex-grow-1 d-flex flex-column justify-content-end align-self-end align-items-end">
-    <Suspense fallback={<LoadingBackdrop loadingText="Starting server..." />}>
-      <ReactVersionContent />
-    </Suspense>
+    <ReactVersionContent />
   </div>
 );
 

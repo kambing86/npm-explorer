@@ -6,11 +6,19 @@ import Button from "@mui/material/Button";
 import Icon from "@mui/material/Icon";
 import TextField from "@mui/material/TextField";
 import ConcurrencyInput from "components/ConcurrencyInput";
+import LoadingBackdrop from "components/LoadingBackdrop";
 import ReactVersion from "components/ReactVersion";
 import useStateWithRef from "hooks/helpers/useStateWithRef";
 import useSearch from "hooks/useSearch";
 import { useUpdateTitle } from "hooks/useUpdateTitle";
-import { KeyboardEvent, memo, useCallback, useEffect, useRef } from "react";
+import {
+  KeyboardEvent,
+  Suspense,
+  memo,
+  useCallback,
+  useEffect,
+  useRef,
+} from "react";
 import { useNavigate } from "react-router-dom";
 
 const Search = () => {
@@ -97,35 +105,37 @@ const Search = () => {
         alignItems: "center",
       }}
     >
-      <Box sx={{ flexGrow: 1 }} />
-      <Box color="black" sx={{ width: "100%" }}>
-        <Autocomplete
-          freeSolo
-          options={searchState.options}
-          loading={searchState.isLoading}
-          onInputChange={onInputChangeHandler}
-          onChange={onChangeHandler}
-          onKeyDown={onKeyDownHandler}
-          onOpen={onMenuOpenHandler}
-          onClose={onMenuCloseHandler}
-          open={isMenuOpen}
-          defaultValue={searchHistory}
-          filterOptions={filterOptions}
-          renderInput={renderInput}
-        />
-      </Box>
-      <Button
-        sx={{ marginTop: 1 }}
-        variant="contained"
-        color="primary"
-        onClick={onSearchHandler}
-        disabled={searchValue.current === ""}
-        startIcon={<Icon>search</Icon>}
-      >
-        Search
-      </Button>
-      <ConcurrencyInput />
-      <ReactVersion />
+      <Suspense fallback={<LoadingBackdrop loadingText="Starting server..." />}>
+        <Box sx={{ flexGrow: 1 }} />
+        <Box color="black" sx={{ width: "100%" }}>
+          <Autocomplete
+            freeSolo
+            options={searchState.options}
+            loading={searchState.isLoading}
+            onInputChange={onInputChangeHandler}
+            onChange={onChangeHandler}
+            onKeyDown={onKeyDownHandler}
+            onOpen={onMenuOpenHandler}
+            onClose={onMenuCloseHandler}
+            open={isMenuOpen}
+            defaultValue={searchHistory}
+            filterOptions={filterOptions}
+            renderInput={renderInput}
+          />
+        </Box>
+        <Button
+          sx={{ marginTop: 1 }}
+          variant="contained"
+          color="primary"
+          onClick={onSearchHandler}
+          disabled={searchValue.current === ""}
+          startIcon={<Icon>search</Icon>}
+        >
+          Search
+        </Button>
+        <ConcurrencyInput />
+        <ReactVersion />
+      </Suspense>
     </Box>
   );
 };
