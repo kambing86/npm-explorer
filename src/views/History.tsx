@@ -6,7 +6,7 @@ import HistoryItem from "components/HistoryItem";
 import { useUpdateTitle } from "hooks/useUpdateTitle";
 import { memo } from "react";
 import { useSelector } from "react-redux";
-import { State } from "store";
+import { RootState } from "store";
 import { maxHistory } from "store/slices/search.slice";
 
 const CustomizedContainer = styled(Container)(
@@ -24,7 +24,9 @@ const CustomizedList = styled(List)(
 );
 
 const History = () => {
-  const searchHistory = useSelector((state: State) => state.search.historyList);
+  const searchHistory = useSelector(
+    (state: RootState) => state.search.historyList,
+  );
   useUpdateTitle("History");
   return (
     <CustomizedContainer maxWidth="md">

@@ -1,18 +1,20 @@
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
-import React from "react";
+import LoadingBackdrop from "components/LoadingBackdrop";
+import { HistoryView, PackageView, SearchView } from "preload";
+import React, { Suspense } from "react";
+import { Route, Routes } from "react-router-dom";
 import Copyright from "./Copyright";
 import TopSideBar from "./TopSideBar";
 
-interface Props {
-  title?: string;
-  children?: React.ReactNode;
-}
+const NotFoundComponent = () => {
+  return <div>Page Not Found</div>;
+};
 
-const MainLayout = ({ title, children }: Props) => {
+const MainLayout = () => {
   return (
     <Box sx={{ display: "flex" }} color="text.primary">
-      <TopSideBar title={title} />
+      <TopSideBar />
       <Box
         component="main"
         sx={{
@@ -37,7 +39,14 @@ const MainLayout = ({ title, children }: Props) => {
             padding: 2,
           }}
         >
-          {children}
+          <Suspense fallback={<LoadingBackdrop />}>
+            <Routes>
+              <Route path="/" element={<SearchView />} />
+              <Route path="/package/:packageName" element={<PackageView />} />
+              <Route path="/history" element={<HistoryView />} />
+              <Route element={<NotFoundComponent />} />
+            </Routes>
+          </Suspense>
         </Box>
         <Box component="footer" sx={{ my: 2 }}>
           <Copyright />
@@ -47,4 +56,4 @@ const MainLayout = ({ title, children }: Props) => {
   );
 };
 
-export default MainLayout;
+export default React.memo(MainLayout);

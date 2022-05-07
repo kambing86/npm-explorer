@@ -1,7 +1,7 @@
 import { QueryResult, getQueryObservable$ } from "observables/queryPackage";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { State } from "store";
+import { RootState } from "store";
 import { searchSlice } from "store/slices/search.slice";
 import useObservable from "./helpers/useObservable";
 
@@ -23,7 +23,7 @@ function getInitialState(searchHistory: string): SearchState {
 }
 
 export default function useSearch() {
-  const searchHistory = useSelector((state: State) => state.search.history);
+  const searchHistory = useSelector((state: RootState) => state.search.history);
   const [searchState, setSearchState] = useState(() =>
     getInitialState(searchHistory),
   );

@@ -1,7 +1,7 @@
 import { Palette, createTheme } from "@mui/material/styles";
 import { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { State } from "store";
+import { RootState } from "store";
 import { DARK, LIGHT, themeActions } from "store/slices/theme.slice";
 import { useMediaQuery } from "./helpers/useMediaQuery";
 
@@ -19,7 +19,7 @@ const getTheme = (themeMode: Palette["mode"] | null) => {
 // else will change the theme based on the machine dark mode
 export const useAppTheme = () => {
   const prefersDarkMode = useMediaQuery("(prefers-color-scheme: dark)");
-  const themeMode = useSelector((state: State) => state.theme);
+  const themeMode = useSelector((state: RootState) => state.theme);
   const [theme, setTheme] = useState(getTheme(themeMode));
   const dispatch = useDispatch();
   const toggleDarkMode = useCallback(() => {

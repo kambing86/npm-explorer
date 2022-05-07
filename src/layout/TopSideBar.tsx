@@ -3,18 +3,15 @@ import Icon from "@mui/material/Icon";
 import IconButton from "@mui/material/IconButton";
 import List from "@mui/material/List";
 import Toolbar from "@mui/material/Toolbar";
-import Typography from "@mui/material/Typography";
 import { useAppTheme } from "hooks/useAppTheme";
 import React, { useCallback, useState } from "react";
+import { LIGHT } from "store/slices/theme.slice";
 import AppBar from "./AppBar";
 import Drawer from "./Drawer";
 import SideBarLink from "./SideBarLink";
+import TopBar from "./TopBar";
 
-interface Props {
-  title?: string;
-}
-
-const TopSideBar = ({ title }: Props) => {
+const TopSideBar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const handleDrawerOpen = useCallback(() => {
     setIsOpen(true);
@@ -43,17 +40,9 @@ const TopSideBar = ({ title }: Props) => {
           >
             <Icon>menu</Icon>
           </IconButton>
-          <Typography
-            component="h1"
-            variant="h6"
-            color="inherit"
-            noWrap
-            sx={{ flexGrow: 1 }}
-          >
-            {title}
-          </Typography>
+          <TopBar />
           <IconButton color="inherit" onClick={toggleDarkMode}>
-            {theme.palette.mode === "light" ? (
+            {theme.palette.mode === LIGHT ? (
               <Icon>light_mode</Icon>
             ) : (
               <Icon>dark_mode</Icon>
