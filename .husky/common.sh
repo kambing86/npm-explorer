@@ -5,4 +5,4 @@ export NVM_DIR="$HOME/.nvm"
 nvm use
 echo "nvm version: $(nvm --version)"
 echo "node version: $(node --version)"
-echo "yarn version: $(yarn --version)"
+echo "pnpm version: $(pnpm --version)"
