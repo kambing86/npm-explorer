@@ -27,7 +27,7 @@ export default function useSearch() {
   const [searchState, setSearchState] = useState(() =>
     getInitialState(searchHistory),
   );
-  const [isMenuOpen, setIsMenuOpen] = useState(searchHistory !== "");
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [queryState, setQuery] = useObservable<QueryResult>();
   const dispatch = useDispatch();
 

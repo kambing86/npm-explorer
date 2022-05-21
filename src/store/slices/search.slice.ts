@@ -35,6 +35,9 @@ export const searchSlice = createSlice({
         if (currentLength > maxHistory) {
           state.historyList.splice(0, currentLength - maxHistory);
         }
+      } else {
+        state.historyList.splice(foundIndex, 1);
+        state.historyList.push(searchString);
       }
       localStorage.setItem(HISTORY_KEY, JSON.stringify(state.historyList));
       state.history = searchString;
