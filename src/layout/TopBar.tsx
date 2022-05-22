@@ -1,5 +1,5 @@
 import Typography from "@mui/material/Typography";
-import React from "react";
+import { memo } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "store";
 
@@ -18,4 +18,4 @@ const TopBar = () => {
   );
 };
 
-export default React.memo(TopBar);
+export default memo(TopBar);

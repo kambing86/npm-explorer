@@ -16,7 +16,7 @@ const LATEST_TAG = "latest";
 // convert dependencies Object to Set with `package@version` format
 const getDependenciesInSet = (dependencies?: { [key: string]: string }) => {
   const results = new Set<string>();
-  if (dependencies === undefined) {
+  if (dependencies == null) {
     return results;
   }
   for (const [key, value] of Object.entries(dependencies)) {

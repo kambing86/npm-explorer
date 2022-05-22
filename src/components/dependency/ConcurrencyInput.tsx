@@ -18,7 +18,7 @@ const ConcurrencyInput = () => {
   return (
     <TextField
       margin="normal"
-      sx={{ minWidth: 100 }}
+      sx={{ minWidth: 100, marginRight: "16px" }}
       label="Concurrency"
       type="number"
       value={concurrency}

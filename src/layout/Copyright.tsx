@@ -1,6 +1,6 @@
 import Link from "@mui/material/Link";
 import Typography from "@mui/material/Typography";
-import React, { ComponentProps } from "react";
+import { ComponentProps, memo } from "react";
 
 const Copyright = (props: ComponentProps<typeof Typography>) => {
   return (
@@ -20,4 +20,4 @@ const Copyright = (props: ComponentProps<typeof Typography>) => {
   );
 };
 
-export default React.memo(Copyright);
+export default memo(Copyright);

@@ -2,7 +2,7 @@ import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
 import LoadingBackdrop from "components/LoadingBackdrop";
 import { HistoryView, PackageView, SearchView } from "preload";
-import React, { Suspense } from "react";
+import { Suspense, memo } from "react";
 import { Route, Routes } from "react-router-dom";
 import Copyright from "./Copyright";
 import TopSideBar from "./TopSideBar";
@@ -56,4 +56,4 @@ const MainLayout = () => {
   );
 };
 
-export default React.memo(MainLayout);
+export default memo(MainLayout);

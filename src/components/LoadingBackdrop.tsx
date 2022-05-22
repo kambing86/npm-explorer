@@ -1,7 +1,7 @@
 import Backdrop from "@mui/material/Backdrop";
 import CircularProgress from "@mui/material/CircularProgress";
 import Typography from "@mui/material/Typography";
-import React from "react";
+import { memo } from "react";
 
 interface Props {
   loadingText?: string;
@@ -23,4 +23,4 @@ const LoadingBackdrop = ({ loadingText = "Loading..." }: Props) => {
   );
 };
 
-export default React.memo(LoadingBackdrop);
+export default memo(LoadingBackdrop);

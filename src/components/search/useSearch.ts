@@ -1,17 +1,16 @@
+import useObservable from "hooks/helpers/useObservable";
 import { QueryResult, getQueryObservable$ } from "observables/queryPackage";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { RootState } from "store";
-import { searchSlice } from "store/slices/search.slice";
-import useObservable from "./helpers/useObservable";
 
 interface SearchState {
-  readonly isLoading: boolean;
-  readonly options: OptionType[];
-  readonly searchString: string;
+  isLoading: boolean;
+  options: OptionType[];
+  searchString: string;
 }
 
-function getInitialState(searchHistory: string): SearchState {
+function getInitialState(searchHistory: string): Readonly<SearchState> {
   if (searchHistory !== "") {
     return { isLoading: true, options: [], searchString: searchHistory };
   }
@@ -27,9 +26,7 @@ export default function useSearch() {
   const [searchState, setSearchState] = useState(() =>
     getInitialState(searchHistory),
   );
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [queryState, setQuery] = useObservable<QueryResult>();
-  const dispatch = useDispatch();
 
   // componentDidMount effect
   // should not trigger useEffect when searchHistory changed
@@ -93,19 +90,9 @@ export default function useSearch() {
     }
   }, [queryState]);
 
-  const setSearchHistory = useCallback(
-    (searchString: string) => {
-      dispatch(searchSlice.actions.setSearchHistory(searchString));
-    },
-    [dispatch],
-  );
-
   return {
     searchState,
     setSearchString,
-    isMenuOpen,
-    setIsMenuOpen,
     searchHistory,
-    setSearchHistory,
   };
 }

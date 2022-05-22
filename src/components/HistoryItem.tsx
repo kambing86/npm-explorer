@@ -15,7 +15,7 @@ const HistoryItem = ({ value }: Props) => {
   const dispatch = useDispatch();
   const clickHandler = useCallback(() => {
     navigate(`/package/${encodeURIComponent(value)}`);
-    dispatch(searchActions.setSearchHistory(value));
+    dispatch(searchActions.setHistory(value));
   }, [navigate, value, dispatch]);
   return (
     <ListItem button alignItems="flex-start" onClick={clickHandler}>

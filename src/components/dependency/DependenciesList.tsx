@@ -1,11 +1,12 @@
-import TextField from "@mui/material/TextField";
-import { Component, memo, useState } from "react";
+import { Component } from "react";
+import { useSelector } from "react-redux";
 import AutoSizer from "react-virtualized-auto-sizer";
 import {
   FixedSizeList as List,
   ListChildComponentProps,
   shouldComponentUpdate,
 } from "react-window";
+import { RootState } from "store";
 
 class RowRenderer extends Component<ListChildComponentProps<string[]>> {
   shouldComponentUpdate = shouldComponentUpdate.bind(this);
@@ -38,39 +39,27 @@ interface Props {
 }
 
 const DependenciesList = ({ data }: Props) => {
-  const [filter, setFilter] = useState("");
+  const filter = useSelector((state: RootState) => state.search.filter);
   const filteredData =
     filter === "" ? data : data.filter((d) => d.includes(filter));
   return (
-    <>
-      <TextField
-        margin="normal"
-        fullWidth={true}
-        label="Filter"
-        value={filter}
-        onChange={(event) => {
-          setFilter(event.target.value);
-        }}
-        inputProps={{ style: { textAlign: "center" } }}
-      />
-      <div className="flex-grow-1 flex-shrink-1 align-self-stretch">
-        <AutoSizer>
-          {({ height, width }) => (
-            <List
-              width={width}
-              height={height}
-              itemCount={filteredData.length}
-              itemSize={30}
-              itemData={filteredData}
-              itemKey={itemKey}
-            >
-              {RowRenderer}
-            </List>
-          )}
-        </AutoSizer>
-      </div>
-    </>
+    <div className="flex-grow-1 flex-shrink-1 align-self-stretch">
+      <AutoSizer>
+        {({ height, width }) => (
+          <List
+            width={width}
+            height={height}
+            itemCount={filteredData.length}
+            itemSize={30}
+            itemData={filteredData}
+            itemKey={itemKey}
+          >
+            {RowRenderer}
+          </List>
+        )}
+      </AutoSizer>
+    </div>
   );
 };
 
-export default memo(DependenciesList);
+export default DependenciesList;

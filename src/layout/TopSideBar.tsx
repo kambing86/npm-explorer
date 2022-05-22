@@ -4,7 +4,7 @@ import IconButton from "@mui/material/IconButton";
 import List from "@mui/material/List";
 import Toolbar from "@mui/material/Toolbar";
 import { useAppTheme } from "hooks/useAppTheme";
-import React, { useCallback, useState } from "react";
+import { memo, useCallback, useState } from "react";
 import { LIGHT } from "store/slices/theme.slice";
 import AppBar from "./AppBar";
 import Drawer from "./Drawer";
@@ -73,4 +73,4 @@ const TopSideBar = () => {
   );
 };
 
-export default React.memo(TopSideBar);
+export default memo(TopSideBar);

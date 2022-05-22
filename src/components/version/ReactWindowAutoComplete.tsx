@@ -50,12 +50,10 @@ const ListboxComponent: React.ForwardRefRenderFunction<
   ListboxComponentProps
 > = (props, ref) => {
   const { children, selectedIndex, ...other } = props;
-  const itemData: React.ReactChild[] = [];
-  (children as React.ReactChild[]).forEach(
-    (item: React.ReactChild & { children?: React.ReactChild[] }) => {
-      itemData.push(item);
-    },
-  );
+  const itemData: React.ReactNode[] = [];
+  (children as React.ReactNode[]).forEach((item: React.ReactNode) => {
+    itemData.push(item);
+  });
 
   const theme = useTheme();
   const smUp = useMediaQuery(theme.breakpoints.up("sm"), {
