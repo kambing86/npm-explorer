@@ -1,3 +1,4 @@
+import Box from "@mui/material/Box";
 import Checkbox from "@mui/material/Checkbox";
 import CircularProgress from "@mui/material/CircularProgress";
 import FormControlLabel from "@mui/material/FormControlLabel";
@@ -43,14 +44,16 @@ const Dependency = ({ packageName }: Props) => {
           label="Show Different Version"
         />
         <ConcurrencyInput />
-        {!completed && <CircularProgress className="my-2" />}
       </FormGroup>
       {data && (
         <>
-          <div>
+          <Box sx={{ display: "flex", alignItems: "center" }}>
             Found {data.length} dependencies for{" "}
             {`${packageName}@${version ?? ""}`}
-          </div>
+            {!completed && (
+              <CircularProgress sx={{ marginLeft: 2 }} className="my-2" />
+            )}
+          </Box>
           <FilterInput />
           <DependenciesList data={data} />
         </>
