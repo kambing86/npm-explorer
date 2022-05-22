@@ -1,3 +1,4 @@
+import Tooltip from "@mui/material/Tooltip";
 import { Component } from "react";
 import { useSelector } from "react-redux";
 import AutoSizer from "react-virtualized-auto-sizer";
@@ -15,17 +16,19 @@ class RowRenderer extends Component<ListChildComponentProps<string[]>> {
     const { data, index, style } = this.props;
     const dependency = data.at(index) ?? "";
     return (
-      <div
-        className="text-center"
-        style={{
-          ...style,
-          overflow: "hidden",
-          whiteSpace: "nowrap",
-          textOverflow: "ellipsis",
-        }}
-      >
-        {dependency}
-      </div>
+      <Tooltip title={dependency}>
+        <div
+          className="text-center"
+          style={{
+            ...style,
+            overflow: "hidden",
+            whiteSpace: "nowrap",
+            textOverflow: "ellipsis",
+          }}
+        >
+          {dependency}
+        </div>
+      </Tooltip>
     );
   }
 }

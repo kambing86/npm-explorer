@@ -31,7 +31,7 @@ const Dependency = ({ packageName }: Props) => {
   }
   return (
     <>
-      <FormGroup row sx={{ alignItems: "center" }}>
+      <FormGroup row sx={{ alignItems: "center", justifyContent: "center" }}>
         <FormControlLabel
           control={
             <Checkbox
@@ -51,7 +51,10 @@ const Dependency = ({ packageName }: Props) => {
             Found {data.length} dependencies for{" "}
             {`${packageName}@${version ?? ""}`}
             {!completed && (
-              <CircularProgress sx={{ marginLeft: 2 }} className="my-2" />
+              <CircularProgress
+                sx={{ marginLeft: 1, height: "unset !important" }}
+                className="my-2"
+              />
             )}
           </Box>
           <FilterInput />
