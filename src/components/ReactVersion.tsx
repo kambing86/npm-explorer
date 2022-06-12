@@ -1,6 +1,6 @@
 import usePromiseWithSuspense from "hooks/helpers/usePromiseWithSuspense";
 import { getAllVersionsAsync } from "observables/getDependencies";
-import { version } from "react";
+import { memo, version } from "react";
 
 function ReactVersionContent() {
   const [reactPackages] = usePromiseWithSuspense(() =>
@@ -21,4 +21,4 @@ const ReactVersion = () => (
   </div>
 );
 
-export default ReactVersion;
+export default memo(ReactVersion);

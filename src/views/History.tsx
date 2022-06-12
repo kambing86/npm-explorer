@@ -3,7 +3,6 @@ import Container from "@mui/material/Container";
 import List from "@mui/material/List";
 import { styled } from "@mui/material/styles";
 import HistoryItem from "components/HistoryItem";
-import { useUpdateTitle } from "hooks/useUpdateTitle";
 import { memo } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "store";
@@ -27,7 +26,6 @@ const History = () => {
   const searchHistory = useSelector(
     (state: RootState) => state.search.historyList,
   );
-  useUpdateTitle("History");
   return (
     <CustomizedContainer maxWidth="md">
       <Typography component="h2">

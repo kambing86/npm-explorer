@@ -1,4 +1,5 @@
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
+import { useEffectOnce } from "./useEffectOnce";
 
 /*
 a helper hook to allow Suspense to capture the promise
@@ -34,7 +35,7 @@ export default function usePromiseWithSuspense<ReturnData, ErrorThrown = Error>(
   const [suspensePromise, setSuspensePromise] = useState<Promise<void> | null>(
     null,
   );
-  useEffect(() => {
+  useEffectOnce(() => {
     if (!promise) {
       return;
     }

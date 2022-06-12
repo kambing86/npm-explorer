@@ -1,14 +1,15 @@
 import ThemeProvider from "@mui/material/styles/ThemeProvider";
+import { useEffectOnce } from "hooks/helpers/useEffectOnce";
 import { useAppTheme } from "hooks/useAppTheme";
 import MainLayout from "layout/MainLayout";
 import { preloadAll } from "preload";
-import { StrictMode, useEffect } from "react";
+import { StrictMode } from "react";
 import { HashRouter as Router } from "react-router-dom";
 import "./App.css";
 
 const App = () => {
   const { theme } = useAppTheme();
-  useEffect(() => {
+  useEffectOnce(() => {
     setTimeout(preloadAll, 2000);
   }, []);
   return (

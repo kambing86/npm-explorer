@@ -44,7 +44,7 @@ const MainLayout = () => {
               <Route path="/" element={<SearchView />} />
               <Route path="/package/:packageName" element={<PackageView />} />
               <Route path="/history" element={<HistoryView />} />
-              <Route element={<NotFoundComponent />} />
+              <Route path="*" element={<NotFoundComponent />} />
             </Routes>
           </Suspense>
         </Box>

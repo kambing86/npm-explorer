@@ -1,5 +1,6 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Observable } from "rxjs";
+import { useEffectOnce } from "./useEffectOnce";
 import useStateSimple from "./useStateSimple";
 
 /*
@@ -31,7 +32,7 @@ export default function useObservable<ReturnData>(
   >(initialObservable);
   const [state, setState] =
     useStateSimple<ObserverState<ReturnData>>(getInitialState);
-  useEffect(() => {
+  useEffectOnce(() => {
     if (!observable) {
       return;
     }

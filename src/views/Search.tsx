@@ -2,11 +2,9 @@ import Box from "@mui/material/Box";
 import LoadingBackdrop from "components/LoadingBackdrop";
 import ReactVersion from "components/ReactVersion";
 import SearchInput from "components/search";
-import { useUpdateTitle } from "hooks/useUpdateTitle";
 import { Suspense, memo } from "react";
 
 const Search = () => {
-  useUpdateTitle("Dependency Explorer");
   return (
     <Box
       sx={{

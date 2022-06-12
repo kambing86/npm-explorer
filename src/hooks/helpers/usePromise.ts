@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import { useEffectOnce } from "./useEffectOnce";
 
 /*
 a helper hook to resolve promise
@@ -32,7 +33,7 @@ export default function usePromise<ReturnData, ErrorThrown = Error>(
   );
   const [state, setState] =
     useState<PromiseState<ReturnData, ErrorThrown>>(getInitialState);
-  useEffect(() => {
+  useEffectOnce(() => {
     if (!promise) {
       return;
     }
