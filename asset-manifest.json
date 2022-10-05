@@ -1,0 +1,23 @@
+{
+  "files": {
+    "main.css": "/npm-explorer/static/css/main.0077a3d3.css",
+    "main.js": "/npm-explorer/static/js/main.93b33982.js",
+    "static/js/986.63a9b6c0.chunk.js": "/npm-explorer/static/js/986.63a9b6c0.chunk.js",
+    "static/js/4.92905d19.chunk.js": "/npm-explorer/static/js/4.92905d19.chunk.js",
+    "static/js/338.d1419630.chunk.js": "/npm-explorer/static/js/338.d1419630.chunk.js",
+    "static/js/745.9cf4a86f.chunk.js": "/npm-explorer/static/js/745.9cf4a86f.chunk.js",
+    "static/js/327.2edb8aa6.chunk.js": "/npm-explorer/static/js/327.2edb8aa6.chunk.js",
+    "index.html": "/npm-explorer/index.html",
+    "main.0077a3d3.css.map": "/npm-explorer/static/css/main.0077a3d3.css.map",
+    "main.93b33982.js.map": "/npm-explorer/static/js/main.93b33982.js.map",
+    "986.63a9b6c0.chunk.js.map": "/npm-explorer/static/js/986.63a9b6c0.chunk.js.map",
+    "4.92905d19.chunk.js.map": "/npm-explorer/static/js/4.92905d19.chunk.js.map",
+    "338.d1419630.chunk.js.map": "/npm-explorer/static/js/338.d1419630.chunk.js.map",
+    "745.9cf4a86f.chunk.js.map": "/npm-explorer/static/js/745.9cf4a86f.chunk.js.map",
+    "327.2edb8aa6.chunk.js.map": "/npm-explorer/static/js/327.2edb8aa6.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.0077a3d3.css",
+    "static/js/main.93b33982.js"
+  ]
+}
