@@ -58,7 +58,7 @@ const getDependenciesFromFetchResult =
   (packageName: string, packageVersionRange?: string) =>
   (packageData: FetchResult) => {
     if (isAllVersionPackageMetaData(packageData)) {
-      if (packageVersionRange) {
+      if (packageVersionRange && packageVersionRange !== LATEST_TAG) {
         const maxVersion = maxSatisfying(
           Object.keys(packageData.versions),
           packageVersionRange,
