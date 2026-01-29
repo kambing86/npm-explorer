@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import Tooltip from "@mui/material/Tooltip";
 import { Component } from "react";
 import { useSelector } from "react-redux";
@@ -48,7 +49,7 @@ const DependenciesList = ({ data }: Props) => {
   return (
     <div className="flex-grow-1 flex-shrink-1 align-self-stretch">
       <AutoSizer>
-        {({ height, width }) => (
+        {({ height, width }: { height: number; width: number }) => (
           <List
             width={width}
             height={height}
