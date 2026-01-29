@@ -19,8 +19,14 @@ const getDependenciesInSet = (dependencies?: { [key: string]: string }) => {
   if (dependencies == null) {
     return results;
   }
-  for (const [key, value] of Object.entries(dependencies)) {
-    results.add(`${key}@${value}`);
+  for (const [packageName, packageVersion] of Object.entries(dependencies)) {
+    if (packageVersion.startsWith("npm:")) {
+      const actualData = packageVersion.split("npm:")[1];
+      const [actualPackageName, actualPackageVersion] = actualData.split("@");
+      results.add(`${actualPackageName}@${actualPackageVersion}`);
+      continue;
+    }
+    results.add(`${packageName}@${packageVersion}`);
   }
   return results;
 };
