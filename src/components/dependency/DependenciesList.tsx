@@ -4,10 +4,10 @@ import { useSelector } from "react-redux";
 import AutoSizer from "react-virtualized-auto-sizer";
 import {
   FixedSizeList as List,
-  ListChildComponentProps,
+  type ListChildComponentProps,
   shouldComponentUpdate,
 } from "react-window";
-import { RootState } from "store";
+import type { RootState } from "store";
 
 class RowRenderer extends Component<ListChildComponentProps<string[]>> {
   shouldComponentUpdate = shouldComponentUpdate.bind(this);

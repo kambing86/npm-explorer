@@ -1,6 +1,6 @@
 import Link from "@mui/material/Link";
 import Typography from "@mui/material/Typography";
-import { ComponentProps, memo } from "react";
+import { type ComponentProps, memo } from "react";
 
 const Copyright = (props: ComponentProps<typeof Typography>) => {
   return (

@@ -1,4 +1,4 @@
-import AppBar, { AppBarProps } from "@mui/material/AppBar";
+import AppBar, { type AppBarProps } from "@mui/material/AppBar";
 import { styled } from "@mui/material/styles";
 import { drawerWidth } from "./Drawer";
 

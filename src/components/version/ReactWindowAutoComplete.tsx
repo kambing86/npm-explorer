@@ -6,7 +6,7 @@ import Typography from "@mui/material/Typography";
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import React from "react";
-import { FixedSizeList, ListChildComponentProps } from "react-window";
+import { FixedSizeList, type ListChildComponentProps } from "react-window";
 
 const LISTBOX_PADDING = 8; // px
 

@@ -4,7 +4,7 @@ import maxSatisfying from "semver/ranges/max-satisfying";
 import { getPackageInfo } from "utils/getPackageInfo";
 import { semverCompare } from "utils/semverCompare";
 import fetchPackage, {
-  FetchResult,
+  type FetchResult,
   isAllVersionPackageMetaData,
 } from "./fetchPackage";
 import { distinctExpand } from "./operators";

@@ -1,4 +1,4 @@
-import { EMPTY, ObservableInput, SchedulerLike } from "rxjs";
+import { EMPTY, type ObservableInput, type SchedulerLike } from "rxjs";
 import { expand } from "rxjs/operators";
 
 // custom operator that only expand if the value is distinct from previous values

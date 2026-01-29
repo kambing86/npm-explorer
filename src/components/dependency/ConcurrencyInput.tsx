@@ -1,7 +1,7 @@
 import TextField from "@mui/material/TextField";
-import { ChangeEvent, memo, useCallback } from "react";
+import { type ChangeEvent, memo, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "store";
+import type { RootState } from "store";
 import { searchActions } from "store/slices/search.slice";
 
 const ConcurrencyInput = () => {

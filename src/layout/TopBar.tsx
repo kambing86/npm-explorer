@@ -1,7 +1,7 @@
 import Typography from "@mui/material/Typography";
 import { memo } from "react";
 import { useSelector } from "react-redux";
-import { RootState } from "store";
+import type { RootState } from "store";
 
 const TopBar = () => {
   const title = useSelector((state: RootState) => state.title);

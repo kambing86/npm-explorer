@@ -1,7 +1,7 @@
-import { Palette, createTheme } from "@mui/material/styles";
+import { type Palette, createTheme } from "@mui/material/styles";
 import { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "store";
+import type { RootState } from "store";
 import { DARK, LIGHT, themeActions } from "store/slices/theme.slice";
 import { useMediaQuery } from "./helpers/useMediaQuery";
 

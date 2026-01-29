@@ -1,4 +1,4 @@
-import { Palette } from "@mui/material/styles";
+import type { Palette } from "@mui/material/styles";
 import { createSlice } from "@reduxjs/toolkit";
 
 const THEME_KEY = "theme";

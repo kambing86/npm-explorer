@@ -2,7 +2,7 @@ import useObservable from "hooks/helpers/useObservable";
 import { getAllDependencies$ } from "observables/getDependencies";
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
-import { RootState } from "store";
+import type { RootState } from "store";
 
 export default function useDependency(
   packageName: string,

@@ -5,7 +5,7 @@ import { styled } from "@mui/material/styles";
 import HistoryItem from "components/HistoryItem";
 import { memo } from "react";
 import { useSelector } from "react-redux";
-import { RootState } from "store";
+import type { RootState } from "store";
 import { maxHistory } from "store/slices/search.slice";
 
 const CustomizedContainer = styled(Container)(

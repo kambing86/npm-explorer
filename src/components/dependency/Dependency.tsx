@@ -5,7 +5,7 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import FormGroup from "@mui/material/FormGroup";
 import { memo, useCallback, useState } from "react";
 import { useSelector } from "react-redux";
-import { RootState } from "store";
+import type { RootState } from "store";
 import ConcurrencyInput from "./ConcurrencyInput";
 import DependenciesList from "./DependenciesList";
 import FilterInput from "./FilterInput";

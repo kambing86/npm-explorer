@@ -1,5 +1,5 @@
 import Autocomplete, {
-  AutocompleteRenderInputParams,
+  type AutocompleteRenderInputParams,
 } from "@mui/material/Autocomplete";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
