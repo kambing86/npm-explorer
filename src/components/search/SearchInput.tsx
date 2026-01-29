@@ -1,12 +1,12 @@
 import Autocomplete, {
-  AutocompleteRenderInputParams,
+  type AutocompleteRenderInputParams,
 } from "@mui/material/Autocomplete";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Icon from "@mui/material/Icon";
 import TextField from "@mui/material/TextField";
 import {
-  KeyboardEvent,
+  type KeyboardEvent,
   memo,
   useCallback,
   useEffect,
@@ -15,9 +15,11 @@ import {
 } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { RootState } from "store";
+import type { RootState } from "store";
 import { searchActions } from "store/slices/search.slice";
 import useSearch from "./useSearch";
+
+const isSearchEnabled = false;
 
 const SearchInput = () => {
   const dispatch = useDispatch();
@@ -25,7 +27,8 @@ const SearchInput = () => {
 
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-  const { searchState, setSearchString, searchHistory } = useSearch();
+  const { searchState, setSearchString, searchHistory } =
+    useSearch(isSearchEnabled);
 
   const packageString = useSelector(
     (state: RootState) => state.search.packageString,
@@ -43,10 +46,14 @@ const SearchInput = () => {
   const onInputChangeHandler = useCallback(
     (_event: unknown, value: string, reason: string) => {
       if (reason === "input") {
-        setSearchString(value);
+        if (isSearchEnabled) {
+          setSearchString(value);
+        } else {
+          dispatch(searchActions.setPackageString(value));
+        }
       }
     },
-    [setSearchString],
+    [setSearchString, dispatch],
   );
 
   const onChangeHandler = useCallback(
@@ -69,6 +76,12 @@ const SearchInput = () => {
   isMenuOpenRef.current = isMenuOpen;
   const onKeyDownHandler = useCallback(
     (event: KeyboardEvent<HTMLElement>) => {
+      if (!isSearchEnabled) {
+        if (event.key === "Enter") {
+          onSearchHandler();
+        }
+        return;
+      }
       if (event.key === "Enter" && !isMenuOpenRef.current) {
         onSearchHandler();
         event.preventDefault();
@@ -78,10 +91,10 @@ const SearchInput = () => {
   );
   const onMenuOpenHandler = useCallback(() => {
     setIsMenuOpen(true);
-  }, [setIsMenuOpen]);
+  }, []);
   const onMenuCloseHandler = useCallback(() => {
     setIsMenuOpen(false);
-  }, [setIsMenuOpen]);
+  }, []);
 
   const filterOptions = useCallback((options: OptionType[]) => options, []);
   const renderInput = useCallback(

@@ -1,9 +1,9 @@
-import { EMPTY, Observable, of } from "rxjs";
+import { EMPTY, type Observable, of } from "rxjs";
 import { fromFetch } from "rxjs/fetch";
 import { delay, mergeMap } from "rxjs/operators";
 
 const getQueryUrl = (query: string) =>
-  `https://npm-proxy.glitch.me/search/suggestions?q=${query}`;
+  `https://www.npmjs.com/search/suggestions?q=${query}`;
 
 interface PackageQuery {
   name: string;

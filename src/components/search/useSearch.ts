@@ -1,8 +1,11 @@
 import useObservable from "hooks/helpers/useObservable";
-import { QueryResult, getQueryObservable$ } from "observables/queryPackage";
+import {
+  type QueryResult,
+  getQueryObservable$,
+} from "observables/queryPackage";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
-import { RootState } from "store";
+import type { RootState } from "store";
 
 interface SearchState {
   isLoading: boolean;
@@ -21,7 +24,7 @@ function getInitialState(searchHistory: string): Readonly<SearchState> {
   };
 }
 
-export default function useSearch() {
+export default function useSearch(isSearchEnabled = false) {
   const searchHistory = useSelector((state: RootState) => state.search.history);
   const [searchState, setSearchState] = useState(() =>
     getInitialState(searchHistory),
@@ -36,28 +39,33 @@ export default function useSearch() {
     if (searchString !== "") {
       setSearchState((prevState) => ({
         ...prevState,
-        isLoading: true,
+        isLoading: isSearchEnabled,
         options: [],
         searchString,
       }));
     }
-  }, []);
+  }, [isSearchEnabled]);
 
   // callbacks for Search component
-  const setSearchString = useCallback((value: string) => {
-    setSearchState((prevState) => ({
-      ...prevState,
-      isLoading: true,
-      options: [],
-      searchString: value,
-    }));
-  }, []);
+  const setSearchString = useCallback(
+    (value: string) => {
+      setSearchState((prevState) => ({
+        ...prevState,
+        isLoading: isSearchEnabled,
+        options: [],
+        searchString: value,
+      }));
+    },
+    [isSearchEnabled],
+  );
 
   // check for searchString and do query
   // triggered by componentDidMount or setSearchString
   useEffect(() => {
-    setQuery(getQueryObservable$(searchState.searchString));
-  }, [setQuery, searchState.searchString]);
+    if (isSearchEnabled) {
+      setQuery(getQueryObservable$(searchState.searchString));
+    }
+  }, [isSearchEnabled, setQuery, searchState.searchString]);
 
   // monitor query and set search state when query is done
   useEffect(() => {
